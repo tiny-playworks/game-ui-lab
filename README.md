@@ -1,8 +1,12 @@
 # Tiny Playworks Game UI Lab
 
+[![CI](https://github.com/tiny-playworks/game-ui-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/tiny-playworks/game-ui-lab/actions/workflows/ci.yml)
+
 Modern Game UI primitives for web games, AI interactive content, and HUD-heavy indie experiences.
 
 This is not another React business UI library. The project focuses on motion-first feedback primitives: combat numbers, loot pulses, combo states, rarity frames, and lightweight HUD feedback.
+
+![Game UI Feedback Sandbox](./assets/gallery-sandbox.png)
 
 ## What This Project Is
 
@@ -104,3 +108,6 @@ Deferred:
 - business components
 - npm publishing
 
+## License
+
+MIT
