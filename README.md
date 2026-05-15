@@ -12,7 +12,7 @@ This is not another React business UI library. The project focuses on motion-fir
 
 - A React + TypeScript primitive kit for game-like web UI.
 - A token-driven UI layer built on CSS variables.
-- A gallery playground for testing feedback behavior in motion.
+- A gallery playground/docs surface for testing feedback behavior in motion.
 - A foundation for future Pixi.js overlay experiments.
 
 ## What This Project Is Not
@@ -69,6 +69,12 @@ Run the gallery:
 pnpm dev
 ```
 
+Gallery routes:
+
+- `/` - Feedback Sandbox
+- `/tokens` - Token Overview
+- `/primitives` - Primitives Overview
+
 Build all packages and the gallery:
 
 ```bash
@@ -96,6 +102,7 @@ Phase 1 is the minimum loop:
 - `packages/primitives`
 - `apps/gallery`
 - CSS variable token foundation
+- lightweight gallery routes for feedback, tokens, and primitives
 - public API boundary from `@tiny-playworks/game-ui`
 - feedback sandbox gallery
 - basic render and token tests
@@ -107,6 +114,14 @@ Deferred:
 - Figma plugin or sync automation
 - business components
 - npm publishing
+
+## Token foundation
+
+Current tokens are a CSS variables foundation exported from `@tiny-playworks/tokens`.
+
+- The gallery treats them as project assets through structured metadata.
+- This is not a full Figma sync pipeline in the current phase.
+- Rspress remains deferred while the gallery carries the early playground/docs role.
 
 ## License
 

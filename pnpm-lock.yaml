@@ -44,6 +44,9 @@ importers:
       '@tiny-playworks/game-ui':
         specifier: workspace:*
         version: link:../../packages/primitives
+      '@tiny-playworks/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
       motion:
         specifier: ^12.38.0
         version: 12.38.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
