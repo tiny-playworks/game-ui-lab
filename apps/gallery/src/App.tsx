@@ -1,40 +1,36 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { GameUiProvider } from '@tiny-playworks/game-ui';
 import { AppNav } from './components/AppNav';
+import {
+  galleryRoutes,
+  resolveRoutePath,
+  restorePagesFallback,
+  toRouteHref,
+  type GalleryRoutePath,
+} from './lib/routing';
 import { FeedbackRoute } from './routes/FeedbackRoute';
 import { PrimitivesRoute } from './routes/PrimitivesRoute';
 import { TokensRoute } from './routes/TokensRoute';
 
-type GalleryRoute = {
-  path: '/' | '/tokens' | '/primitives';
-  label: string;
-  shortLabel: string;
-};
-
-const routes: GalleryRoute[] = [
-  { path: '/', label: 'Feedback', shortLabel: 'Sandbox' },
-  { path: '/tokens', label: 'Tokens', shortLabel: 'Foundation' },
-  { path: '/primitives', label: 'Primitives', shortLabel: 'Public API' },
-];
-
-function resolvePath(pathname: string) {
-  const normalizedPathname = pathname !== '/' && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-
-  return routes.find((route) => route.path === normalizedPathname)?.path ?? '/';
-}
+const basePath = __LAB_BASE_PATH__;
 
 export function App() {
-  const [pathname, setPathname] = useState<'/' | '/tokens' | '/primitives'>(() => resolvePath(window.location.pathname));
+  const [pathname, setPathname] = useState<GalleryRoutePath>(() => resolveRoutePath(window.location.pathname, basePath));
 
   useEffect(() => {
-    const normalizedPath = resolvePath(window.location.pathname);
+    restorePagesFallback(basePath);
 
-    if (normalizedPath !== window.location.pathname) {
-      window.history.replaceState({}, '', normalizedPath);
+    const normalizedPath = resolveRoutePath(window.location.pathname, basePath);
+    const normalizedHref = toRouteHref(normalizedPath, basePath);
+
+    if (normalizedHref !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
+      const nextUrl = new URL(window.location.href);
+      nextUrl.pathname = normalizedHref;
+      window.history.replaceState({}, '', nextUrl.toString());
     }
 
     const handlePopState = () => {
-      setPathname(resolvePath(window.location.pathname));
+      setPathname(resolveRoutePath(window.location.pathname, basePath));
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -44,17 +40,17 @@ export function App() {
     };
   }, []);
 
-  function navigate(nextPath: '/' | '/tokens' | '/primitives') {
+  function navigate(nextPath: GalleryRoutePath) {
     if (nextPath === pathname) {
       return;
     }
 
-    window.history.pushState({}, '', nextPath);
+    window.history.pushState({}, '', toRouteHref(nextPath, basePath));
     setPathname(nextPath);
   }
 
   const activeRoute = useMemo(
-    () => routes.find((route) => route.path === pathname) ?? routes[0],
+    () => galleryRoutes.find((route) => route.path === pathname) ?? galleryRoutes[0],
     [pathname],
   );
 
@@ -62,14 +58,16 @@ export function App() {
     <GameUiProvider className="gallery-app">
       <div className="app-backdrop" aria-hidden="true" />
       <div className="gallery-shell">
-        <AppNav routes={routes} activePath={pathname} onNavigate={navigate} />
+        <AppNav routes={galleryRoutes} activePath={pathname} onNavigate={navigate} basePath={basePath} />
 
         <main className="gallery-main">
-          <header className="route-banner" aria-label="Current route">
-            <span className="route-banner__label">Current route</span>
-            <strong>{activeRoute.label}</strong>
-            <span>{activeRoute.shortLabel}</span>
-          </header>
+          {pathname !== '/' ? (
+            <header className="route-banner" aria-label="Current route">
+              <span className="route-banner__label">Current route</span>
+              <strong>{activeRoute.label}</strong>
+              <span>{activeRoute.shortLabel}</span>
+            </header>
+          ) : null}
 
           {pathname === '/' ? <FeedbackRoute onNavigate={navigate} /> : null}
           {pathname === '/tokens' ? <TokensRoute /> : null}

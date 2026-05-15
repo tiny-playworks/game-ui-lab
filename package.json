@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "pnpm --filter @tiny-playworks/game-ui-gallery dev",
     "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && pnpm --filter @tiny-playworks/game-ui-gallery build",
+    "build:pages": "pnpm --filter @tiny-playworks/game-ui-gallery build:pages",
     "test": "pnpm --filter @tiny-playworks/game-ui test",
     "typecheck": "pnpm --filter @tiny-playworks/game-ui typecheck && pnpm --filter @tiny-playworks/game-ui-gallery typecheck"
   },
