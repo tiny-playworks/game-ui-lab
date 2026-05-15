@@ -3,6 +3,7 @@ dist
 .rslib
 .rsbuild
 .playwright-cli
+.superpowers
 .env
 .env.*
 coverage
