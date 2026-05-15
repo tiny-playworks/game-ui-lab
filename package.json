@@ -1,0 +1,28 @@
+{
+  "name": "game-ui-lab",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "packageManager": "pnpm@11.1.2+sha512.415a1cc25974731e75455c1468371be74c5aa5fb7621b50d4056d222451609f11412f23fd602e6169f1e060466641f798597e1be961a10688836a67b16569499",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @tiny-playworks/game-ui-gallery dev",
+    "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && pnpm --filter @tiny-playworks/game-ui-gallery build",
+    "test": "pnpm --filter @tiny-playworks/game-ui test",
+    "typecheck": "pnpm --filter @tiny-playworks/game-ui typecheck && pnpm --filter @tiny-playworks/game-ui-gallery typecheck"
+  },
+  "devDependencies": {
+    "@rslib/core": "^0.14.0",
+    "@rsbuild/core": "^1.5.10",
+    "@rsbuild/plugin-react": "^1.4.1",
+    "@rstest/core": "^0.9.9",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "happy-dom": "^20.0.10",
+    "typescript": "^5.8.3"
+  }
+}
