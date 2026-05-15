@@ -12,7 +12,7 @@ This is not another React business UI library. The project focuses on motion-fir
 
 - A React + TypeScript primitive kit for game-like web UI.
 - A token-driven UI layer built on CSS variables.
-- A gallery playground/docs surface for testing feedback behavior in motion.
+- A public gallery/lab surface for testing feedback behavior in motion.
 - A foundation for future Pixi.js overlay experiments.
 
 ## What This Project Is Not
@@ -81,6 +81,12 @@ Build all packages and the gallery:
 pnpm build
 ```
 
+Build the GitHub Pages bundle:
+
+```bash
+pnpm build:pages
+```
+
 Run tests:
 
 ```bash
@@ -105,6 +111,7 @@ Phase 1 is the minimum loop:
 - lightweight gallery routes for feedback, tokens, and primitives
 - public API boundary from `@tiny-playworks/game-ui`
 - feedback sandbox gallery
+- public lab landing page for GitHub Pages
 - basic render and token tests
 
 Deferred:
@@ -122,6 +129,20 @@ Current tokens are a CSS variables foundation exported from `@tiny-playworks/tok
 - The gallery treats them as project assets through structured metadata.
 - This is not a full Figma sync pipeline in the current phase.
 - Rspress remains deferred while the gallery carries the early playground/docs role.
+
+## Public site structure
+
+The static site target is the GitHub Pages project URL:
+
+- `https://tiny-playworks.github.io/game-ui-lab/`
+
+Recommended structure:
+
+- `/` - Lab entry / landing page with live feedback stage
+- `/tokens` - Token foundation overview
+- `/primitives` - Primitive overview
+
+The Pages build keeps clean URLs through a `404.html` fallback and uses `/game-ui-lab/` as the production base path.
 
 ## License
 
