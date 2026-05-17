@@ -1,6 +1,6 @@
 export const gameUiTokenCssExport = '@tiny-playworks/tokens/css';
 
-export type GameUiTokenGroupId = 'color' | 'rarity' | 'motion' | 'glow' | 'radius' | 'spacing';
+export type GameUiTokenGroupId = 'color' | 'rarity' | 'hud' | 'motion' | 'glow' | 'radius' | 'spacing';
 export type GameUiTokenSampleKind = 'swatch' | 'text' | 'border' | 'motion' | 'shadow' | 'radius' | 'spacing';
 
 export interface GameUiTokenDefinition {
@@ -146,6 +146,69 @@ export const gameUiTokenGroups: GameUiTokenGroupDefinition[] = [
         group: 'rarity',
         description: 'Top rarity highlight for strong border emphasis.',
         sample: { kind: 'border' },
+      },
+    ],
+  },
+  {
+    id: 'hud',
+    title: 'HUD tokens',
+    description: 'Persistent overlay tones for health, resources, cooldowns, and status states.',
+    tokens: [
+      {
+        name: 'Health',
+        cssVar: '--game-ui-health',
+        value: '#ff4d7d',
+        group: 'hud',
+        description: 'Primary health fill for player and boss HUD bars.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Shield',
+        cssVar: '--game-ui-shield',
+        value: '#4cc9f0',
+        group: 'hud',
+        description: 'Shield overlay for temporary protection layers.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Mana',
+        cssVar: '--game-ui-mana',
+        value: '#7c8cff',
+        group: 'hud',
+        description: 'Mana resource fill for spell and ability costs.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Energy',
+        cssVar: '--game-ui-energy',
+        value: '#ffd166',
+        group: 'hud',
+        description: 'Energy resource fill for fast tactical actions.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Stamina',
+        cssVar: '--game-ui-stamina',
+        value: '#5cff9d',
+        group: 'hud',
+        description: 'Stamina resource fill for movement and endurance states.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Debuff',
+        cssVar: '--game-ui-debuff',
+        value: '#ff6b6b',
+        group: 'hud',
+        description: 'Negative status tone for persistent combat effects.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Cooldown mask',
+        cssVar: '--game-ui-cooldown-mask',
+        value: 'rgba(4, 8, 18, 0.72)',
+        group: 'hud',
+        description: 'Overlay mask used to show ability cooldown progress.',
+        sample: { kind: 'swatch' },
       },
     ],
   },

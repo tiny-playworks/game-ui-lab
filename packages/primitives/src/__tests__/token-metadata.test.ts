@@ -6,10 +6,25 @@ describe('token metadata export', () => {
     expect(gameUiTokenGroups.map((group) => group.id)).toEqual([
       'color',
       'rarity',
+      'hud',
       'motion',
       'glow',
       'radius',
       'spacing',
+    ]);
+  });
+
+  it('exposes the HUD token metadata used by persistent overlays', () => {
+    const hudGroup = gameUiTokenGroups.find((group) => group.id === 'hud');
+
+    expect(hudGroup?.tokens.map((token) => token.cssVar)).toEqual([
+      '--game-ui-health',
+      '--game-ui-shield',
+      '--game-ui-mana',
+      '--game-ui-energy',
+      '--game-ui-stamina',
+      '--game-ui-debuff',
+      '--game-ui-cooldown-mask',
     ]);
   });
 

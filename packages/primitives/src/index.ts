@@ -1,10 +1,18 @@
 export { ComboCounter } from './combo-counter';
 export type { ComboCounterProps } from './combo-counter';
+export { CooldownSlot } from './cooldown-slot';
+export type { CooldownSlotProps } from './cooldown-slot';
 export { DamageNumber } from './damage-number';
 export type { DamageNumberProps, DamageNumberVariant } from './damage-number';
 export { FloatingToast } from './floating-toast';
 export type { FloatingToastProps, FloatingToastVariant } from './floating-toast';
 export { GameUiProvider } from './provider';
 export type { GameUiProviderProps } from './provider';
+export { HealthBar } from './health-bar';
+export type { HealthBarProps, HealthBarTone } from './health-bar';
 export { RarityBorder } from './rarity-border';
 export type { RarityBorderProps, RarityBorderTone } from './rarity-border';
+export { ResourceMeter } from './resource-meter';
+export type { ResourceMeterKind, ResourceMeterProps } from './resource-meter';
+export { StatusBadge } from './status-badge';
+export type { StatusBadgeProps, StatusBadgeTone } from './status-badge';

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "rsbuild dev --open",
     "build": "rsbuild build",
-    "build:pages": "PUBLIC_BASE_PATH=/game-ui-lab/ rsbuild build && node ./scripts/write-pages-fallback.mjs",
+    "build:pages": "node ./scripts/build-pages.mjs",
     "preview": "rsbuild preview",
     "typecheck": "tsc --noEmit"
   },

@@ -8,6 +8,9 @@ describe('token css contract', () => {
 
     expect(css).toContain('--game-ui-accent');
     expect(css).toContain('--game-ui-rarity-legendary');
+    expect(css).toContain('--game-ui-health');
+    expect(css).toContain('--game-ui-shield');
+    expect(css).toContain('--game-ui-cooldown-mask');
     expect(css).toContain('--game-ui-duration-normal');
   });
 });
