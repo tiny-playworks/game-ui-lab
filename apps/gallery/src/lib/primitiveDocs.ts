@@ -92,6 +92,41 @@ export const primitiveDocs: PrimitiveDoc[] = [
     ],
   },
   {
+    name: 'LootCard',
+    usage: '<LootCard name="Neon Shard" rarity="epic" quantity={3} value="240g" />',
+    states: ['common', 'rare', 'epic', 'legendary', 'selected'],
+    props: [
+      { name: 'name', type: 'string', description: 'Loot item name.' },
+      { name: 'rarity', type: 'common | rare | epic | legendary', description: 'Loot rarity tone.' },
+      { name: 'quantity', type: 'number', description: 'Optional stack quantity.' },
+      { name: 'value', type: 'string', description: 'Optional compact value text.' },
+      { name: 'subtitle', type: 'string', description: 'Optional item category or source.' },
+    ],
+  },
+  {
+    name: 'LootStack',
+    usage: '<LootStack label="Wave drops" items={items} limit={3} />',
+    states: ['empty', 'capped', 'overflow'],
+    props: [
+      { name: 'items', type: 'LootStackItem[]', description: 'Loot items rendered as compact cards.' },
+      { name: 'label', type: 'string', description: 'Accessible list label and stack heading.' },
+      { name: 'limit', type: 'number', description: 'Maximum visible items before the overflow marker.' },
+      { name: 'className', type: 'string', description: 'Optional class name for layout control.' },
+    ],
+  },
+  {
+    name: 'RewardReveal',
+    usage: '<RewardReveal title="Cache unlocked" state="revealed" items={items} actionLabel="Claim" />',
+    states: ['sealed', 'revealed', 'claimed'],
+    props: [
+      { name: 'title', type: 'string', description: 'Reward panel title.' },
+      { name: 'items', type: 'LootStackItem[]', description: 'Reward contents shown in the reveal panel.' },
+      { name: 'state', type: 'sealed | revealed | claimed', description: 'Reveal flow state.' },
+      { name: 'actionLabel', type: 'string', description: 'Optional claim or continue action label.' },
+      { name: 'onAction', type: '() => void', description: 'Optional action handler.' },
+    ],
+  },
+  {
     name: 'RarityBorder',
     usage: '<RarityBorder tone="legendary">Legendary cache</RarityBorder>',
     states: ['common', 'rare', 'epic', 'legendary'],
