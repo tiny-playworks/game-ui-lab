@@ -826,6 +826,74 @@ code {
   min-height: 164px;
 }
 
+.overview-card__usage {
+  display: block;
+  overflow-x: auto;
+  padding: 12px;
+  border: 1px solid rgba(129, 230, 217, 0.12);
+  border-radius: 12px;
+  background: rgba(5, 9, 18, 0.9);
+  color: #8ff8df;
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.overview-card__states {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.overview-card__states span {
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(12, 18, 34, 0.78);
+  color: #d6e3f7;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.overview-card__props {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  background: rgba(7, 12, 24, 0.7);
+}
+
+.overview-card__prop-row {
+  display: grid;
+  grid-template-columns: minmax(96px, 0.58fr) minmax(128px, 0.9fr) minmax(0, 1.4fr);
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.overview-card__prop-row:first-child {
+  border-top: 0;
+}
+
+.overview-card__prop-row strong {
+  color: #f8fbff;
+  font-size: 12px;
+}
+
+.overview-card__prop-row code {
+  color: #8ff8df;
+  font-size: 11px;
+  white-space: normal;
+}
+
+.overview-card__prop-row span {
+  color: #aebdda;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .sample-row {
   align-items: center;
 }
@@ -965,6 +1033,10 @@ code {
 
   .overview-card__sample {
     min-height: auto;
+  }
+
+  .overview-card__prop-row {
+    grid-template-columns: 1fr;
   }
 
   .hud-state-panel {

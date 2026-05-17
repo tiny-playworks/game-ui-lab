@@ -63,6 +63,9 @@ importers:
       '@rsbuild/plugin-react':
         specifier: ^1.4.1
         version: 1.4.6(@rsbuild/core@1.7.5)
+      '@rstest/core':
+        specifier: ^0.9.9
+        version: 0.9.10(core-js@3.47.0)(happy-dom@20.9.0)
       '@types/react':
         specifier: ^19.1.2
         version: 19.2.14

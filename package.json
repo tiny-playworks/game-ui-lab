@@ -10,10 +10,11 @@
   },
   "scripts": {
     "dev": "pnpm --filter @tiny-playworks/game-ui-gallery dev",
-    "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && pnpm --filter @tiny-playworks/game-ui-gallery build",
+    "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui-gallery build",
     "build:pages": "pnpm --filter @tiny-playworks/game-ui-gallery build:pages",
-    "test": "pnpm --filter @tiny-playworks/game-ui test",
-    "typecheck": "pnpm --filter @tiny-playworks/game-ui typecheck && pnpm --filter @tiny-playworks/game-ui-gallery typecheck"
+    "test": "pnpm --filter @tiny-playworks/game-ui test && pnpm --filter @tiny-playworks/game-ui-gallery test",
+    "typecheck": "pnpm --filter @tiny-playworks/game-ui typecheck && pnpm --filter @tiny-playworks/game-ui-gallery typecheck",
+    "visual:smoke": "pnpm build && pnpm --filter @tiny-playworks/game-ui-gallery visual:smoke"
   },
   "devDependencies": {
     "@rslib/core": "^0.14.0",

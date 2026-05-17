@@ -12,8 +12,20 @@ import {
 import { LoopingDamagePreview } from '../components/LoopingDamagePreview';
 import { PageIntro } from '../components/PageIntro';
 import { PrimitiveCard } from '../components/PrimitiveCard';
+import { primitiveDocs } from '../lib/primitiveDocs';
 
 const rarityTones: Array<'common' | 'rare' | 'epic' | 'legendary'> = ['common', 'rare', 'epic', 'legendary'];
+
+function getPrimitiveDoc(name: string) {
+  const doc = primitiveDocs.find((item) => item.name === name);
+
+  if (!doc) {
+    throw new Error(`Missing primitive docs for ${name}`);
+  }
+
+  const { usage, states, props } = doc;
+  return { usage, states, props };
+}
 
 export function PrimitivesRoute() {
   return (
@@ -58,6 +70,7 @@ export function PrimitivesRoute() {
           name="DamageNumber"
           summary="Floating combat text for damage, heal, critical, and miss states."
           tokenNote="Consumes combat color tokens and motion durations to create a readable brightness spike."
+          {...getPrimitiveDoc('DamageNumber')}
         >
           <LoopingDamagePreview
             className="sample-row sample-row--damage"
@@ -75,6 +88,7 @@ export function PrimitivesRoute() {
           name="FloatingToast"
           summary="Short-lived game feedback messages for utility, loot, warning, and success states."
           tokenNote="Consumes surface, line, spacing, and shadow tokens so utility alerts stay legible."
+          {...getPrimitiveDoc('FloatingToast')}
         >
           <div className="sample-stack">
             <FloatingToast title="Info" message="Reload finished" variant="info" />
@@ -86,6 +100,7 @@ export function PrimitivesRoute() {
           name="ComboCounter"
           summary="Compact HUD counter for combo chains and rising encounter tempo."
           tokenNote="Consumes critical-tone colors, radius, and shadow/glow tokens for the combo peak."
+          {...getPrimitiveDoc('ComboCounter')}
         >
           <div className="sample-row sample-row--combo">
             <ComboCounter count={5} />
@@ -97,6 +112,7 @@ export function PrimitivesRoute() {
           name="HealthBar"
           summary="Persistent HP and shield readout for player, boss, and encounter HUD states."
           tokenNote="Consumes health and shield HUD tokens with compact value and shield overlays."
+          {...getPrimitiveDoc('HealthBar')}
         >
           <div className="sample-stack">
             <HealthBar value={96} max={120} shield={32} label="Pilot HP" showValue />
@@ -108,6 +124,7 @@ export function PrimitivesRoute() {
           name="ResourceMeter"
           summary="Compact mana, energy, and stamina bars for ability costs and movement state."
           tokenNote="Consumes HUD resource colors while preserving the shared surface and spacing tokens."
+          {...getPrimitiveDoc('ResourceMeter')}
         >
           <div className="sample-stack">
             <ResourceMeter value={44} max={80} kind="mana" label="Arcane" />
@@ -120,6 +137,7 @@ export function PrimitivesRoute() {
           name="CooldownSlot"
           summary="Ability slot with cooldown mask, ready state, disabled state, and compact label."
           tokenNote="Consumes cooldown mask, accent, heal, radius, and surface tokens for ability readiness."
+          {...getPrimitiveDoc('CooldownSlot')}
         >
           <div className="sample-row sample-row--cooldowns">
             <CooldownSlot progress={1} label="Blink" icon="B" ready />
@@ -132,6 +150,7 @@ export function PrimitivesRoute() {
           name="StatusBadge"
           summary="Small persistent status marker for buffs, debuffs, warnings, stacks, and durations."
           tokenNote="Consumes HUD positive, negative, warning, and neutral tones for readable status chips."
+          {...getPrimitiveDoc('StatusBadge')}
         >
           <div className="sample-row sample-row--badges">
             <StatusBadge label="Haste" tone="buff" count={3} duration="12s" />
@@ -145,6 +164,7 @@ export function PrimitivesRoute() {
           name="RarityBorder"
           summary="Token-driven rarity frame for common, rare, epic, and legendary states."
           tokenNote="Consumes rarity colors, radius, and glow tokens to frame loot and status emphasis."
+          {...getPrimitiveDoc('RarityBorder')}
         >
           <div className="sample-grid sample-grid--rarity">
             {rarityTones.map((tone) => (
@@ -161,6 +181,7 @@ export function PrimitivesRoute() {
           name="GameUiProvider"
           summary="Theme root that provides the CSS variable context for every primitive preview."
           tokenNote="Provides the shared theme boundary so primitives read from one token foundation instead of local overrides."
+          {...getPrimitiveDoc('GameUiProvider')}
         >
           <GameUiProvider className="provider-sample">
             <div className="provider-sample__panel">
