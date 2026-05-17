@@ -21,6 +21,7 @@ export default defineConfig({
     title: 'Tiny Playworks Game UI Lab',
   },
   server: {
+    historyApiFallback: true,
     port: 4300,
   },
 });
