@@ -1,9 +1,13 @@
 import React from 'react';
 import {
   ComboCounter,
+  CooldownSlot,
   FloatingToast,
   GameUiProvider,
+  HealthBar,
   RarityBorder,
+  ResourceMeter,
+  StatusBadge,
 } from '@tiny-playworks/game-ui';
 import { LoopingDamagePreview } from '../components/LoopingDamagePreview';
 import { PageIntro } from '../components/PageIntro';
@@ -41,8 +45,9 @@ export function PrimitivesRoute() {
               ]}
             />
             <div className="primitive-stage__aside">
+              <HealthBar value={86} max={120} shield={28} label="Pilot HP" showValue />
               <ComboCounter count={19} />
-              <FloatingToast title="Overview running" message="Five public primitives, one dark shell." variant="success" />
+              <FloatingToast title="Overview running" message="HUD core joins the feedback primitives." variant="success" />
             </div>
           </div>
         </RarityBorder>
@@ -85,6 +90,54 @@ export function PrimitivesRoute() {
           <div className="sample-row sample-row--combo">
             <ComboCounter count={5} />
             <ComboCounter count={18} />
+          </div>
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="HealthBar"
+          summary="Persistent HP and shield readout for player, boss, and encounter HUD states."
+          tokenNote="Consumes health and shield HUD tokens with compact value and shield overlays."
+        >
+          <div className="sample-stack">
+            <HealthBar value={96} max={120} shield={32} label="Pilot HP" showValue />
+            <HealthBar value={42} max={180} label="Boss Core" tone="boss" showValue />
+          </div>
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="ResourceMeter"
+          summary="Compact mana, energy, and stamina bars for ability costs and movement state."
+          tokenNote="Consumes HUD resource colors while preserving the shared surface and spacing tokens."
+        >
+          <div className="sample-stack">
+            <ResourceMeter value={44} max={80} kind="mana" label="Arcane" />
+            <ResourceMeter value={68} max={100} kind="energy" />
+            <ResourceMeter value={31} max={60} kind="stamina" />
+          </div>
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="CooldownSlot"
+          summary="Ability slot with cooldown mask, ready state, disabled state, and compact label."
+          tokenNote="Consumes cooldown mask, accent, heal, radius, and surface tokens for ability readiness."
+        >
+          <div className="sample-row sample-row--cooldowns">
+            <CooldownSlot progress={1} label="Blink" icon="B" ready />
+            <CooldownSlot progress={0.58} label="Burst" icon="Q" />
+            <CooldownSlot progress={0.2} label="Nova" icon="R" disabled />
+          </div>
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="StatusBadge"
+          summary="Small persistent status marker for buffs, debuffs, warnings, stacks, and durations."
+          tokenNote="Consumes HUD positive, negative, warning, and neutral tones for readable status chips."
+        >
+          <div className="sample-row sample-row--badges">
+            <StatusBadge label="Haste" tone="buff" count={3} duration="12s" />
+            <StatusBadge label="Burn" tone="debuff" duration="8s" />
+            <StatusBadge label="Guard" tone="neutral" />
+            <StatusBadge label="Overheat" tone="warning" />
           </div>
         </PrimitiveCard>
 

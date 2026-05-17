@@ -160,6 +160,215 @@
   font-weight: 700;
 }
 
+.game-ui-health-bar {
+  display: grid;
+  min-width: 220px;
+  gap: var(--game-ui-space-1);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-health-bar__topline,
+.game-ui-resource-meter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--game-ui-space-2);
+}
+
+.game-ui-health-bar__label,
+.game-ui-resource-meter__label {
+  overflow: hidden;
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.game-ui-health-bar__value,
+.game-ui-resource-meter__value,
+.game-ui-health-bar__shield-value {
+  color: var(--game-ui-text);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.game-ui-health-bar__track,
+.game-ui-resource-meter__track {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  height: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(4, 8, 18, 0.74);
+  box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.game-ui-health-bar__fill,
+.game-ui-health-bar__shield,
+.game-ui-resource-meter__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  width: var(--game-ui-health-ratio);
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--game-ui-health), color-mix(in srgb, var(--game-ui-health), white 24%));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--game-ui-health), transparent 56%);
+}
+
+.game-ui-health-bar__shield {
+  left: var(--game-ui-health-ratio);
+  width: var(--game-ui-shield-ratio);
+  background: linear-gradient(90deg, var(--game-ui-shield), color-mix(in srgb, var(--game-ui-shield), white 24%));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--game-ui-shield), transparent 54%);
+}
+
+.game-ui-health-bar__shield-value {
+  color: var(--game-ui-shield);
+}
+
+.game-ui-health-bar[data-tone="danger"] .game-ui-health-bar__fill {
+  filter: saturate(1.24);
+}
+
+.game-ui-health-bar[data-tone="boss"] .game-ui-health-bar__fill {
+  background: linear-gradient(90deg, var(--game-ui-debuff), var(--game-ui-critical));
+}
+
+.game-ui-health-bar[data-empty="true"] .game-ui-health-bar__fill {
+  opacity: 0.24;
+}
+
+.game-ui-resource-meter {
+  min-width: 190px;
+  padding: 8px 10px;
+  border: 1px solid var(--game-ui-line);
+  border-radius: var(--game-ui-radius-md);
+  background: var(--game-ui-surface);
+  box-shadow: var(--game-ui-shadow-soft);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-resource-meter__track {
+  grid-column: 1 / -1;
+  height: 8px;
+}
+
+.game-ui-resource-meter__fill {
+  width: var(--game-ui-resource-ratio);
+  background: linear-gradient(90deg, var(--game-ui-mana), color-mix(in srgb, var(--game-ui-mana), white 24%));
+}
+
+.game-ui-resource-meter[data-kind="energy"] .game-ui-resource-meter__fill {
+  background: linear-gradient(90deg, var(--game-ui-energy), color-mix(in srgb, var(--game-ui-energy), white 24%));
+}
+
+.game-ui-resource-meter[data-kind="stamina"] .game-ui-resource-meter__fill {
+  background: linear-gradient(90deg, var(--game-ui-stamina), color-mix(in srgb, var(--game-ui-stamina), white 24%));
+}
+
+.game-ui-cooldown-slot {
+  position: relative;
+  display: grid;
+  width: 72px;
+  min-width: 72px;
+  gap: 5px;
+  place-items: center;
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-cooldown-slot__icon {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--game-ui-accent), transparent 34%);
+  border-radius: var(--game-ui-radius-md);
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.18), transparent 34%),
+    var(--game-ui-surface-strong);
+  box-shadow: var(--game-ui-shadow-soft);
+  color: var(--game-ui-accent);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.game-ui-cooldown-slot__mask {
+  position: absolute;
+  top: 0;
+  width: 52px;
+  height: var(--game-ui-cooldown-progress);
+  border-radius: var(--game-ui-radius-md) var(--game-ui-radius-md) 0 0;
+  background: var(--game-ui-cooldown-mask);
+  pointer-events: none;
+}
+
+.game-ui-cooldown-slot__label {
+  overflow: hidden;
+  max-width: 72px;
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.game-ui-cooldown-slot[data-ready="true"] .game-ui-cooldown-slot__icon {
+  border-color: var(--game-ui-heal);
+  color: var(--game-ui-heal);
+  box-shadow: var(--game-ui-shadow-soft), 0 0 22px color-mix(in srgb, var(--game-ui-heal), transparent 64%);
+}
+
+.game-ui-cooldown-slot[data-disabled="true"] {
+  opacity: 0.48;
+}
+
+.game-ui-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--game-ui-line);
+  border-radius: 999px;
+  background: var(--game-ui-surface);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.game-ui-status-badge[data-tone="buff"] {
+  border-color: color-mix(in srgb, var(--game-ui-stamina), transparent 40%);
+  color: var(--game-ui-stamina);
+}
+
+.game-ui-status-badge[data-tone="debuff"] {
+  border-color: color-mix(in srgb, var(--game-ui-debuff), transparent 36%);
+  color: var(--game-ui-debuff);
+}
+
+.game-ui-status-badge[data-tone="warning"] {
+  border-color: color-mix(in srgb, var(--game-ui-critical), transparent 36%);
+  color: var(--game-ui-critical);
+}
+
+.game-ui-status-badge__count,
+.game-ui-status-badge__duration {
+  color: var(--game-ui-text);
+  font-size: 11px;
+}
+
 .game-ui-rarity-border {
   --game-ui-rarity-color: var(--game-ui-rarity-common);
   position: relative;
@@ -215,5 +424,13 @@
   52%,
   100% {
     transform: translateX(90%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-ui-rarity-border[data-active="true"]::before {
+    animation: none;
+    opacity: 0.18;
+    transform: none;
   }
 }

@@ -543,11 +543,44 @@ code {
   text-transform: uppercase;
 }
 
+.hud-state-panel {
+  position: absolute;
+  top: 56px;
+  left: 22px;
+  z-index: 4;
+  display: grid;
+  width: min(330px, calc(100% - 44px));
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(129, 230, 217, 0.16);
+  border-radius: 16px;
+  background: rgba(7, 12, 24, 0.72);
+  box-shadow: var(--game-ui-shadow-soft);
+  backdrop-filter: blur(14px);
+}
+
+.hud-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
 .combo-dock {
   position: absolute;
   right: 22px;
   bottom: 22px;
   z-index: 4;
+}
+
+.cooldown-dock {
+  position: absolute;
+  bottom: 22px;
+  left: 128px;
+  z-index: 4;
+  display: flex;
+  gap: 10px;
+  align-items: end;
 }
 
 .rarity-chip {
@@ -766,7 +799,7 @@ code {
 }
 
 .consumption-panel__grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .route-note--compact strong {
@@ -803,6 +836,17 @@ code {
 
 .sample-row--combo {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sample-row--cooldowns {
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+}
+
+.sample-row--badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
 }
 
 .sample-stack {
@@ -921,5 +965,27 @@ code {
 
   .overview-card__sample {
     min-height: auto;
+  }
+
+  .hud-state-panel {
+    right: 14px;
+    left: 14px;
+    width: auto;
+  }
+
+  .cooldown-dock {
+    bottom: 116px;
+    left: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boss-orbit,
+  .boss-eye {
+    animation: none;
+  }
+
+  .arena-grid {
+    mask-image: none;
   }
 }
