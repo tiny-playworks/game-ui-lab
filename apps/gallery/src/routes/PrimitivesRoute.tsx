@@ -5,8 +5,11 @@ import {
   FloatingToast,
   GameUiProvider,
   HealthBar,
+  LootCard,
+  LootStack,
   RarityBorder,
   ResourceMeter,
+  RewardReveal,
   StatusBadge,
 } from '@tiny-playworks/game-ui';
 import { LoopingDamagePreview } from '../components/LoopingDamagePreview';
@@ -15,6 +18,13 @@ import { PrimitiveCard } from '../components/PrimitiveCard';
 import { primitiveDocs } from '../lib/primitiveDocs';
 
 const rarityTones: Array<'common' | 'rare' | 'epic' | 'legendary'> = ['common', 'rare', 'epic', 'legendary'];
+
+const lootItems = [
+  { id: 'credits', name: 'Credits', rarity: 'common' as const, quantity: 120, value: '120g' },
+  { id: 'core', name: 'Pulse Core', rarity: 'rare' as const, quantity: 1, subtitle: 'Upgrade' },
+  { id: 'shard', name: 'Neon Shard', rarity: 'epic' as const, quantity: 3, value: '240g' },
+  { id: 'cache', name: 'Ancient Cache', rarity: 'legendary' as const, quantity: 1, subtitle: 'Wave clear' },
+];
 
 function getPrimitiveDoc(name: string) {
   const doc = primitiveDocs.find((item) => item.name === name);
@@ -158,6 +168,36 @@ export function PrimitivesRoute() {
             <StatusBadge label="Guard" tone="neutral" />
             <StatusBadge label="Overheat" tone="warning" />
           </div>
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="LootCard"
+          summary="Compact loot item surface for rarity, quantity, value, and item category metadata."
+          tokenNote="Consumes rarity colors, loot emphasis, surface, radius, and shadow tokens for item pickup clarity."
+          {...getPrimitiveDoc('LootCard')}
+        >
+          <div className="sample-stack">
+            <LootCard name="Neon Shard" rarity="epic" quantity={3} value="240g" subtitle="Crafting drop" />
+            <LootCard name="Ancient Cache" rarity="legendary" subtitle="Wave clear" selected />
+          </div>
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="LootStack"
+          summary="Stacked drop list with a stable visible limit and overflow marker for post-wave pickup."
+          tokenNote="Uses LootCard internally so stacks inherit rarity and surface tokens without extra API paths."
+          {...getPrimitiveDoc('LootStack')}
+        >
+          <LootStack label="Wave drops" items={lootItems} limit={3} />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="RewardReveal"
+          summary="Reward flow panel for sealed, revealed, and claimed cache states with optional action."
+          tokenNote="Combines loot and surface tokens into a single post-combat reveal state."
+          {...getPrimitiveDoc('RewardReveal')}
+        >
+          <RewardReveal title="Cache unlocked" state="revealed" items={lootItems.slice(1)} actionLabel="Claim" />
         </PrimitiveCard>
 
         <PrimitiveCard

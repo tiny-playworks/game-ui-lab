@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from '@rstest/core';
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it } from '@rstest/core';
 import {
   ComboCounter,
   CooldownSlot,
@@ -8,10 +8,17 @@ import {
   FloatingToast,
   GameUiProvider,
   HealthBar,
+  LootCard,
+  LootStack,
   RarityBorder,
   ResourceMeter,
+  RewardReveal,
   StatusBadge,
 } from '../index';
+
+afterEach(() => {
+  cleanup();
+});
 
 describe('game ui primitives', () => {
   it('renders token provider with theme attribute', () => {
@@ -96,5 +103,58 @@ describe('game ui primitives', () => {
     expect(screen.getByRole('status', { name: 'Haste buff 3 stacks 12s' }).getAttribute('data-tone')).toBe('buff');
     expect(screen.getByText('x3').textContent).toBe('x3');
     expect(screen.getByText('12s').textContent).toBe('12s');
+  });
+
+  it('renders a loot card with rarity and quantity metadata', () => {
+    render(<LootCard name="Neon Shard" rarity="epic" quantity={3} value="240g" subtitle="Crafting drop" />);
+
+    expect(screen.getByRole('article', { name: 'Neon Shard epic loot' }).getAttribute('data-rarity')).toBe('epic');
+    expect(screen.getByText('Neon Shard').textContent).toBe('Neon Shard');
+    expect(screen.getByText('x3').textContent).toBe('x3');
+    expect(screen.getByText('240g').textContent).toBe('240g');
+  });
+
+  it('renders a loot stack with capped visible items', () => {
+    render(
+      <LootStack
+        label="Wave drops"
+        limit={2}
+        items={[
+          { id: 'credits', name: 'Credits', rarity: 'common', quantity: 120 },
+          { id: 'core', name: 'Pulse Core', rarity: 'rare', quantity: 1 },
+          { id: 'shard', name: 'Neon Shard', rarity: 'epic', quantity: 3 },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('list', { name: 'Wave drops 3 items' }).getAttribute('data-overflow')).toBe('1');
+    expect(screen.getByText('Credits').textContent).toBe('Credits');
+    expect(screen.getByText('Pulse Core').textContent).toBe('Pulse Core');
+    expect(screen.getByText('+1 more').textContent).toBe('+1 more');
+  });
+
+  it('renders reward reveal states and action', () => {
+    const { rerender } = render(
+      <RewardReveal
+        title="Cache unlocked"
+        state="sealed"
+        items={[{ id: 'cache', name: 'Ancient Cache', rarity: 'legendary' }]}
+      />,
+    );
+
+    expect(screen.getByRole('status', { name: 'Cache unlocked sealed reward with 1 item' }).getAttribute('data-state')).toBe('sealed');
+    expect(screen.getByText('Sealed').textContent).toBe('Sealed');
+
+    rerender(
+      <RewardReveal
+        title="Cache unlocked"
+        state="revealed"
+        actionLabel="Claim"
+        items={[{ id: 'cache', name: 'Ancient Cache', rarity: 'legendary' }]}
+      />,
+    );
+
+    expect(screen.getByRole('status', { name: 'Cache unlocked revealed reward with 1 item' }).getAttribute('data-state')).toBe('revealed');
+    expect(screen.getByRole('button', { name: 'Claim' }).textContent).toBe('Claim');
   });
 });

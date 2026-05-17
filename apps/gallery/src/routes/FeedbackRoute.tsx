@@ -118,6 +118,14 @@ const primitiveSnapshots = [
     note: 'Framing for collectible emphasis.',
   },
   {
+    name: 'LootStack',
+    note: 'Post-wave drops with overflow handling.',
+  },
+  {
+    name: 'RewardReveal',
+    note: 'Cache reveal and claim flow.',
+  },
+  {
     name: 'GameUiProvider',
     note: 'Theme root for the shared token layer.',
   },
@@ -401,7 +409,7 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
           <button type="button" className="gateway-card" onClick={() => onNavigate('/primitives')}>
             <span className="gateway-card__eyebrow">Primitives overview</span>
             <strong>Public API in motion</strong>
-            <p>DamageNumber, FloatingToast, ComboCounter, RarityBorder, and GameUiProvider in compact live previews.</p>
+            <p>Combat feedback, HUD state, rarity framing, and loot flow in compact live previews.</p>
           </button>
         </div>
       </section>

@@ -369,6 +369,188 @@
   font-size: 11px;
 }
 
+.game-ui-loot-card {
+  --game-ui-loot-rarity-color: var(--game-ui-rarity-common);
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--game-ui-space-2);
+  min-width: 210px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-loot-rarity-color), transparent 36%);
+  border-radius: var(--game-ui-radius-md);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--game-ui-loot-rarity-color), transparent 88%), transparent 48%),
+    var(--game-ui-surface);
+  box-shadow: var(--game-ui-shadow-soft);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-loot-card[data-rarity="rare"] {
+  --game-ui-loot-rarity-color: var(--game-ui-rarity-rare);
+}
+
+.game-ui-loot-card[data-rarity="epic"] {
+  --game-ui-loot-rarity-color: var(--game-ui-rarity-epic);
+}
+
+.game-ui-loot-card[data-rarity="legendary"] {
+  --game-ui-loot-rarity-color: var(--game-ui-rarity-legendary);
+}
+
+.game-ui-loot-card[data-selected="true"] {
+  box-shadow: var(--game-ui-shadow-soft), 0 0 24px color-mix(in srgb, var(--game-ui-loot-rarity-color), transparent 70%);
+}
+
+.game-ui-loot-card__icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--game-ui-loot-rarity-color), transparent 28%);
+  border-radius: var(--game-ui-radius-sm);
+  background: color-mix(in srgb, var(--game-ui-loot-rarity-color), transparent 84%);
+  color: var(--game-ui-loot-rarity-color);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.game-ui-loot-card__body,
+.game-ui-loot-card__meta {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.game-ui-loot-card__name {
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-ui-loot-card__subtitle,
+.game-ui-loot-card__value {
+  overflow: hidden;
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-ui-loot-card__meta {
+  justify-items: end;
+}
+
+.game-ui-loot-card__quantity {
+  color: var(--game-ui-loot-rarity-color);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.game-ui-loot-stack {
+  display: grid;
+  gap: var(--game-ui-space-2);
+  min-width: 240px;
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-loot-stack__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--game-ui-space-2);
+}
+
+.game-ui-loot-stack__label,
+.game-ui-loot-stack__count {
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.game-ui-loot-stack__list {
+  display: grid;
+  gap: var(--game-ui-space-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.game-ui-loot-stack__item {
+  min-width: 0;
+}
+
+.game-ui-loot-stack__overflow {
+  display: grid;
+  min-height: 32px;
+  place-items: center;
+  border: 1px dashed var(--game-ui-line);
+  border-radius: var(--game-ui-radius-md);
+  color: var(--game-ui-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.game-ui-reward-reveal {
+  position: relative;
+  display: grid;
+  gap: var(--game-ui-space-3);
+  min-width: 280px;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-loot), transparent 42%);
+  border-radius: var(--game-ui-radius-lg);
+  background:
+    radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--game-ui-loot), transparent 78%), transparent 34%),
+    var(--game-ui-surface-strong);
+  box-shadow: var(--game-ui-shadow-soft), 0 0 28px color-mix(in srgb, var(--game-ui-loot), transparent 82%);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-reward-reveal__header {
+  display: grid;
+  gap: 3px;
+}
+
+.game-ui-reward-reveal__state {
+  color: var(--game-ui-loot);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.game-ui-reward-reveal__title {
+  font-size: 16px;
+}
+
+.game-ui-reward-reveal[data-state="sealed"] .game-ui-loot-stack {
+  filter: saturate(0.5);
+  opacity: 0.72;
+}
+
+.game-ui-reward-reveal[data-state="claimed"] {
+  opacity: 0.72;
+}
+
+.game-ui-reward-reveal__action {
+  min-height: 34px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-loot), transparent 28%);
+  border-radius: var(--game-ui-radius-md);
+  background: color-mix(in srgb, var(--game-ui-loot), transparent 84%);
+  color: var(--game-ui-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 .game-ui-rarity-border {
   --game-ui-rarity-color: var(--game-ui-rarity-common);
   position: relative;

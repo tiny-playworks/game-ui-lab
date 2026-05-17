@@ -32,6 +32,9 @@ This is not another React business UI library. The project focuses on motion-fir
 - `ResourceMeter`: compact mana, energy, and stamina meter for ability costs and movement state.
 - `CooldownSlot`: ability slot with cooldown mask, ready state, disabled state, and compact label.
 - `StatusBadge`: small persistent status marker for buffs, debuffs, warnings, stacks, and durations.
+- `LootCard`: compact loot item surface for rarity, quantity, value, and item metadata.
+- `LootStack`: capped post-wave drop list with overflow handling.
+- `RewardReveal`: sealed, revealed, and claimed reward panel for loot flow moments.
 - `RarityBorder`: token-driven rarity frame for common, rare, epic, and legendary states.
 - `GameUiProvider`: theme root for Game UI primitives.
 
@@ -47,8 +50,11 @@ import {
   FloatingToast,
   GameUiProvider,
   HealthBar,
+  LootCard,
+  LootStack,
   RarityBorder,
   ResourceMeter,
+  RewardReveal,
   StatusBadge,
   type ComboCounterProps,
   type CooldownSlotProps,
@@ -56,7 +62,10 @@ import {
   type FloatingToastProps,
   type RarityBorderProps,
   type HealthBarProps,
+  type LootCardProps,
+  type LootStackProps,
   type ResourceMeterProps,
+  type RewardRevealProps,
   type StatusBadgeProps,
 } from '@tiny-playworks/game-ui';
 
