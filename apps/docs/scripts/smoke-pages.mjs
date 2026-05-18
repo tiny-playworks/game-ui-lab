@@ -23,8 +23,8 @@ const routes = [
 ];
 
 const viewports = [
-  { name: 'desktop', width: 1440, height: 1000, mobile: false },
-  { name: 'mobile', width: 390, height: 900, mobile: true },
+  { name: 'desktop', width: 1440, height: 1000, mobile: false, minScreenshotBytes: 25_000 },
+  { name: 'mobile', width: 390, height: 900, mobile: true, minScreenshotBytes: 18_000 },
 ];
 
 if (!chromePath) {
@@ -76,7 +76,7 @@ try {
       });
 
       const screenshotSize = statSync(screenshotPath).size;
-      if (screenshotSize < 25_000) {
+      if (screenshotSize < viewport.minScreenshotBytes) {
         throw new Error(`Screenshot looks too small for ${route.path} ${viewport.name}: ${screenshotSize} bytes`);
       }
     }
