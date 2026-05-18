@@ -7,10 +7,10 @@ export default defineConfig({
   description: 'Motion-first React primitives for game-like web interfaces.',
   themeConfig: {
     nav: [
-      { text: 'Guide', link: '/guide/getting-started' },
-      { text: 'Primitives', link: '/primitives/' },
-      { text: 'Tokens', link: '/tokens/' },
-      { text: 'Lab', link: '/lab/' },
+      { text: '指南 / Guide', link: '/guide/getting-started' },
+      { text: '原语 / Primitives', link: '/primitives/' },
+      { text: '令牌 / Tokens', link: '/tokens/' },
+      { text: '实验台 / Lab', link: '/lab/' },
     ],
     sidebar: {
       '/guide/': [

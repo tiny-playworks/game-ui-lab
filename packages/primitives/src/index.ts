@@ -1,3 +1,5 @@
+import './styles.css';
+
 export { ComboCounter } from './combo-counter';
 export type { ComboCounterProps } from './combo-counter';
 export { CooldownSlot } from './cooldown-slot';

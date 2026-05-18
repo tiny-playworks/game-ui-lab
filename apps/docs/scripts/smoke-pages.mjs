@@ -15,8 +15,8 @@ const chromePath = process.env.CHROME_BIN ?? findChrome();
 const publicBase = '/game-ui-lab/';
 
 const routes = [
-  { path: '/game-ui-lab/', name: 'docs-home', keyText: 'Tiny Playworks Game UI' },
-  { path: '/game-ui-lab/lab/', name: 'lab-home', keyText: 'A MOVING GAME UI LAB' },
+  { path: '/game-ui-lab/', name: 'docs-home', keyText: '游戏 UI 组件库' },
+  { path: '/game-ui-lab/lab/', name: 'lab-home', keyText: '直接看效果' },
 ];
 
 const viewports = [

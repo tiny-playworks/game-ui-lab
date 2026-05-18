@@ -1,16 +1,32 @@
-# Getting Started
+import { DocShell } from '../../components/doc-shell';
+import { Localized } from '../../components/locale';
 
-Install the public packages:
+<DocShell
+  eyebrowZh="入门"
+  eyebrowEn="Getting Started"
+  titleZh="先把组件用起来"
+  titleEn="Get the components running"
+  summaryZh="这一步只讲最短路径：装包、导入、放进页面里。"
+  summaryEn="The shortest path only: install, import, and render."
+>
+  <section className="docs-section">
+    <Localized
+      as="h2"
+      className="docs-section__title"
+      zh="安装"
+      en="Install"
+    />
+    <pre className="docs-card"><code>pnpm add @tiny-playworks/game-ui @tiny-playworks/tokens</code></pre>
+  </section>
 
-```bash
-pnpm add @tiny-playworks/game-ui @tiny-playworks/tokens
-```
-
-Import the components from the package entry and load the shared CSS once:
-
-```tsx
-import { DamageNumber, GameUiProvider } from '@tiny-playworks/game-ui';
-import '@tiny-playworks/game-ui/styles.css';
+  <section className="docs-section">
+    <Localized
+      as="h2"
+      className="docs-section__title"
+      zh="导入"
+      en="Import"
+    />
+    <pre className="docs-card"><code>{`import { DamageNumber, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function CombatPulse() {
   return (
@@ -18,13 +34,27 @@ export function CombatPulse() {
       <DamageNumber value="512" variant="critical" prefix="CRIT" />
     </GameUiProvider>
   );
-}
-```
+}`}</code></pre>
+    <Localized
+      as="p"
+      className="docs-section__text"
+      zh="你不需要额外引 `@tiny-playworks/game-ui/styles.css`。包入口已经把样式一起带上了。"
+      en="You do not need to import `@tiny-playworks/game-ui/styles.css` manually. The package entry already brings the styles in."
+    />
+  </section>
 
-Do not import from internal paths such as `packages/primitives/src/*`. The stable public API is `@tiny-playworks/game-ui`.
-
-## Requirements
-
-- React 18.2 or newer.
-- React DOM 18.2 or newer.
-- A bundler that supports CSS imports.
+  <section className="docs-section">
+    <Localized
+      as="h2"
+      className="docs-section__title"
+      zh="先记住这条规则"
+      en="Remember this rule"
+    />
+    <Localized
+      as="p"
+      className="docs-section__text"
+      zh="不要从 `packages/primitives/src/*` 这种内部路径去拿组件。公开入口只有 `@tiny-playworks/game-ui`。"
+      en="Do not import from internal paths such as `packages/primitives/src/*`. The public entry is `@tiny-playworks/game-ui`."
+    />
+  </section>
+</DocShell>
