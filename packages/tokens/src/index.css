@@ -24,6 +24,14 @@
   --game-ui-rarity-epic: #b47cff;
   --game-ui-rarity-legendary: #ffd166;
 
+  --game-ui-health: #ff4d7d;
+  --game-ui-shield: #4cc9f0;
+  --game-ui-mana: #7c8cff;
+  --game-ui-energy: #ffd166;
+  --game-ui-stamina: #5cff9d;
+  --game-ui-debuff: #ff6b6b;
+  --game-ui-cooldown-mask: rgba(4, 8, 18, 0.72);
+
   --game-ui-radius-sm: 6px;
   --game-ui-radius-md: 10px;
   --game-ui-radius-lg: 16px;

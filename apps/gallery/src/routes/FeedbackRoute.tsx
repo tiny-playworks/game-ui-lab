@@ -1,10 +1,14 @@
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ComboCounter,
+  CooldownSlot,
   DamageNumber,
   FloatingToast,
+  HealthBar,
   RarityBorder,
+  ResourceMeter,
+  StatusBadge,
   type DamageNumberVariant,
   type FloatingToastVariant,
   type RarityBorderTone,
@@ -102,8 +106,24 @@ const primitiveSnapshots = [
     note: 'HUD tempo and streak energy.',
   },
   {
+    name: 'HealthBar',
+    note: 'Persistent HP and shield state.',
+  },
+  {
+    name: 'CooldownSlot',
+    note: 'Ability readiness at a glance.',
+  },
+  {
     name: 'RarityBorder',
     note: 'Framing for collectible emphasis.',
+  },
+  {
+    name: 'LootStack',
+    note: 'Post-wave drops with overflow handling.',
+  },
+  {
+    name: 'RewardReveal',
+    note: 'Cache reveal and claim flow.',
   },
   {
     name: 'GameUiProvider',
@@ -112,6 +132,7 @@ const primitiveSnapshots = [
 ];
 
 export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
+  const shouldReduceMotion = useReducedMotion();
   const [frameIndex, setFrameIndex] = useState(1);
   const [combo, setCombo] = useState(7);
   const [hits, setHits] = useState<HitEvent[]>([
@@ -127,10 +148,15 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
   const eventIdRef = useRef(10);
 
   const frame = frames[frameIndex];
+  const healthValue = Math.max(34, 118 - combo * 3);
+  const shieldValue = frame.rarity === 'epic' || frame.rarity === 'legendary' ? 34 : 0;
+  const manaValue = Math.max(22, 76 - frameIndex * 9);
+  const cooldownProgress = frame.rarity === 'legendary' ? 1 : Math.min(0.92, 0.34 + frameIndex * 0.18);
   const waveLabel = useMemo(
     () => (combo >= 18 ? 'Fever streak' : combo >= 8 ? 'Clean combo' : 'Opening hits'),
     [combo],
   );
+  const feedbackStatus = `Current phase: ${frame.phase}, combo ${combo}, rarity ${frame.rarity}, health ${healthValue}, shield ${shieldValue}.`;
 
   function fireFrame(nextIndex = (frameIndex + 1) % frames.length) {
     const nextFrame = frames[nextIndex];
@@ -220,18 +246,18 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
 
         <div className="route-grid__stage">
           <RarityBorder tone={frame.rarity} className="sandbox-frame">
-            <div className="combat-panel">
+            <div className="combat-panel" aria-label="Live combat feedback stage">
               <div className="arena-grid" aria-hidden="true" />
               <div className="boss-core">
                 <motion.div
                   className="boss-orbit"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+                  animate={shouldReduceMotion ? { rotate: 0 } : { rotate: 360 }}
+                  transition={shouldReduceMotion ? { duration: 0 } : { duration: 12, repeat: Infinity, ease: 'linear' }}
                 />
                 <motion.div
                   className="boss-eye"
-                  animate={{ scale: frame.rarity === 'legendary' ? [1, 1.08, 1] : [1, 1.03, 1] }}
-                  transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+                  animate={shouldReduceMotion ? { scale: 1 } : { scale: frame.rarity === 'legendary' ? [1, 1.08, 1] : [1, 1.03, 1] }}
+                  transition={shouldReduceMotion ? { duration: 0 } : { duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
                 />
               </div>
 
@@ -252,8 +278,22 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
                 <span>{waveLabel}</span>
               </div>
 
+              <div className="hud-state-panel">
+                <HealthBar value={healthValue} max={120} shield={shieldValue} label="Pilot HP" showValue />
+                <ResourceMeter value={manaValue} max={90} kind="mana" label="Arcane" />
+                <div className="hud-status-row">
+                  <StatusBadge label={waveLabel} tone={combo >= 18 ? 'buff' : 'neutral'} count={Math.max(1, Math.floor(combo / 6))} />
+                  <StatusBadge label="Exposed" tone="debuff" duration="8s" />
+                </div>
+              </div>
+
               <div className="rarity-chip" data-tone={frame.rarity}>
                 {frame.rarity}
+              </div>
+
+              <div className="cooldown-dock">
+                <CooldownSlot progress={cooldownProgress} label="Blink" icon="B" ready={cooldownProgress >= 1} />
+                <CooldownSlot progress={0.68} label="Burst" icon="Q" />
               </div>
 
               <div className="combo-dock">
@@ -267,7 +307,11 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
             <button type="button" onClick={resetSandbox}>Reset loop</button>
           </div>
 
-          <div className="toast-stack">
+          <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+            {feedbackStatus}
+          </div>
+
+          <div className="toast-stack" role="log" aria-live="polite" aria-atomic="false" aria-relevant="additions text" aria-label="Feedback messages">
             <AnimatePresence>
               {toasts.map((toast) => (
                 <FloatingToast
@@ -345,6 +389,11 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
             </div>
             <div className="overview-card__sample sample-stack">
               <ComboCounter count={18} />
+              <HealthBar value={82} max={120} shield={24} label="Pilot HP" showValue />
+              <div className="hud-status-row">
+                <CooldownSlot progress={0.7} label="Blink" icon="B" />
+                <StatusBadge label="Haste" tone="buff" count={3} duration="12s" />
+              </div>
               <FloatingToast title="Loot pulse" message="Legendary cache border activated" variant="loot" />
             </div>
           </article>
@@ -365,7 +414,7 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
           <button type="button" className="gateway-card" onClick={() => onNavigate('/primitives')}>
             <span className="gateway-card__eyebrow">Primitives overview</span>
             <strong>Public API in motion</strong>
-            <p>DamageNumber, FloatingToast, ComboCounter, RarityBorder, and GameUiProvider in compact live previews.</p>
+            <p>Combat feedback, HUD state, rarity framing, and loot flow in compact live previews.</p>
           </button>
         </div>
       </section>

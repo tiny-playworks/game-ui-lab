@@ -2,7 +2,9 @@ import React from 'react';
 import {
   ComboCounter,
   FloatingToast,
+  HealthBar,
   RarityBorder,
+  ResourceMeter,
 } from '@tiny-playworks/game-ui';
 import { gameUiTokenGroups } from '@tiny-playworks/tokens';
 import { LoopingDamagePreview } from '../components/LoopingDamagePreview';
@@ -21,6 +23,10 @@ const consumptionNotes = [
   {
     name: 'FloatingToast',
     note: 'Consumes surface, line, space, and shadow tokens so utility feedback stays readable on dark scenes.',
+  },
+  {
+    name: 'HUD Core Pack',
+    note: 'Consumes health, shield, resource, debuff, and cooldown mask tokens for persistent overlay state.',
   },
 ];
 
@@ -54,6 +60,8 @@ export function TokensRoute() {
               ]}
             />
             <div className="token-sample__status">
+              <HealthBar value={84} max={120} shield={24} label="Pilot HP" showValue />
+              <ResourceMeter value={52} max={90} kind="mana" label="Arcane" />
               <ComboCounter count={14} />
               <FloatingToast
                 title="Token deck"

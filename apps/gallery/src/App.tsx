@@ -1,3 +1,4 @@
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { GameUiProvider } from '@tiny-playworks/game-ui';
 import { AppNav } from './components/AppNav';
@@ -15,6 +16,7 @@ import { TokensRoute } from './routes/TokensRoute';
 const basePath = __LAB_BASE_PATH__;
 
 export function App() {
+  const shouldReduceMotion = useReducedMotion();
   const [pathname, setPathname] = useState<GalleryRoutePath>(() => resolveRoutePath(window.location.pathname, basePath));
 
   useEffect(() => {
@@ -53,6 +55,9 @@ export function App() {
     () => galleryRoutes.find((route) => route.path === pathname) ?? galleryRoutes[0],
     [pathname],
   );
+  const routeTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { duration: 0.22, ease: 'easeOut' as const };
 
   return (
     <GameUiProvider className="gallery-app">
@@ -69,9 +74,20 @@ export function App() {
             </header>
           ) : null}
 
-          {pathname === '/' ? <FeedbackRoute onNavigate={navigate} /> : null}
-          {pathname === '/tokens' ? <TokensRoute /> : null}
-          {pathname === '/primitives' ? <PrimitivesRoute /> : null}
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={pathname}
+              className="route-view"
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
+              transition={routeTransition}
+            >
+              {pathname === '/' ? <FeedbackRoute onNavigate={navigate} /> : null}
+              {pathname === '/tokens' ? <TokensRoute /> : null}
+              {pathname === '/primitives' ? <PrimitivesRoute /> : null}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
     </GameUiProvider>
