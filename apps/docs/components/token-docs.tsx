@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { gameUiTokenGroups } from '../../../packages/tokens/src';
+import { gameUiTokenGroups, gameUiTokens, gameUiTokenVars } from '../../../packages/tokens/src';
 import {
   CooldownSlot,
   FloatingToast,
@@ -21,20 +21,23 @@ const groupLabels = {
 };
 
 const customTokenStyle = {
-  '--game-ui-accent': '#ff7ad9',
-  '--game-ui-line': 'rgba(255, 122, 217, 0.38)',
-  '--game-ui-health': '#ff335f',
-  '--game-ui-shield': '#7dd3fc',
-  '--game-ui-mana': '#48f5ff',
-  '--game-ui-rarity-legendary': '#ffb000',
-  '--game-ui-shadow-glow': '0 0 32px rgba(255, 122, 217, 0.34)',
+  [gameUiTokenVars.accent]: '#ff7ad9',
+  [gameUiTokenVars.line]: 'rgba(255, 122, 217, 0.38)',
+  [gameUiTokenVars.health]: '#ff335f',
+  [gameUiTokenVars.shield]: '#7dd3fc',
+  [gameUiTokenVars.mana]: '#48f5ff',
+  [gameUiTokenVars.rarityLegendary]: '#ffb000',
+  [gameUiTokenVars.shadowGlow]: '0 0 32px rgba(255, 122, 217, 0.34)',
 } as CSSProperties;
 
-const tokenCode = `// Tokens are CSS variables, so they can be overridden per scope.
+const tokenCode = `import { gameUiTokens, gameUiTokenVars } from '@tiny-playworks/tokens';
+
 <div style={{
-  '--game-ui-health': '#ff335f',
-  '--game-ui-mana': '#48f5ff',
-  '--game-ui-rarity-legendary': '#ffb000',
+  [gameUiTokenVars.health]: '#ff335f',
+  [gameUiTokenVars.mana]: '#48f5ff',
+  [gameUiTokenVars.rarityLegendary]: '#ffb000',
+  padding: gameUiTokens.space4,
+  gap: gameUiTokens.space3,
 }}>
   <HealthBar value={82} max={100} showValue />
   <ResourceMeter value={64} max={100} kind="mana" label="MP" />
@@ -91,7 +94,7 @@ function TokenScene({ title, style }: { title: string; style?: CSSProperties }) 
           <CooldownSlot label="Q" progress={0.64} ready={false} />
         </div>
         <HealthBar value={82} max={100} shield={18} label="HP" showValue />
-      <ResourceMeter value={64} max={100} kind="mana" label="MP" />
+        <ResourceMeter value={64} max={100} kind="mana" label="MP" />
         <div className="docs-token-scene__loot">
           <LootCard name="星核" rarity="legendary" quantity={1} value="999" subtitle="Legendary" />
           <FloatingToast title="Token Applied" message="Color, border, glow" variant="loot" />
@@ -126,5 +129,5 @@ function TokenSample({ kind, value }: { kind: string; value: string }) {
     return <span className="docs-token-sample docs-token-sample--motion" />;
   }
 
-  return <span className="docs-token-sample docs-token-sample--swatch" style={{ background: value }} />;
+  return <span className="docs-token-sample docs-token-sample--swatch" style={{ background: value, color: gameUiTokens.text }} />;
 }

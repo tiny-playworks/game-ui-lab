@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@rstest/core';
-import { gameUiTokenGroups } from '@tiny-playworks/tokens';
+import { gameUiTokenGroups, gameUiTokens, gameUiTokenVars } from '@tiny-playworks/tokens';
 
 describe('token metadata export', () => {
   it('exposes the gallery token groups', () => {
@@ -38,5 +38,12 @@ describe('token metadata export', () => {
         expect(token.sample.kind.length).toBeGreaterThan(0);
       }
     }
+  });
+
+  it('exposes ergonomic token helpers for direct consumption and scoped overrides', () => {
+    expect(gameUiTokens.space1).toBe('var(--game-ui-space-1)');
+    expect(gameUiTokens.radiusLg).toBe('var(--game-ui-radius-lg)');
+    expect(gameUiTokenVars.space1).toBe('--game-ui-space-1');
+    expect(gameUiTokenVars.health).toBe('--game-ui-health');
   });
 });

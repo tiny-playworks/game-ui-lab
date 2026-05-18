@@ -1,5 +1,54 @@
 export const gameUiTokenCssExport = '@tiny-playworks/tokens/css';
 
+export const gameUiTokenVars = {
+  background: '--game-ui-bg',
+  surface: '--game-ui-surface',
+  surfaceStrong: '--game-ui-surface-strong',
+  line: '--game-ui-line',
+  text: '--game-ui-text',
+  muted: '--game-ui-muted',
+  accent: '--game-ui-accent',
+  accentStrong: '--game-ui-accent-strong',
+  danger: '--game-ui-danger',
+  heal: '--game-ui-heal',
+  critical: '--game-ui-critical',
+  miss: '--game-ui-miss',
+  loot: '--game-ui-loot',
+  rarityCommon: '--game-ui-rarity-common',
+  rarityRare: '--game-ui-rarity-rare',
+  rarityEpic: '--game-ui-rarity-epic',
+  rarityLegendary: '--game-ui-rarity-legendary',
+  health: '--game-ui-health',
+  shield: '--game-ui-shield',
+  mana: '--game-ui-mana',
+  energy: '--game-ui-energy',
+  stamina: '--game-ui-stamina',
+  debuff: '--game-ui-debuff',
+  cooldownMask: '--game-ui-cooldown-mask',
+  radiusSm: '--game-ui-radius-sm',
+  radiusMd: '--game-ui-radius-md',
+  radiusLg: '--game-ui-radius-lg',
+  space1: '--game-ui-space-1',
+  space2: '--game-ui-space-2',
+  space3: '--game-ui-space-3',
+  space4: '--game-ui-space-4',
+  space5: '--game-ui-space-5',
+  shadowSoft: '--game-ui-shadow-soft',
+  shadowGlow: '--game-ui-shadow-glow',
+  durationFast: '--game-ui-duration-fast',
+  durationNormal: '--game-ui-duration-normal',
+  durationSlow: '--game-ui-duration-slow',
+  easeOut: '--game-ui-ease-out',
+} as const;
+
+export type GameUiTokenName = keyof typeof gameUiTokenVars;
+
+export const gameUiTokens = Object.fromEntries(
+  Object.entries(gameUiTokenVars).map(([key, value]) => [key, `var(${value})`]),
+) as {
+  [K in GameUiTokenName]: `var(${(typeof gameUiTokenVars)[K]})`;
+};
+
 export type GameUiTokenGroupId = 'color' | 'rarity' | 'hud' | 'motion' | 'glow' | 'radius' | 'spacing';
 export type GameUiTokenSampleKind = 'swatch' | 'text' | 'border' | 'motion' | 'shadow' | 'radius' | 'spacing';
 
