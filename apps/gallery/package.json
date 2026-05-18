@@ -20,11 +20,11 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@rsbuild/core": "^1.5.10",
-    "@rsbuild/plugin-react": "^1.4.1",
-    "@rstest/core": "^0.9.9",
+    "@rsbuild/core": "^2.0.6",
+    "@rsbuild/plugin-react": "^2.0.0",
+    "@rstest/core": "^0.10.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "typescript": "^5.8.3"
+    "typescript": "^6.0.3"
   }
 }

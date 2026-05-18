@@ -29,7 +29,11 @@ export function PrimitiveCard({
       </div>
       <p className="overview-card__summary">{summary}</p>
       <div className="overview-card__sample">{children}</div>
-      {usage ? <code className="overview-card__usage">{usage}</code> : null}
+      {usage ? (
+        <div className="overview-card__usage" aria-label={`${name} usage example`}>
+          <code>{usage}</code>
+        </div>
+      ) : null}
       {states.length ? (
         <div className="overview-card__states" aria-label={`${name} states`}>
           {states.map((state) => (
