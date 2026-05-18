@@ -16,7 +16,10 @@ const publicBase = '/game-ui-lab/';
 
 const routes = [
   { path: '/game-ui-lab/', name: 'docs-home', keyText: '游戏 UI 组件库' },
-  { path: '/game-ui-lab/lab/', name: 'lab-home', keyText: '直接看效果' },
+  { path: '/game-ui-lab/primitives/', name: 'primitives-overview', keyText: '组件总览' },
+  { path: '/game-ui-lab/primitives/damage-number', name: 'primitive-damage-number', keyText: 'DamageNumber' },
+  { path: '/game-ui-lab/primitives/loot-card', name: 'primitive-loot-card', keyText: 'LootCard' },
+  { path: '/game-ui-lab/lab/', name: 'lab-home', keyText: '组合预览' },
 ];
 
 const viewports = [

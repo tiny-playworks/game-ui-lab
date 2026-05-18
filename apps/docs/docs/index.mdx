@@ -1,40 +1,51 @@
 import { DocShell } from '../components/doc-shell';
 import { Localized } from '../components/locale';
 import { LabPreview } from '../components/lab-preview';
+import { PrimitiveOverview } from '../components/primitive-docs';
 
 <DocShell
   eyebrowZh="Tiny Playworks"
   eyebrowEn="Tiny Playworks"
   titleZh="游戏 UI 组件库"
   titleEn="Game UI primitives"
-  summaryZh="中文优先的公开文档，先把怎么用说清楚，再给你看动效和实验台。"
-  summaryEn="Chinese-first public docs: show usage first, then motion and the live lab."
+  summaryZh="面向网页游戏界面的 React 组件。文档默认中文，组件页提供演示、代码、API 和 token 说明。"
+  summaryEn="React components for game-like web interfaces. Component pages include demos, code, API, and token notes."
 >
   <section className="docs-section">
     <Localized
       as="h2"
       className="docs-section__title"
-      zh="先看怎么用"
-      en="Start with usage"
+      zh="快速入口"
+      en="Quick Links"
     />
-    <Localized
-      as="p"
-      className="docs-section__text"
-      zh="这个库不是传统业务组件库，所以文档也不会用传统业务组件库的写法。你先学会安装、导入和怎么在游戏界面里摆它。"
-      en="This is not a traditional business UI kit, so the docs should not read like one. Start with install, import, and how to place the pieces inside a game UI."
-    />
+    <div className="docs-card-grid">
+      <a className="docs-component-link" href="/game-ui-lab/guide/getting-started">
+        <span className="docs-component-link__meta">Guide</span>
+        <strong>安装和导入</strong>
+        <span>从安装到第一个组件渲染。</span>
+      </a>
+      <a className="docs-component-link" href="/game-ui-lab/primitives/">
+        <span className="docs-component-link__meta">Primitives</span>
+        <strong>组件文档</strong>
+        <span>查看每个组件的演示、代码和 API。</span>
+      </a>
+      <a className="docs-component-link" href="/game-ui-lab/tokens/">
+        <span className="docs-component-link__meta">Tokens</span>
+        <strong>设计令牌</strong>
+        <span>颜色、状态、稀有度和动效变量。</span>
+      </a>
+      <a className="docs-component-link" href="/game-ui-lab/lab/">
+        <span className="docs-component-link__meta">Lab</span>
+        <strong>实验台</strong>
+        <span>把多个组件放在同一个 HUD 场景里看。</span>
+      </a>
+    </div>
   </section>
 
-  <div className="docs-card-grid">
-    <article className="docs-card">
-      <h3>安装和导入</h3>
-      <p>先把 `@tiny-playworks/game-ui` 装进项目，再直接 import 组件。样式会跟着包一起进来，不需要你额外单独引 CSS。</p>
-    </article>
-    <article className="docs-card">
-      <h3>原语和令牌</h3>
-      <p>`game-ui` 负责组件，`tokens` 负责变量基础层。你如果单独玩 token，再去引 `@tiny-playworks/tokens/css` 就行。</p>
-    </article>
-  </div>
+  <section className="docs-section">
+    <Localized as="h2" className="docs-section__title" zh="组件" en="Components" />
+    <PrimitiveOverview />
+  </section>
 
   <LabPreview />
 </DocShell>

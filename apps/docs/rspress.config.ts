@@ -22,7 +22,20 @@ export default defineConfig({
       '/primitives/': [
         {
           text: 'Primitives',
-          items: [{ text: 'Overview', link: '/primitives/' }],
+          items: [
+            { text: 'Overview', link: '/primitives/' },
+            { text: 'DamageNumber', link: '/primitives/damage-number' },
+            { text: 'HealthBar', link: '/primitives/health-bar' },
+            { text: 'ResourceMeter', link: '/primitives/resource-meter' },
+            { text: 'ComboCounter', link: '/primitives/combo-counter' },
+            { text: 'CooldownSlot', link: '/primitives/cooldown-slot' },
+            { text: 'StatusBadge', link: '/primitives/status-badge' },
+            { text: 'FloatingToast', link: '/primitives/floating-toast' },
+            { text: 'RarityBorder', link: '/primitives/rarity-border' },
+            { text: 'LootCard', link: '/primitives/loot-card' },
+            { text: 'LootStack', link: '/primitives/loot-stack' },
+            { text: 'RewardReveal', link: '/primitives/reward-reveal' },
+          ],
         },
       ],
       '/tokens/': [

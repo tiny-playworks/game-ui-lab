@@ -99,19 +99,19 @@ export function LabPreview() {
     () =>
       isZh
         ? frame.rarity === 'legendary'
-          ? '先看效果，再看接口。'
-          : '先看效果，再抄用法。'
+          ? '奖励、HUD、反馈可以在同一个场景里检查。'
+          : '用于检查多个组件组合后的间距、层级和节奏。'
         : frame.rarity === 'legendary'
-          ? 'See the effect first, then the API.'
-          : 'See the effect first, then copy the usage.',
+          ? 'Inspect rewards, HUD, and feedback in one scene.'
+          : 'Check spacing, hierarchy, and rhythm across multiple components.',
     [frame.rarity, isZh],
   );
 
   return (
     <section className="lab-preview">
       <div className="lab-preview__copy">
-        <p className="docs-eyebrow">{isZh ? '实时实验台 / Live Lab' : 'Live Lab / 实时实验台'}</p>
-        <h2>{isZh ? '直接看效果，不是先读一堆英文。' : 'See the effect, not a wall of English.'}</h2>
+        <p className="docs-eyebrow">{isZh ? 'Playground / 实验台' : 'Playground / 实验台'}</p>
+        <h2>{isZh ? 'HUD 组合预览' : 'HUD composition preview'}</h2>
         <p>{subtitle}</p>
         <div className="lab-preview__actions">
           <button type="button" onClick={() => setFrameIndex((current) => (current + 1) % frames.length)}>

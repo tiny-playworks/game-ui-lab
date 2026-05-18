@@ -1,202 +1,22 @@
 import { DocShell } from '../../components/doc-shell';
-import { ComponentShowcase } from '../../components/component-showcase';
 import { Localized } from '../../components/locale';
-import {
-  comboCounterSnippet,
-  cooldownSlotSnippet,
-  damageNumberSnippet,
-  floatingToastSnippet,
-  healthBarSnippet,
-  lootCardSnippet,
-  lootItems,
-  lootStackSnippet,
-  rarityBorderSnippet,
-  resourceMeterSnippet,
-  rewardRevealSnippet,
-  statusBadgeSnippet,
-} from '../../components/primitives-snippets';
-import {
-  ComboCounter,
-  CooldownSlot,
-  DamageNumber,
-  FloatingToast,
-  GameUiProvider,
-  HealthBar,
-  LootCard,
-  LootStack,
-  RarityBorder,
-  ResourceMeter,
-  RewardReveal,
-  StatusBadge,
-} from '@tiny-playworks/game-ui';
+import { PrimitiveOverview } from '../../components/primitive-docs';
 
 <DocShell
-  eyebrowZh="原语"
+  eyebrowZh="Primitives"
   eyebrowEn="Primitives"
-  titleZh="每个组件都有展示和用法"
-  titleEn="Each component shows usage and preview"
-  summaryZh="这一页按组件写，不写说明书式废话。先看展示，再看最短用法。"
-  summaryEn="This page is written component by component. Show first, then the shortest usage."
+  titleZh="组件总览"
+  titleEn="Components"
+  summaryZh="按使用场景浏览组件。进入组件页后可以看到演示、代码、API 和相关 token。"
+  summaryEn="Browse components by use case. Each component page includes demos, code, API, and related tokens."
 >
-  <section className="docs-section">
+  <section className="docs-product-section">
     <Localized
       as="h2"
-      className="docs-section__title"
-      zh="接入前置"
-      en="Basic setup"
+      className="docs-product-heading"
+      zh="公开组件"
+      en="Public Components"
     />
-    <pre className="docs-showcase__code"><code>{`import { GameUiProvider } from '@tiny-playworks/game-ui';`}</code></pre>
+    <PrimitiveOverview />
   </section>
-
-  <GameUiProvider>
-    <ComponentShowcase
-      eyebrowZh="原语 01"
-      eyebrowEn="Primitive 01"
-      titleZh="DamageNumber"
-      titleEn="DamageNumber"
-      summaryZh="飘字，常用来展示伤害、治疗、暴击和 miss。"
-      summaryEn="Floating numbers for damage, healing, critical hits, and misses."
-      code={damageNumberSnippet}
-    >
-      <div className="docs-demo-row">
-        <DamageNumber value="128" variant="critical" prefix="暴击" />
-        <DamageNumber value="42" variant="heal" prefix="治疗" />
-        <DamageNumber value="MISS" variant="miss" />
-      </div>
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 02"
-      eyebrowEn="Primitive 02"
-      titleZh="HealthBar"
-      titleEn="HealthBar"
-      summaryZh="生命值条，适合角色血量、Boss 血条和护盾显示。"
-      summaryEn="A health bar for character HP, boss bars, and shields."
-      code={healthBarSnippet}
-    >
-      <HealthBar value={97} max={120} shield={18} label="生命" showValue />
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 03"
-      eyebrowEn="Primitive 03"
-      titleZh="ResourceMeter"
-      titleEn="ResourceMeter"
-      summaryZh="资源条，适合法力、能量和耐力。"
-      summaryEn="A resource meter for mana, energy, or stamina."
-      code={resourceMeterSnippet}
-    >
-      <div className="docs-demo-stack">
-        <ResourceMeter value={67} max={90} kind="mana" label="法力" />
-        <ResourceMeter value={44} max={100} kind="stamina" label="耐力" />
-      </div>
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 04"
-      eyebrowEn="Primitive 04"
-      titleZh="ComboCounter"
-      titleEn="ComboCounter"
-      summaryZh="连击计数，用来强调节奏和连续命中。"
-      summaryEn="Combo counting for rhythm and chained hits."
-      code={comboCounterSnippet}
-    >
-      <ComboCounter count={12} label="连击" tier="稳定连击" />
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 05"
-      eyebrowEn="Primitive 05"
-      titleZh="CooldownSlot"
-      titleEn="CooldownSlot"
-      summaryZh="技能冷却槽，告诉你什么时候能按。"
-      summaryEn="A cooldown slot that tells you when an action is ready."
-      code={cooldownSlotSnippet}
-    >
-      <CooldownSlot progress={0.62} label="爆发" icon="Q" />
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 06"
-      eyebrowEn="Primitive 06"
-      titleZh="StatusBadge"
-      titleEn="StatusBadge"
-      summaryZh="状态徽章，适合 buff、debuff 和持续时间。"
-      summaryEn="Status badges for buffs, debuffs, and durations."
-      code={statusBadgeSnippet}
-    >
-      <StatusBadge label="急速" tone="buff" count={3} duration="12秒" />
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 07"
-      eyebrowEn="Primitive 07"
-      titleZh="FloatingToast"
-      titleEn="FloatingToast"
-      summaryZh="短消息提示，适合掉落、提醒和状态反馈。"
-      summaryEn="Short toast messages for drops, alerts, and feedback."
-      code={floatingToastSnippet}
-    >
-      <FloatingToast title="命中已触发" message="基础反馈已经开始播放。" variant="info" />
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 08"
-      eyebrowEn="Primitive 08"
-      titleZh="RarityBorder"
-      titleEn="RarityBorder"
-      summaryZh="稀有度边框，适合卡片、掉落和奖励容器。"
-      summaryEn="Rarity borders for cards, drops, and reward containers."
-      code={rarityBorderSnippet}
-    >
-      <RarityBorder tone="legendary">
-        <div className="docs-demo-rarity">
-          <strong>传奇掉落</strong>
-          <span>适合把结果收得更有层次。</span>
-        </div>
-      </RarityBorder>
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 09"
-      eyebrowEn="Primitive 09"
-      titleZh="LootCard"
-      titleEn="LootCard"
-      summaryZh="单个掉落卡片，适合奖励、素材和物品列表。"
-      summaryEn="A single loot card for rewards, materials, and inventories."
-      code={lootCardSnippet}
-    >
-      <LootCard
-        name="星辉碎片"
-        rarity="epic"
-        quantity={3}
-        value="240"
-        subtitle="制作材料"
-      />
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 10"
-      eyebrowEn="Primitive 10"
-      titleZh="LootStack"
-      titleEn="LootStack"
-      summaryZh="掉落栈，适合一组结果或奖励列表。"
-      summaryEn="A loot stack for grouped rewards or result lists."
-      code={lootStackSnippet}
-    >
-      <LootStack items={lootItems} label="掉落栈" limit={3} />
-    </ComponentShowcase>
-
-    <ComponentShowcase
-      eyebrowZh="原语 11"
-      eyebrowEn="Primitive 11"
-      titleZh="RewardReveal"
-      titleEn="RewardReveal"
-      summaryZh="奖励揭示，把结算和领取动作放在一起。"
-      summaryEn="Reward reveal combines the result and the claim action."
-      code={rewardRevealSnippet}
-    >
-      <RewardReveal title="战斗结算" items={lootItems} state="revealed" actionLabel="领取" />
-    </ComponentShowcase>
-  </GameUiProvider>
 </DocShell>

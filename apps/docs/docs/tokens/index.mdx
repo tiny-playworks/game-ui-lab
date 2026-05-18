@@ -6,32 +6,17 @@ import { Localized } from '../../components/locale';
   eyebrowEn="Tokens"
   titleZh="CSS 变量基础层"
   titleEn="CSS variable foundation"
-  summaryZh="token 是给组件提供颜色、间距、动效和状态的底层参数。"
-  summaryEn="Tokens provide the base values for color, spacing, motion, and states."
+  summaryZh="组件默认会加载需要的样式。只有单独消费 token 时，才需要直接使用 tokens 包。"
+  summaryEn="Components load their styles by default. Use the tokens package directly only when consuming tokens outside the components."
 >
   <section className="docs-section">
     <Localized
       as="h2"
       className="docs-section__title"
-      zh="这包主要干什么"
-      en="What this package does"
+      zh="直接消费 token"
+      en="Direct token usage"
     />
-    <Localized
-      as="p"
-      className="docs-section__text"
-      zh="`@tiny-playworks/tokens` 负责变量和元数据。它本身不负责渲染 UI。"
-      en="`@tiny-playworks/tokens` provides variables and metadata. It does not render UI by itself."
-    />
-  </section>
-
-  <section className="docs-section">
-    <Localized
-      as="h2"
-      className="docs-section__title"
-      zh="直接用 token 时"
-      en="When using tokens directly"
-    />
-    <pre className="docs-card"><code>{`import { gameUiTokenGroups } from '@tiny-playworks/tokens';
+    <pre className="docs-demo-block__code"><code>{`import { gameUiTokenGroups } from '@tiny-playworks/tokens';
 import '@tiny-playworks/tokens/css';`}</code></pre>
   </section>
 

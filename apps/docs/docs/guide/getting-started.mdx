@@ -6,8 +6,8 @@ import { Localized } from '../../components/locale';
   eyebrowEn="Getting Started"
   titleZh="先把组件用起来"
   titleEn="Get the components running"
-  summaryZh="这一步只讲最短路径：装包、导入、放进页面里。"
-  summaryEn="The shortest path only: install, import, and render."
+  summaryZh="最短路径：安装、导入、渲染。组件样式由包入口自动带入。"
+  summaryEn="The shortest path: install, import, and render. Component styles are loaded from the package entry."
 >
   <section className="docs-section">
     <Localized
@@ -23,10 +23,10 @@ import { Localized } from '../../components/locale';
     <Localized
       as="h2"
       className="docs-section__title"
-      zh="导入"
-      en="Import"
+      zh="第一个组件"
+      en="First Component"
     />
-    <pre className="docs-card"><code>{`import { DamageNumber, GameUiProvider } from '@tiny-playworks/game-ui';
+    <pre className="docs-demo-block__code"><code>{`import { DamageNumber, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function CombatPulse() {
   return (
