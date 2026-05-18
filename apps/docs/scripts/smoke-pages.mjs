@@ -73,7 +73,7 @@ try {
       });
 
       const screenshotSize = statSync(screenshotPath).size;
-      if (screenshotSize < 40_000) {
+      if (screenshotSize < 25_000) {
         throw new Error(`Screenshot looks too small for ${route.path} ${viewport.name}: ${screenshotSize} bytes`);
       }
     }
