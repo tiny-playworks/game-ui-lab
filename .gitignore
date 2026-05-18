@@ -8,6 +8,8 @@ dist
 .env.*
 coverage
 apps/gallery/smoke-artifacts
+apps/docs/doc_build
+apps/docs/smoke-artifacts
 .DS_Store
 *.log
 *.local

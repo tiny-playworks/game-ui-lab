@@ -1,19 +1,28 @@
 {
   "name": "@tiny-playworks/tokens",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./css": "./src/index.css",
-    "./theme.css": "./src/index.css"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./css": "./dist/index.css",
+    "./theme.css": "./dist/index.css",
+    "./package.json": "./package.json"
   },
   "files": [
-    "src",
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsc --noEmit"
+    "build": "node ./scripts/build.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "typescript": "^6.0.3"

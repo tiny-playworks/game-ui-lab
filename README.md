@@ -84,17 +84,25 @@ nvm use 24.15.0
 pnpm install
 ```
 
-Run the gallery:
+Run the Rspress docs site:
 
 ```bash
 pnpm dev
 ```
 
-Gallery routes:
+Run the live gallery/lab directly:
 
-- `/` - Feedback Sandbox
-- `/tokens` - Token Overview
-- `/primitives` - Primitives Overview
+```bash
+pnpm dev:lab
+```
+
+Public site routes:
+
+- `/` - Rspress docs home
+- `/guide/getting-started` - installation and usage
+- `/primitives` - Primitive overview
+- `/tokens` - Token overview
+- `/lab` - live feedback gallery
 
 Build all packages and the gallery:
 
@@ -120,28 +128,27 @@ Run type checks:
 pnpm typecheck
 ```
 
-## Phase 1 Scope
+## Phase 2 Scope
 
-Phase 1 is the minimum loop:
+Phase 2 makes the project publicly consumable:
 
 - pnpm monorepo
 - `packages/tokens`
 - `packages/primitives`
 - `apps/gallery`
+- `apps/docs`
 - CSS variable token foundation
-- lightweight gallery routes for feedback, tokens, and primitives
+- Rspress docs as the public Pages entry
+- gallery mounted under `/lab`
 - public API boundary from `@tiny-playworks/game-ui`
-- feedback sandbox gallery
-- public lab landing page for GitHub Pages
+- npm-ready `@tiny-playworks/tokens` and `@tiny-playworks/game-ui`
 - basic render and token tests
 
 Deferred:
 
 - Pixi.js overlay package
-- Rspress documentation site
 - Figma plugin or sync automation
 - business components
-- npm publishing
 
 ## Token foundation
 
@@ -149,7 +156,7 @@ Current tokens are a CSS variables foundation exported from `@tiny-playworks/tok
 
 - The gallery treats them as project assets through structured metadata.
 - This is not a full Figma sync pipeline in the current phase.
-- Rspress remains deferred while the gallery carries the early playground/docs role.
+- Rspress carries the public docs role while the gallery remains the live lab.
 
 ## Public site structure
 
@@ -159,9 +166,10 @@ The static site target is the GitHub Pages project URL:
 
 Recommended structure:
 
-- `/` - Lab entry / landing page with live feedback stage
+- `/` - Docs entry / installation path
 - `/tokens` - Token foundation overview
 - `/primitives` - Primitive overview
+- `/lab` - live feedback lab
 
 The Pages build keeps clean URLs through a `404.html` fallback and uses `/game-ui-lab/` as the production base path.
 

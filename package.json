@@ -9,12 +9,13 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "dev": "pnpm --filter @tiny-playworks/game-ui-gallery dev",
-    "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui-gallery build",
-    "build:pages": "pnpm --filter @tiny-playworks/game-ui-gallery build:pages",
+    "dev": "pnpm --filter @tiny-playworks/game-ui-docs dev",
+    "dev:lab": "pnpm --filter @tiny-playworks/game-ui-gallery dev",
+    "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && pnpm --filter @tiny-playworks/game-ui-gallery build && pnpm --filter @tiny-playworks/game-ui-docs build",
+    "build:pages": "pnpm --filter @tiny-playworks/game-ui-docs build:pages",
     "test": "pnpm --filter @tiny-playworks/game-ui test && pnpm --filter @tiny-playworks/game-ui-gallery test",
-    "typecheck": "pnpm --filter @tiny-playworks/game-ui typecheck && pnpm --filter @tiny-playworks/game-ui-gallery typecheck",
-    "visual:smoke": "pnpm build && pnpm --filter @tiny-playworks/game-ui-gallery visual:smoke"
+    "typecheck": "pnpm --filter @tiny-playworks/tokens typecheck && pnpm --filter @tiny-playworks/game-ui typecheck && pnpm --filter @tiny-playworks/game-ui-gallery typecheck && pnpm --filter @tiny-playworks/game-ui-docs typecheck",
+    "visual:smoke": "pnpm build:pages && pnpm --filter @tiny-playworks/game-ui-docs visual:smoke"
   },
   "devDependencies": {
     "@rsbuild/core": "^2.0.6",

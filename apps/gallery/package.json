@@ -4,12 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter @tiny-playworks/game-ui build && rsbuild dev --open",
-    "build": "pnpm --filter @tiny-playworks/game-ui build && rsbuild build",
+    "dev": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && rsbuild dev --open",
+    "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && rsbuild build",
+    "build:lab": "PUBLIC_BASE_PATH=/game-ui-lab/lab/ pnpm run build && node ./scripts/write-pages-fallback.mjs",
     "build:pages": "node ./scripts/build-pages.mjs",
     "preview": "rsbuild preview",
     "test": "rstest run",
-    "typecheck": "pnpm --filter @tiny-playworks/game-ui build && tsc --noEmit",
+    "typecheck": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && tsc --noEmit",
     "visual:smoke": "node ./scripts/smoke-gallery.mjs"
   },
   "dependencies": {

@@ -41,3 +41,5 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Visual smoke
+        run: pnpm visual:smoke

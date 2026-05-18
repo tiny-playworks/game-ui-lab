@@ -1,0 +1,24 @@
+{
+  "name": "@tiny-playworks/game-ui-docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "rspress dev",
+    "build": "rspress build",
+    "build:pages": "node ./scripts/build-pages.mjs",
+    "preview": "rspress preview",
+    "typecheck": "tsc --noEmit",
+    "visual:smoke": "node ./scripts/smoke-pages.mjs"
+  },
+  "dependencies": {
+    "@tiny-playworks/game-ui": "workspace:^",
+    "@tiny-playworks/tokens": "workspace:^",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@rspress/core": "2.0.11",
+    "typescript": "^6.0.3"
+  }
+}
