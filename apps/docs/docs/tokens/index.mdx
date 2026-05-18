@@ -1,5 +1,6 @@
 import { DocShell } from '../../components/doc-shell';
 import { Localized } from '../../components/locale';
+import { TokenShowcase } from '../../components/token-docs';
 
 <DocShell
   eyebrowZh="令牌"
@@ -20,18 +21,5 @@ import { Localized } from '../../components/locale';
 import '@tiny-playworks/tokens/css';`}</code></pre>
   </section>
 
-  <section className="docs-section">
-    <Localized
-      as="h2"
-      className="docs-section__title"
-      zh="有哪些 token"
-      en="Available token groups"
-    />
-    <div className="docs-card-grid">
-      <article className="docs-card"><h3>颜色 / Colors</h3><p>深色底、文字、强调色、伤害和治疗反馈。</p></article>
-      <article className="docs-card"><h3>稀有度 / Rarity</h3><p>Common、Rare、Epic、Legendary 的视觉框架。</p></article>
-      <article className="docs-card"><h3>HUD</h3><p>生命、护盾、法力、能量、耐力和状态色。</p></article>
-      <article className="docs-card"><h3>Motion / 动效</h3><p>时长和 easing，让反馈看得清楚，不是瞎抖。</p></article>
-    </div>
-  </section>
+  <TokenShowcase />
 </DocShell>
