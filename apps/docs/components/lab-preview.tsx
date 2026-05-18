@@ -9,7 +9,7 @@ import {
   RarityBorder,
   ResourceMeter,
   StatusBadge,
-} from '@tiny-playworks/game-ui';
+} from '../../../packages/primitives/src';
 import { useDocsLocale } from './locale';
 import './docs.css';
 

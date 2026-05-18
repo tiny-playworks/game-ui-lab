@@ -12,7 +12,7 @@ import {
   ResourceMeter,
   RewardReveal,
   StatusBadge,
-} from '@tiny-playworks/game-ui';
+} from '../../../packages/primitives/src';
 import { DocShell } from './doc-shell';
 import { Localized, useDocsLocale } from './locale';
 
@@ -44,8 +44,6 @@ interface PrimitiveDoc {
   categoryEn: string;
   summaryZh: string;
   summaryEn: string;
-  whenZh: string;
-  whenEn: string;
   snippet: string;
   api: ApiRow[];
   tokenZh: string;
@@ -72,8 +70,6 @@ const docs: Record<PrimitiveId, PrimitiveDoc> = {
     categoryEn: 'Combat feedback',
     summaryZh: '用于伤害、治疗、暴击和 Miss 的即时飘字。',
     summaryEn: 'Instant floating numbers for damage, healing, critical hits, and misses.',
-    whenZh: '当玩家需要马上知道一次命中结果时使用。不要把它当普通文本标签。',
-    whenEn: 'Use it when players need immediate hit feedback. Do not use it as ordinary text.',
     snippet: `import { DamageNumber, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -103,8 +99,6 @@ export function Demo() {
     categoryEn: 'HUD',
     summaryZh: '生命值条，支持护盾和数值展示。',
     summaryEn: 'A health bar with shield and value display.',
-    whenZh: '适合角色、Boss、单位血量这类持续状态。',
-    whenEn: 'Use it for persistent HP states such as characters, bosses, and units.',
     snippet: `import { HealthBar, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -134,8 +128,6 @@ export function Demo() {
     categoryEn: 'HUD',
     summaryZh: '法力、能量、耐力等资源条。',
     summaryEn: 'A meter for mana, energy, or stamina.',
-    whenZh: '适合需要持续读取和消耗的资源。',
-    whenEn: 'Use it for resources that are continuously read and spent.',
     snippet: `import { ResourceMeter, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -163,8 +155,6 @@ export function Demo() {
     categoryEn: 'Combat feedback',
     summaryZh: '连击计数，强调连续命中和节奏。',
     summaryEn: 'A combo counter for chained hits and rhythm.',
-    whenZh: '适合短时间内连续触发的战斗反馈。',
-    whenEn: 'Use it for short-window combat chains.',
     snippet: `import { ComboCounter, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -192,8 +182,6 @@ export function Demo() {
     categoryEn: 'HUD',
     summaryZh: '技能冷却槽，展示技能是否可用。',
     summaryEn: 'A cooldown slot that shows whether an ability is ready.',
-    whenZh: '适合技能栏、快捷键和主动能力。',
-    whenEn: 'Use it for skill bars, hotkeys, and active abilities.',
     snippet: `import { CooldownSlot, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -222,8 +210,6 @@ export function Demo() {
     categoryEn: 'Status',
     summaryZh: '状态徽章，展示 buff、debuff、警告和持续时间。',
     summaryEn: 'A badge for buffs, debuffs, warnings, and durations.',
-    whenZh: '适合小面积状态信息，不适合承载长文本。',
-    whenEn: 'Use it for compact status information, not long messages.',
     snippet: `import { StatusBadge, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -251,8 +237,6 @@ export function Demo() {
     categoryEn: 'Feedback',
     summaryZh: '短消息提示，用于即时反馈。',
     summaryEn: 'A short toast for immediate feedback.',
-    whenZh: '适合掉落、成功、警告等轻量反馈。',
-    whenEn: 'Use it for lightweight loot, success, and warning feedback.',
     snippet: `import { FloatingToast, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -280,8 +264,6 @@ export function Demo() {
     categoryEn: 'Container',
     summaryZh: '稀有度边框，用来包裹奖励或卡片。',
     summaryEn: 'A rarity border for rewards or cards.',
-    whenZh: '适合强调稀有度层级的容器。',
-    whenEn: 'Use it for containers that need rarity hierarchy.',
     snippet: `import { RarityBorder, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -310,8 +292,6 @@ export function Demo() {
     categoryEn: 'Reward',
     summaryZh: '单个掉落卡片，展示物品名称、稀有度和数量。',
     summaryEn: 'A single loot card for item name, rarity, and quantity.',
-    whenZh: '适合背包、掉落列表和奖励清单。',
-    whenEn: 'Use it in inventories, drop lists, and reward summaries.',
     snippet: `import { LootCard, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -342,8 +322,6 @@ export function Demo() {
     categoryEn: 'Reward',
     summaryZh: '一组掉落卡片，支持数量截断。',
     summaryEn: 'A list of loot cards with overflow limiting.',
-    whenZh: '适合战斗结果、宝箱内容和一次性奖励列表。',
-    whenEn: 'Use it for battle results, chest contents, and reward lists.',
     snippet: `import { LootStack, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const items = [
@@ -375,8 +353,6 @@ export function Demo() {
     categoryEn: 'Reward',
     summaryZh: '奖励揭示面板，组合标题、奖励栈和领取动作。',
     summaryEn: 'A reward reveal panel with title, loot stack, and action.',
-    whenZh: '适合结算、开箱、领取奖励这些完整反馈。',
-    whenEn: 'Use it for complete reward flows such as results, chests, and claims.',
     snippet: `import { RewardReveal, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -447,13 +423,8 @@ export function PrimitiveDocPage({ id }: { id: PrimitiveId }) {
       summaryZh={doc.summaryZh}
       summaryEn={doc.summaryEn}
     >
-      <section className="docs-product-section">
-        <Localized as="h2" className="docs-product-heading" zh="何时使用" en="When To Use" />
-        <Localized as="p" className="docs-product-text" zh={doc.whenZh} en={doc.whenEn} />
-      </section>
-
       <DemoBlock titleZh="代码演示" titleEn="Examples" code={doc.snippet}>
-        <GameUiProvider>
+        <GameUiProvider className="docs-game-stage">
           <Preview />
         </GameUiProvider>
       </DemoBlock>
