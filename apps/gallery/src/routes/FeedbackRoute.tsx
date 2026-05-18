@@ -156,6 +156,7 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
     () => (combo >= 18 ? 'Fever streak' : combo >= 8 ? 'Clean combo' : 'Opening hits'),
     [combo],
   );
+  const feedbackStatus = `Current phase: ${frame.phase}, combo ${combo}, rarity ${frame.rarity}, health ${healthValue}, shield ${shieldValue}.`;
 
   function fireFrame(nextIndex = (frameIndex + 1) % frames.length) {
     const nextFrame = frames[nextIndex];
@@ -245,7 +246,7 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
 
         <div className="route-grid__stage">
           <RarityBorder tone={frame.rarity} className="sandbox-frame">
-            <div className="combat-panel">
+            <div className="combat-panel" aria-label="Live combat feedback stage">
               <div className="arena-grid" aria-hidden="true" />
               <div className="boss-core">
                 <motion.div
@@ -306,7 +307,11 @@ export function FeedbackRoute({ onNavigate }: FeedbackRouteProps) {
             <button type="button" onClick={resetSandbox}>Reset loop</button>
           </div>
 
-          <div className="toast-stack">
+          <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+            {feedbackStatus}
+          </div>
+
+          <div className="toast-stack" role="log" aria-live="polite" aria-atomic="false" aria-relevant="additions text" aria-label="Feedback messages">
             <AnimatePresence>
               {toasts.map((toast) => (
                 <FloatingToast

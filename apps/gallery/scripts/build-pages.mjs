@@ -8,7 +8,7 @@ const packageDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 process.chdir(packageDir);
 
-const primitiveBuild = spawnSync('pnpm --filter @tiny-playworks/game-ui build', {
+const primitiveBuild = spawnSync('pnpm', ['--filter', '@tiny-playworks/game-ui', 'build'], {
   env: process.env,
   shell: process.platform === 'win32',
   stdio: 'inherit',
@@ -18,7 +18,7 @@ if (primitiveBuild.status !== 0) {
   process.exit(primitiveBuild.status ?? 1);
 }
 
-const result = spawnSync('pnpm exec rsbuild build', {
+const result = spawnSync('pnpm', ['exec', 'rsbuild', 'build'], {
   env: process.env,
   shell: process.platform === 'win32',
   stdio: 'inherit',

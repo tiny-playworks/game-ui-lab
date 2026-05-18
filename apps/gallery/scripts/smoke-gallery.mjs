@@ -15,9 +15,9 @@ const artifactDir = resolve('smoke-artifacts');
 const chromePath = process.env.CHROME_BIN ?? findChrome();
 
 const routes = [
-  { path: '/', name: 'home', keyText: 'A moving Game UI Lab' },
-  { path: '/tokens', name: 'tokens', keyText: 'Token Overview' },
-  { path: '/primitives', name: 'primitives', keyText: 'Primitives Overview' },
+  { path: '/', name: 'home', keyText: 'A MOVING GAME UI LAB' },
+  { path: '/tokens', name: 'tokens', keyText: 'TOKEN OVERVIEW' },
+  { path: '/primitives', name: 'primitives', keyText: 'PRIMITIVES OVERVIEW' },
 ];
 
 const viewports = [
@@ -32,7 +32,7 @@ if (!chromePath) {
 rmSync(artifactDir, { force: true, recursive: true });
 mkdirSync(artifactDir, { recursive: true });
 
-const preview = spawn(`pnpm exec rsbuild preview --host ${host} --port ${port}`, {
+const preview = spawn('pnpm', ['exec', 'rsbuild', 'preview', '--host', host, '--port', String(port)], {
   shell: process.platform === 'win32',
   stdio: ['ignore', 'pipe', 'pipe'],
 });
