@@ -10,14 +10,18 @@ import {
   ResourceMeter,
   StatusBadge,
 } from '@tiny-playworks/game-ui';
+import { useDocsLocale } from './locale';
 import './docs.css';
 
 interface Frame {
-  title: string;
+  titleZh: string;
+  titleEn: string;
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
   damage: string;
-  toastTitle: string;
-  toastMessage: string;
+  toastTitleZh: string;
+  toastTitleEn: string;
+  toastMessageZh: string;
+  toastMessageEn: string;
   toastVariant: 'info' | 'success' | 'warning' | 'loot';
   combo: number;
   health: number;
@@ -28,11 +32,14 @@ interface Frame {
 
 const frames: Frame[] = [
   {
-    title: 'Opening hits',
+    titleZh: '开场命中',
+    titleEn: 'Opening hits',
     rarity: 'common',
     damage: '128',
-    toastTitle: 'Strike landed',
-    toastMessage: '基础反馈已经开始播放。',
+    toastTitleZh: '命中已触发',
+    toastTitleEn: 'Strike landed',
+    toastMessageZh: '基础反馈已经开始播放。',
+    toastMessageEn: 'The base feedback is now playing.',
     toastVariant: 'info',
     combo: 7,
     health: 97,
@@ -41,11 +48,14 @@ const frames: Frame[] = [
     cooldown: 0.34,
   },
   {
-    title: 'Clean combo',
+    titleZh: '稳定连击',
+    titleEn: 'Clean combo',
     rarity: 'rare',
     damage: '312',
-    toastTitle: 'Critical chain',
-    toastMessage: '连击窗口被拉长了。',
+    toastTitleZh: '暴击连锁',
+    toastTitleEn: 'Critical chain',
+    toastMessageZh: '连击窗口被拉长了。',
+    toastMessageEn: 'The combo window got longer.',
     toastVariant: 'warning',
     combo: 10,
     health: 88,
@@ -54,11 +64,14 @@ const frames: Frame[] = [
     cooldown: 0.52,
   },
   {
-    title: 'Loot pulse',
+    titleZh: '传奇掉落',
+    titleEn: 'Loot pulse',
     rarity: 'legendary',
     damage: 'MISS',
-    toastTitle: 'Loot found',
-    toastMessage: '传奇掉落边框已激活。',
+    toastTitleZh: '发现掉落',
+    toastTitleEn: 'Loot found',
+    toastMessageZh: '传奇掉落边框已激活。',
+    toastMessageEn: 'The legendary loot border is active.',
     toastVariant: 'loot',
     combo: 3,
     health: 74,
@@ -69,8 +82,10 @@ const frames: Frame[] = [
 ];
 
 export function LabPreview() {
+  const { locale } = useDocsLocale();
   const [frameIndex, setFrameIndex] = useState(0);
   const frame = frames[frameIndex];
+  const isZh = locale === 'zh';
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -82,23 +97,27 @@ export function LabPreview() {
 
   const subtitle = useMemo(
     () =>
-      frame.rarity === 'legendary'
-        ? '英文不是重点，重点是你能不能马上看懂怎么用。'
-        : '这个面板就是给人先看懂，再去抄用法。',
-    [frame.rarity],
+      isZh
+        ? frame.rarity === 'legendary'
+          ? '先看效果，再看接口。'
+          : '先看效果，再抄用法。'
+        : frame.rarity === 'legendary'
+          ? 'See the effect first, then the API.'
+          : 'See the effect first, then copy the usage.',
+    [frame.rarity, isZh],
   );
 
   return (
     <section className="lab-preview">
       <div className="lab-preview__copy">
-        <p className="docs-eyebrow">Live Lab / 实时实验台</p>
-        <h2>直接看效果，不是先读一堆英文。</h2>
+        <p className="docs-eyebrow">{isZh ? '实时实验台 / Live Lab' : 'Live Lab / 实时实验台'}</p>
+        <h2>{isZh ? '直接看效果，不是先读一堆英文。' : 'See the effect, not a wall of English.'}</h2>
         <p>{subtitle}</p>
         <div className="lab-preview__actions">
           <button type="button" onClick={() => setFrameIndex((current) => (current + 1) % frames.length)}>
-            下一个场景
+            {isZh ? '下一个场景' : 'Next scene'}
           </button>
-          <span>自动轮播 + 手动切换</span>
+          <span>{isZh ? '自动轮播 + 手动切换' : 'Auto-rotates + manual switch'}</span>
         </div>
       </div>
 
@@ -106,15 +125,56 @@ export function LabPreview() {
         <RarityBorder tone={frame.rarity} className="lab-preview__stage">
           <div className="lab-preview__stage-inner">
             <div className="lab-preview__numbers">
-              <DamageNumber value={frame.damage} variant={frame.rarity === 'legendary' ? 'critical' : 'damage'} prefix={frame.rarity === 'legendary' ? 'LEG' : 'CRIT'} />
+              <p className="lab-preview__stage-kicker">{isZh ? frame.titleZh : frame.titleEn}</p>
+              <DamageNumber
+                value={frame.damage}
+                variant={frame.rarity === 'legendary' ? 'critical' : 'damage'}
+                prefix={isZh ? (frame.rarity === 'legendary' ? '传说' : '暴击') : frame.rarity === 'legendary' ? 'LEG' : 'CRIT'}
+              />
             </div>
             <div className="lab-preview__hud">
-              <HealthBar value={frame.health} max={120} shield={frame.shield} label="Pilot HP" showValue />
-              <ResourceMeter value={frame.mana} max={90} kind="mana" label="Arcane" />
-              <ComboCounter count={frame.combo} />
-              <CooldownSlot progress={frame.cooldown} label="Burst" icon="Q" />
-              <StatusBadge label="Haste" tone="buff" count={3} duration="12s" />
-              <FloatingToast title={frame.toastTitle} message={frame.toastMessage} variant={frame.toastVariant} />
+              <div className="lab-preview__hud-item">
+                <span className="lab-preview__hud-label">{isZh ? '生命' : 'HP'}</span>
+                <HealthBar value={frame.health} max={120} shield={frame.shield} label={isZh ? '生命' : 'HP'} showValue />
+              </div>
+              <div className="lab-preview__hud-item">
+                <span className="lab-preview__hud-label">{isZh ? '法力' : 'Mana'}</span>
+                <ResourceMeter value={frame.mana} max={90} kind="mana" label={isZh ? '法力' : 'Mana'} />
+              </div>
+              <div className="lab-preview__hud-item">
+                <span className="lab-preview__hud-label">{isZh ? '连击' : 'Combo'}</span>
+                <ComboCounter
+                  count={frame.combo}
+                  label={isZh ? '连击' : 'Combo'}
+                  tier={
+                    isZh
+                      ? frame.combo >= 30
+                        ? '爆发连击'
+                        : frame.combo >= 15
+                          ? '高热连击'
+                          : frame.combo >= 6
+                            ? '稳定连击'
+                            : '开场命中'
+                      : undefined
+                  }
+                />
+              </div>
+              <div className="lab-preview__hud-item">
+                <span className="lab-preview__hud-label">{isZh ? '爆发' : 'Burst'}</span>
+                <CooldownSlot progress={frame.cooldown} label={isZh ? '爆发' : 'Burst'} icon="Q" />
+              </div>
+              <div className="lab-preview__hud-item">
+                <span className="lab-preview__hud-label">{isZh ? '状态' : 'Status'}</span>
+                <StatusBadge label={isZh ? '急速' : 'Haste'} tone="buff" count={3} duration={isZh ? '12秒' : '12s'} />
+              </div>
+              <div className="lab-preview__hud-item lab-preview__hud-item--toast">
+                <span className="lab-preview__hud-label">{isZh ? '反馈' : 'Toast'}</span>
+                <FloatingToast
+                  title={isZh ? frame.toastTitleZh : frame.toastTitleEn}
+                  message={isZh ? frame.toastMessageZh : frame.toastMessageEn}
+                  variant={frame.toastVariant}
+                />
+              </div>
             </div>
           </div>
         </RarityBorder>

@@ -119,6 +119,66 @@
   line-height: 1.7;
 }
 
+.docs-showcase {
+  display: grid;
+  gap: 16px;
+}
+
+.docs-showcase__header {
+  display: grid;
+  gap: 8px;
+}
+
+.docs-showcase__eyebrow {
+  margin: 0;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.docs-showcase__title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.docs-showcase__summary {
+  margin: 0;
+  max-width: 72ch;
+  color: #64748b;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.docs-showcase__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 460px);
+  gap: 16px;
+  align-items: start;
+}
+
+.docs-showcase__preview,
+.docs-showcase__code {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.05);
+}
+
+.docs-showcase__code {
+  margin: 0;
+  overflow: auto;
+}
+
+.docs-showcase__code code {
+  display: block;
+  white-space: pre-wrap;
+}
+
 .lab-preview {
   display: grid;
   gap: 24px;
@@ -173,17 +233,27 @@
   display: grid;
   grid-template-columns: minmax(220px, 1fr) minmax(260px, 380px);
   gap: 24px;
-  align-items: center;
+  align-items: start;
 }
 
 .lab-preview__numbers {
   display: grid;
   place-items: center;
   min-height: 240px;
+  gap: 12px;
   border-radius: 28px;
   background:
     radial-gradient(circle at 50% 50%, rgba(85, 247, 210, 0.14), transparent 45%),
     linear-gradient(180deg, rgba(8, 11, 19, 0.1), rgba(8, 11, 19, 0.04));
+}
+
+.lab-preview__stage-kicker {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .lab-preview__hud {
@@ -191,9 +261,39 @@
   gap: 12px;
 }
 
+.lab-preview__hud-item {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.lab-preview__hud-item--toast {
+  gap: 8px;
+}
+
+.lab-preview__hud-label {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lab-preview__hud-item .game-ui-combo-counter {
+  display: grid;
+  gap: 4px;
+}
+
 @media (max-width: 900px) {
   .docs-card-grid,
   .lab-preview__stage-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .docs-showcase__body {
     grid-template-columns: 1fr;
   }
 
