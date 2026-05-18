@@ -13,3 +13,4 @@ apps/docs/smoke-artifacts
 .DS_Store
 *.log
 *.local
+.npmrc
