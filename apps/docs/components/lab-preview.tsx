@@ -152,6 +152,22 @@ export function LabPreview() {
 
   return (
     <section className="lab-preview">
+      <div className="lab-preview__hero">
+        <div className="lab-preview__hero-copy">
+          <p className="docs-eyebrow">{isZh ? 'Docs Native Lab' : 'Docs Native Lab'}</p>
+          <h2>{isZh ? '同一个设计系统里的实验舞台' : 'One lab stage inside the design system'}</h2>
+          <p>
+            {isZh
+              ? '这里直接运行 Docs 内的 React 组件，没有 iframe，也没有第二套独立运行时。'
+              : 'This stage runs directly in Docs with React components, without iframes or a second independent runtime.'}
+          </p>
+        </div>
+        <div className="lab-preview__hero-links" aria-label={isZh ? '实验台入口' : 'Lab links'}>
+          <a href="/game-ui-lab/primitives/">{isZh ? '查看 Primitives' : 'View Primitives'}</a>
+          <a href="/game-ui-lab/tokens/">{isZh ? '查看 Tokens' : 'View Tokens'}</a>
+        </div>
+      </div>
+
       <div className="lab-preview__copy">
         <p className="docs-eyebrow">{isZh ? 'Playground / 实验台' : 'Playground / 实验台'}</p>
         <h2>{isZh ? '多场景组件组合预览' : 'Multi-surface composition preview'}</h2>
@@ -166,6 +182,11 @@ export function LabPreview() {
 
       <GameUiProvider>
         <RarityBorder tone={frame.rarity} className="lab-preview__stage">
+          <header className="lab-preview__stage-heading">
+            <span>{isZh ? 'Sandbox' : 'Sandbox'}</span>
+            <strong>{isZh ? frame.titleZh : frame.titleEn}</strong>
+            <span>HUD / Map / Narrative</span>
+          </header>
           <div className="lab-preview__stage-inner">
             <div className="lab-preview__numbers">
               <p className="lab-preview__stage-kicker">{isZh ? frame.titleZh : frame.titleEn}</p>

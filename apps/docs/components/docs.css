@@ -171,19 +171,6 @@ html.dark,
   font-weight: 650;
 }
 
-.docs-live-lab {
-  display: grid;
-  gap: 14px;
-}
-
-.docs-live-lab__frame {
-  width: 100%;
-  min-height: min(760px, 82vh);
-  border: 1px solid var(--docs-line);
-  border-radius: 12px;
-  background: #060912;
-}
-
 .docs-demo-block {
   display: grid;
   overflow: hidden;
@@ -327,7 +314,64 @@ html.dark,
 
 .lab-preview {
   display: grid;
-  gap: 18px;
+  gap: 20px;
+}
+
+.lab-preview__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: end;
+  overflow: hidden;
+  padding: 28px;
+  border: 1px solid rgba(85, 247, 210, 0.28);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(85, 247, 210, 0.2), transparent 34%),
+    radial-gradient(circle at 88% 16%, rgba(255, 126, 182, 0.18), transparent 28%),
+    linear-gradient(135deg, #081c1e, #090b19 72%);
+  box-shadow: 0 28px 80px rgba(3, 7, 18, 0.28);
+}
+
+.lab-preview__hero-copy {
+  display: grid;
+  gap: 12px;
+  max-width: 720px;
+}
+
+.lab-preview__hero-copy h2 {
+  margin: 0;
+  color: #f7fbff;
+  font-size: clamp(36px, 7vw, 76px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+}
+
+.lab-preview__hero-copy p {
+  margin: 0;
+  max-width: 56ch;
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.lab-preview__hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.lab-preview__hero-links a {
+  border: 1px solid rgba(85, 247, 210, 0.4);
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: rgba(8, 13, 26, 0.7);
+  color: #f7fbff;
+  font-size: 13px;
+  font-weight: 750;
+  text-decoration: none;
 }
 
 .lab-preview__copy {
@@ -381,6 +425,25 @@ html.dark,
     radial-gradient(circle at 12% 18%, rgba(85, 247, 210, 0.16), transparent 30%),
     radial-gradient(circle at 84% 12%, rgba(255, 209, 102, 0.14), transparent 28%),
     linear-gradient(180deg, rgba(11, 19, 36, 0.98), #050b16);
+}
+
+.lab-preview__stage-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 18px;
+  color: var(--game-ui-muted);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lab-preview__stage-heading strong {
+  color: var(--game-ui-text);
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .lab-preview__stage-inner {
@@ -648,8 +711,17 @@ html.dark,
   .docs-component-grid,
   .docs-token-compare,
   .docs-token-list,
+  .lab-preview__hero,
   .lab-preview__stage-inner {
     grid-template-columns: 1fr;
+  }
+
+  .lab-preview__hero {
+    padding: 22px;
+  }
+
+  .lab-preview__hero-links {
+    justify-content: flex-start;
   }
 
   .docs-demo-block__preview,

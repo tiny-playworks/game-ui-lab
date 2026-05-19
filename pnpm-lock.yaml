@@ -8,12 +8,6 @@ importers:
 
   .:
     devDependencies:
-      '@rsbuild/core':
-        specifier: ^2.0.6
-        version: 2.0.6
-      '@rsbuild/plugin-react':
-        specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.6)(@rspack/core@2.0.3(@swc/helpers@0.5.21))
       '@rslib/core':
         specifier: ^0.21.5
         version: 0.21.5(typescript@6.0.3)
@@ -57,43 +51,6 @@ importers:
       '@rspress/core':
         specifier: 2.0.11
         version: 2.0.11(@rspack/core@2.0.3(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@19.2.14)(micromark-util-types@2.0.2)(micromark@4.0.2)
-      typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
-
-  apps/gallery:
-    dependencies:
-      '@tiny-playworks/game-ui':
-        specifier: workspace:*
-        version: link:../../packages/primitives
-      '@tiny-playworks/tokens':
-        specifier: workspace:*
-        version: link:../../packages/tokens
-      motion:
-        specifier: ^12.38.0
-        version: 12.38.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      react:
-        specifier: ^19.1.0
-        version: 19.2.6
-      react-dom:
-        specifier: ^19.1.0
-        version: 19.2.6(react@19.2.6)
-    devDependencies:
-      '@rsbuild/core':
-        specifier: ^2.0.6
-        version: 2.0.6
-      '@rsbuild/plugin-react':
-        specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.6)(@rspack/core@2.0.3(@swc/helpers@0.5.21))
-      '@rstest/core':
-        specifier: ^0.10.0
-        version: 0.10.0(happy-dom@20.9.0)
-      '@types/react':
-        specifier: ^19.1.2
-        version: 19.2.14
-      '@types/react-dom':
-        specifier: ^19.1.2
-        version: 19.2.3(@types/react@19.2.14)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3

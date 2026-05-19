@@ -6,13 +6,13 @@ Modern Game UI primitives for web games, AI interactive content, and HUD-heavy i
 
 This is not another React business UI library. The project focuses on motion-first feedback primitives: combat numbers, loot pulses, combo states, rarity frames, and lightweight HUD feedback.
 
-![Game UI Feedback Sandbox](./assets/gallery-sandbox.png)
+![Game UI Feedback Lab](./assets/lab-sandbox.png)
 
 ## What This Project Is
 
 - A React + TypeScript primitive kit for game-like web UI.
 - A token-driven UI layer built on CSS variables.
-- A public gallery/lab surface for testing feedback behavior in motion.
+- A Docs-native lab page for testing combined feedback behavior in motion.
 - A foundation for future Pixi.js overlay experiments.
 
 ## What This Project Is Not
@@ -119,16 +119,10 @@ nvm use 24.15.0
 pnpm install
 ```
 
-Run the local docs and embedded lab:
+Run the local docs and built-in lab:
 
 ```bash
 pnpm dev
-```
-
-Run the live gallery/lab directly:
-
-```bash
-pnpm dev:lab
 ```
 
 Public site routes:
@@ -137,9 +131,9 @@ Public site routes:
 - `/guide/getting-started` - installation and usage
 - `/primitives` - Primitive overview
 - `/tokens` - Token overview
-- `/lab` - live feedback gallery
+- `/lab` - Docs-native feedback lab
 
-Build all packages and the gallery:
+Build all packages and docs:
 
 ```bash
 pnpm build
@@ -170,11 +164,10 @@ Phase 2 makes the project publicly consumable:
 - pnpm monorepo
 - `packages/tokens`
 - `packages/primitives`
-- `apps/gallery`
 - `apps/docs`
 - CSS variable token foundation
 - Rspress docs as the public Pages entry
-- gallery mounted under `/lab`
+- built-in Docs lab under `/lab`
 - public API boundary from `@tiny-playworks/game-ui`
 - npm-ready `@tiny-playworks/tokens` and `@tiny-playworks/game-ui`
 - basic render and token tests
@@ -189,9 +182,9 @@ Deferred:
 
 Current tokens are a CSS variables foundation exported from `@tiny-playworks/tokens`.
 
-- The gallery treats them as project assets through structured metadata.
+- The Docs token pages and Lab use them as project assets through structured metadata.
 - This is not a full Figma sync pipeline in the current phase.
-- Rspress carries the public docs role while the gallery remains the live lab.
+- Rspress carries the docs, token overview, primitive pages, and live Lab in one runtime.
 
 ## Public site structure
 
@@ -204,7 +197,7 @@ Recommended structure:
 - `/` - Docs entry / installation path
 - `/tokens` - Token foundation overview
 - `/primitives` - Primitive overview
-- `/lab` - live feedback lab
+- `/lab` - Docs-native feedback lab
 
 The Pages build keeps clean URLs through a `404.html` fallback and uses `/game-ui-lab/` as the production base path.
 

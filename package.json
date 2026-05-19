@@ -9,18 +9,15 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "dev": "node ./scripts/dev.mjs",
-    "dev:lab": "pnpm --filter @tiny-playworks/game-ui-gallery dev",
-    "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && pnpm --filter @tiny-playworks/game-ui-gallery build && pnpm --filter @tiny-playworks/game-ui-docs build",
+    "dev": "pnpm --filter @tiny-playworks/game-ui-docs dev",
+    "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && pnpm --filter @tiny-playworks/game-ui-docs build",
     "build:pages": "pnpm --filter @tiny-playworks/game-ui-docs build:pages",
-    "test": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui test && pnpm --filter @tiny-playworks/game-ui-gallery test",
-    "typecheck": "pnpm --filter @tiny-playworks/tokens typecheck && pnpm --filter @tiny-playworks/game-ui typecheck && pnpm --filter @tiny-playworks/game-ui-gallery typecheck && pnpm --filter @tiny-playworks/game-ui-docs typecheck",
+    "test": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui test",
+    "typecheck": "pnpm --filter @tiny-playworks/tokens typecheck && pnpm --filter @tiny-playworks/game-ui typecheck && pnpm --filter @tiny-playworks/game-ui-docs typecheck",
     "visual:smoke": "pnpm build:pages && pnpm --filter @tiny-playworks/game-ui-docs visual:smoke",
     "release": "node ./scripts/release.mjs"
   },
   "devDependencies": {
-    "@rsbuild/core": "^2.0.6",
-    "@rsbuild/plugin-react": "^2.0.0",
     "@rslib/core": "^0.21.5",
     "@rstest/core": "^0.10.0",
     "@testing-library/jest-dom": "^6.9.1",

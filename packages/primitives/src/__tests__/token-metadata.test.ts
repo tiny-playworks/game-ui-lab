@@ -2,7 +2,7 @@ import { describe, expect, it } from '@rstest/core';
 import { gameUiTokenGroups, gameUiTokens, gameUiTokenVars } from '@tiny-playworks/tokens';
 
 describe('token metadata export', () => {
-  it('exposes the gallery token groups', () => {
+  it('exposes the documented token groups', () => {
     expect(gameUiTokenGroups.map((group) => group.id)).toEqual([
       'color',
       'rarity',

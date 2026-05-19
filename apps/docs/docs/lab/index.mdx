@@ -1,24 +1,22 @@
 import { DocShell } from '../../components/doc-shell';
 import { Localized } from '../../components/locale';
 import { LabPreview } from '../../components/lab-preview';
-import { LiveLabFrame } from '../../components/live-lab-frame';
 
 <DocShell
   eyebrowZh="实验台"
   eyebrowEn="Live Lab"
-  titleZh="组合预览"
-  titleEn="Playground"
-  summaryZh="把多个 primitive 放在同一个 HUD 场景中，检查它们组合后的视觉节奏。"
-  summaryEn="Place multiple primitives in one HUD scene to inspect their combined rhythm."
+  titleZh="实验舞台"
+  titleEn="Lab Stage"
+  summaryZh="在同一个 Docs 体系里组合 HUD、地图和叙事 primitive，检查真实页面里的视觉节奏。"
+  summaryEn="Compose HUD, map, and narrative primitives inside the Docs site to inspect their real visual rhythm."
 >
   <section className="docs-section">
     <Localized
       as="p"
       className="docs-section__text"
-      zh="开发态会在这里嵌入真正的 gallery 实验台；单个组件的 API 请看 Primitives。"
-      en="In local development this page embeds the real gallery lab. See Primitives for individual APIs."
+      zh="这里不是独立应用，也没有 iframe。Lab 只负责把公开 primitives 放进同一个场景里展示；单组件 API 仍然回到 Primitives 页面。"
+      en="This is not a separate app and does not use an iframe. The Lab only stages public primitives together; individual APIs stay in Primitives."
     />
-    <LiveLabFrame />
   </section>
 
   <LabPreview />
