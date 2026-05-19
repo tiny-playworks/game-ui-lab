@@ -25,6 +25,18 @@ This is not another React business UI library. The project focuses on motion-fir
 
 ## Current Primitives
 
+- `AbilityBar`: grouped ability slots for ready, cooling, locked, and cost states.
+- `AbilityTooltip`: compact ability detail card for cost, cooldown, and state.
+- `CastBar`: cast or channel progress bar.
+- `TargetFrame`: target card with name, faction, health, shield, and statuses.
+- `MiniMap`: lightweight marker map using 0-100 coordinates.
+- `MapMarker`: map point for ally, enemy, objective, and neutral markers.
+- `CompassBar`: compact heading strip with directional markers.
+- `LocationTag`: location label with zone, danger, and status.
+- `DialogueBox`: narrative dialogue panel with speaker, text, and portrait slot.
+- `ChoicePrompt`: choice list with optional callbacks.
+- `QuestLog`: quest list surface built from tracker primitives.
+- `NotificationStack`: capped notification stack built from toast primitives.
 - `DamageNumber`: floating combat text for damage, heal, critical, and miss states.
 - `FloatingToast`: short-lived game feedback messages for info, success, warning, and loot events.
 - `ComboCounter`: compact HUD counter for combo chains.
@@ -44,29 +56,51 @@ Use the main package entry for components and props types:
 
 ```tsx
 import {
+  AbilityBar,
+  AbilityTooltip,
+  CastBar,
+  ChoicePrompt,
   ComboCounter,
+  CompassBar,
   CooldownSlot,
   DamageNumber,
+  DialogueBox,
   FloatingToast,
   GameUiProvider,
   HealthBar,
+  LocationTag,
   LootCard,
   LootStack,
+  MapMarker,
+  MiniMap,
+  NotificationStack,
   RarityBorder,
   ResourceMeter,
   RewardReveal,
   StatusBadge,
+  TargetFrame,
+  type AbilityBarProps,
+  type AbilityTooltipProps,
+  type CastBarProps,
+  type ChoicePromptProps,
   type ComboCounterProps,
+  type CompassBarProps,
   type CooldownSlotProps,
   type DamageNumberProps,
+  type DialogueBoxProps,
   type FloatingToastProps,
-  type RarityBorderProps,
   type HealthBarProps,
+  type LocationTagProps,
   type LootCardProps,
   type LootStackProps,
+  type MapMarkerProps,
+  type MiniMapProps,
+  type NotificationStackProps,
+  type RarityBorderProps,
   type ResourceMeterProps,
   type RewardRevealProps,
   type StatusBadgeProps,
+  type TargetFrameProps,
 } from '@tiny-playworks/game-ui';
 
 import '@tiny-playworks/game-ui/styles.css';

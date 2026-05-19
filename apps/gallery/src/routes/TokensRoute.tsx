@@ -28,6 +28,14 @@ const consumptionNotes = [
     name: 'HUD Core Pack',
     note: 'Consumes health, shield, resource, debuff, and cooldown mask tokens for persistent overlay state.',
   },
+  {
+    name: 'Ability and Target Pack',
+    note: 'Consumes ability-ready, ability-locked, cast, and target tokens for skill bars and target frames.',
+  },
+  {
+    name: 'Map and Narrative Pack',
+    note: 'Consumes map marker and narrative tokens for minimaps, dialogue, choices, and notification stacks.',
+  },
 ];
 
 export function TokensRoute() {

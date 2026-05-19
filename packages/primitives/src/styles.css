@@ -332,6 +332,174 @@
   opacity: 0.48;
 }
 
+.game-ui-ability-bar {
+  display: inline-flex;
+  align-items: end;
+  gap: var(--game-ui-space-2);
+  padding: var(--game-ui-space-2);
+  border: 1px solid var(--game-ui-line);
+  border-radius: var(--game-ui-radius-lg);
+  background: var(--game-ui-surface);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-ability-bar__item {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.game-ui-ability-bar__item[data-locked="true"] .game-ui-cooldown-slot__icon {
+  border-color: var(--game-ui-ability-locked);
+  color: var(--game-ui-ability-locked);
+}
+
+.game-ui-ability-bar__cost {
+  position: absolute;
+  right: 7px;
+  bottom: 22px;
+  color: var(--game-ui-ability-ready);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.game-ui-ability-tooltip {
+  display: grid;
+  gap: var(--game-ui-space-1);
+  max-width: 280px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-ability-ready), transparent 42%);
+  border-radius: var(--game-ui-radius-md);
+  background: var(--game-ui-surface-strong);
+  box-shadow: var(--game-ui-shadow-soft);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-ability-tooltip[data-state="locked"] {
+  border-color: var(--game-ui-ability-locked);
+  opacity: 0.72;
+}
+
+.game-ui-ability-tooltip__kind,
+.game-ui-ability-tooltip__meta {
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.game-ui-ability-tooltip__name {
+  color: var(--game-ui-ability-ready);
+  font-size: 16px;
+}
+
+.game-ui-ability-tooltip__description {
+  color: var(--game-ui-muted);
+  font-size: 13px;
+}
+
+.game-ui-ability-tooltip__meta {
+  display: flex;
+  gap: var(--game-ui-space-2);
+}
+
+.game-ui-cast-bar {
+  --game-ui-cast-progress: 0%;
+  display: grid;
+  min-width: 260px;
+  gap: var(--game-ui-space-1);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-cast-bar__topline {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--game-ui-space-2);
+  color: var(--game-ui-muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.game-ui-cast-bar__topline strong {
+  color: var(--game-ui-text);
+}
+
+.game-ui-cast-bar__track {
+  display: block;
+  overflow: hidden;
+  height: 12px;
+  border: 1px solid var(--game-ui-line);
+  border-radius: 999px;
+  background: rgba(4, 8, 18, 0.74);
+}
+
+.game-ui-cast-bar__fill {
+  display: block;
+  width: var(--game-ui-cast-progress);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--game-ui-cast), var(--game-ui-ability-ready));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--game-ui-cast), transparent 54%);
+}
+
+.game-ui-cast-bar[data-state="interrupted"] .game-ui-cast-bar__fill {
+  background: var(--game-ui-debuff);
+}
+
+.game-ui-cast-bar[data-state="complete"] .game-ui-cast-bar__fill {
+  background: var(--game-ui-heal);
+}
+
+.game-ui-target-frame {
+  display: grid;
+  gap: var(--game-ui-space-2);
+  min-width: 280px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-target), transparent 40%);
+  border-radius: var(--game-ui-radius-lg);
+  background: var(--game-ui-surface);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-target-frame[data-faction="ally"] {
+  border-color: color-mix(in srgb, var(--game-ui-marker-ally), transparent 38%);
+}
+
+.game-ui-target-frame[data-faction="neutral"] {
+  border-color: var(--game-ui-line);
+}
+
+.game-ui-target-frame__header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--game-ui-space-2);
+}
+
+.game-ui-target-frame__header span:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.game-ui-target-frame__header em,
+.game-ui-target-frame__faction {
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.game-ui-target-frame__statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--game-ui-space-1);
+}
+
 .game-ui-status-badge {
   display: inline-flex;
   align-items: center;
@@ -500,6 +668,296 @@
 .game-ui-quest-tracker__list {
   display: grid;
   gap: var(--game-ui-space-2);
+}
+
+.game-ui-map-marker {
+  --game-ui-marker-color: var(--game-ui-muted);
+  position: absolute;
+  top: var(--game-ui-marker-y);
+  left: var(--game-ui-marker-x);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--game-ui-marker-color);
+  font-family: var(--game-ui-font-sans);
+  font-size: 10px;
+  font-weight: 900;
+  transform: translate(-50%, -50%);
+}
+
+.game-ui-map-marker[data-tone="ally"] {
+  --game-ui-marker-color: var(--game-ui-marker-ally);
+}
+
+.game-ui-map-marker[data-tone="enemy"] {
+  --game-ui-marker-color: var(--game-ui-marker-enemy);
+}
+
+.game-ui-map-marker[data-tone="objective"] {
+  --game-ui-marker-color: var(--game-ui-marker-objective);
+}
+
+.game-ui-map-marker__dot {
+  display: grid;
+  width: 12px;
+  height: 12px;
+  place-items: center;
+  border: 2px solid var(--game-ui-marker-color);
+  border-radius: 999px;
+  background: rgba(4, 8, 18, 0.84);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--game-ui-marker-color), transparent 58%);
+}
+
+.game-ui-map-marker[data-active="true"] .game-ui-map-marker__dot {
+  width: 16px;
+  height: 16px;
+}
+
+.game-ui-map-marker__label {
+  padding: 2px 5px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-marker-color), transparent 46%);
+  border-radius: 999px;
+  background: var(--game-ui-surface);
+}
+
+.game-ui-mini-map {
+  position: relative;
+  overflow: hidden;
+  width: 260px;
+  height: 180px;
+  border: 1px solid var(--game-ui-map-line);
+  border-radius: var(--game-ui-radius-lg);
+  background:
+    linear-gradient(var(--game-ui-map-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--game-ui-map-line) 1px, transparent 1px),
+    radial-gradient(circle at 28% 20%, color-mix(in srgb, var(--game-ui-marker-objective), transparent 82%), transparent 28%),
+    var(--game-ui-surface);
+  background-size: 32px 32px, 32px 32px, auto, auto;
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-mini-map__grid {
+  position: absolute;
+  inset: 12px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-map-line), transparent 20%);
+  border-radius: var(--game-ui-radius-md);
+}
+
+.game-ui-mini-map__label {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.game-ui-compass-bar {
+  display: grid;
+  min-width: 280px;
+  gap: var(--game-ui-space-1);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-compass-bar__heading {
+  color: var(--game-ui-marker-objective);
+  font-size: 12px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.game-ui-compass-bar__track {
+  position: relative;
+  display: block;
+  height: 30px;
+  border: 1px solid var(--game-ui-map-line);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, transparent 24%, var(--game-ui-map-line) 25%, transparent 26% 74%, var(--game-ui-map-line) 75%, transparent 76%),
+    var(--game-ui-surface);
+}
+
+.game-ui-compass-bar__marker {
+  position: absolute;
+  top: 50%;
+  left: var(--game-ui-compass-position);
+  color: var(--game-ui-muted);
+  font-size: 10px;
+  font-weight: 900;
+  transform: translate(-50%, -50%);
+}
+
+.game-ui-compass-bar__marker[data-tone="objective"] {
+  color: var(--game-ui-marker-objective);
+}
+
+.game-ui-compass-bar__marker[data-tone="enemy"] {
+  color: var(--game-ui-marker-enemy);
+}
+
+.game-ui-location-tag {
+  display: inline-grid;
+  gap: 2px;
+  min-width: 160px;
+  padding: 9px 11px;
+  border: 1px solid var(--game-ui-map-line);
+  border-radius: var(--game-ui-radius-md);
+  background: var(--game-ui-surface);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-location-tag[data-danger="contested"] {
+  border-color: var(--game-ui-marker-objective);
+}
+
+.game-ui-location-tag[data-danger="hostile"] {
+  border-color: var(--game-ui-marker-enemy);
+}
+
+.game-ui-location-tag__zone,
+.game-ui-location-tag__status {
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.game-ui-dialogue-box {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: var(--game-ui-space-3);
+  max-width: 520px;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-speaker), transparent 48%);
+  border-radius: var(--game-ui-radius-lg);
+  background: var(--game-ui-dialogue);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-dialogue-box[data-tone="warning"] {
+  border-color: var(--game-ui-debuff);
+}
+
+.game-ui-dialogue-box__portrait {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--game-ui-speaker), transparent 34%);
+  border-radius: var(--game-ui-radius-md);
+  color: var(--game-ui-speaker);
+  font-weight: 900;
+}
+
+.game-ui-dialogue-box__content {
+  display: grid;
+  gap: var(--game-ui-space-1);
+}
+
+.game-ui-dialogue-box__content strong {
+  color: var(--game-ui-speaker);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.game-ui-dialogue-box__content span {
+  color: var(--game-ui-text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.game-ui-choice-prompt {
+  display: grid;
+  gap: var(--game-ui-space-2);
+  min-width: 280px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-choice), transparent 42%);
+  border-radius: var(--game-ui-radius-lg);
+  background: var(--game-ui-surface);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-choice-prompt__title {
+  color: var(--game-ui-choice);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.game-ui-choice-prompt__choices {
+  display: grid;
+  gap: var(--game-ui-space-2);
+}
+
+.game-ui-choice-prompt__choice {
+  display: grid;
+  gap: 2px;
+  padding: 9px 10px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-choice), transparent 58%);
+  border-radius: var(--game-ui-radius-md);
+  background: color-mix(in srgb, var(--game-ui-choice), transparent 90%);
+  color: var(--game-ui-text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.game-ui-choice-prompt__choice:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.game-ui-choice-prompt__choice small {
+  color: var(--game-ui-muted);
+}
+
+.game-ui-quest-log {
+  display: grid;
+  gap: var(--game-ui-space-3);
+  min-width: 320px;
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-quest-log__header {
+  display: flex;
+  justify-content: space-between;
+  color: var(--game-ui-muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.game-ui-quest-log__list {
+  display: grid;
+  gap: var(--game-ui-space-3);
+}
+
+.game-ui-quest-log__active {
+  color: var(--game-ui-choice);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.game-ui-notification-stack {
+  display: grid;
+  gap: var(--game-ui-space-2);
+  max-width: 420px;
+}
+
+.game-ui-notification-stack__overflow {
+  justify-self: end;
+  color: var(--game-ui-notification);
+  font-family: var(--game-ui-font-sans);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .game-ui-loot-card {

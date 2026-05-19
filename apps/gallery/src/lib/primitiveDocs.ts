@@ -13,6 +13,123 @@ export interface PrimitiveDoc {
 
 export const primitiveDocs: PrimitiveDoc[] = [
   {
+    name: 'AbilityBar',
+    usage: '<AbilityBar abilities={abilities} />',
+    states: ['ready', 'cooling', 'locked'],
+    props: [
+      { name: 'abilities', type: 'AbilityBarItem[]', description: 'Ability slots rendered in order.' },
+      { name: 'label', type: 'string', description: 'Accessible group label.' },
+    ],
+  },
+  {
+    name: 'AbilityTooltip',
+    usage: '<AbilityTooltip name="Blink" description="Dash through danger." cost="20 MP" cooldown="8s" />',
+    states: ['ready', 'cooling', 'locked'],
+    props: [
+      { name: 'name', type: 'string', description: 'Ability name.' },
+      { name: 'description', type: 'ReactNode', description: 'Ability description.' },
+      { name: 'cost', type: 'ReactNode', description: 'Optional cost detail.' },
+      { name: 'cooldown', type: 'ReactNode', description: 'Optional cooldown detail.' },
+    ],
+  },
+  {
+    name: 'CastBar',
+    usage: '<CastBar label="Arc Beam" progress={0.72} state="channeling" />',
+    states: ['casting', 'channeling', 'complete', 'interrupted'],
+    props: [
+      { name: 'label', type: 'string', description: 'Cast label.' },
+      { name: 'progress', type: 'number', description: 'Progress from 0 to 1.' },
+      { name: 'state', type: 'casting | channeling | complete | interrupted', description: 'Cast state.' },
+    ],
+  },
+  {
+    name: 'TargetFrame',
+    usage: '<TargetFrame name="Warden" faction="boss" health={420} maxHealth={800} />',
+    states: ['ally', 'enemy', 'neutral', 'boss'],
+    props: [
+      { name: 'name', type: 'string', description: 'Target name.' },
+      { name: 'health', type: 'number', description: 'Current health.' },
+      { name: 'maxHealth', type: 'number', description: 'Maximum health.' },
+      { name: 'statuses', type: 'StatusBadgeProps[]', description: 'Optional target statuses.' },
+    ],
+  },
+  {
+    name: 'MiniMap',
+    usage: '<MiniMap label="Sector map" markers={markers} />',
+    states: ['ally markers', 'enemy markers', 'objective markers'],
+    props: [
+      { name: 'markers', type: 'MiniMapMarker[]', description: 'Map markers using 0-100 coordinates.' },
+      { name: 'label', type: 'string', description: 'Accessible map label.' },
+    ],
+  },
+  {
+    name: 'MapMarker',
+    usage: '<MapMarker x={48} y={28} tone="objective" label="Beacon" active />',
+    states: ['ally', 'enemy', 'objective', 'neutral'],
+    props: [
+      { name: 'x', type: 'number', description: 'Horizontal coordinate from 0 to 100.' },
+      { name: 'y', type: 'number', description: 'Vertical coordinate from 0 to 100.' },
+      { name: 'tone', type: 'ally | enemy | objective | neutral', description: 'Marker tone.' },
+    ],
+  },
+  {
+    name: 'CompassBar',
+    usage: '<CompassBar heading={90} markers={markers} />',
+    states: ['heading', 'objective marker', 'enemy marker'],
+    props: [
+      { name: 'heading', type: 'number', description: 'Current heading in degrees.' },
+      { name: 'markers', type: 'CompassMarker[]', description: 'Compact compass markers.' },
+    ],
+  },
+  {
+    name: 'LocationTag',
+    usage: '<LocationTag name="Ash Gate" zone="North" danger="hostile" status="Enemy patrol" />',
+    states: ['safe', 'contested', 'hostile'],
+    props: [
+      { name: 'name', type: 'string', description: 'Location name.' },
+      { name: 'zone', type: 'string', description: 'Optional zone label.' },
+      { name: 'danger', type: 'safe | contested | hostile', description: 'Danger level.' },
+    ],
+  },
+  {
+    name: 'DialogueBox',
+    usage: '<DialogueBox speaker="Mira" text="Hold the gate." tone="ally" />',
+    states: ['neutral', 'ally', 'warning'],
+    props: [
+      { name: 'speaker', type: 'string', description: 'Speaker name.' },
+      { name: 'text', type: 'ReactNode', description: 'Dialogue text.' },
+      { name: 'portrait', type: 'ReactNode', description: 'Optional portrait slot.' },
+    ],
+  },
+  {
+    name: 'ChoicePrompt',
+    usage: '<ChoicePrompt title="Choose route" choices={choices} />',
+    states: ['enabled', 'disabled'],
+    props: [
+      { name: 'title', type: 'string', description: 'Choice prompt title.' },
+      { name: 'choices', type: 'ChoicePromptOption[]', description: 'Choice options.' },
+      { name: 'onChoice', type: '(id: string) => void', description: 'Optional click callback.' },
+    ],
+  },
+  {
+    name: 'QuestLog',
+    usage: '<QuestLog activeId="signal" quests={quests} />',
+    states: ['quest list', 'tracked quest'],
+    props: [
+      { name: 'quests', type: 'QuestLogQuest[]', description: 'Quest tracker groups.' },
+      { name: 'activeId', type: 'string', description: 'Optional tracked quest id.' },
+    ],
+  },
+  {
+    name: 'NotificationStack',
+    usage: '<NotificationStack notifications={notifications} limit={3} />',
+    states: ['info', 'success', 'warning', 'loot', 'overflow'],
+    props: [
+      { name: 'notifications', type: 'NotificationStackItem[]', description: 'Toast-like notifications.' },
+      { name: 'limit', type: 'number', description: 'Maximum visible notifications.' },
+    ],
+  },
+  {
     name: 'DamageNumber',
     usage: '<DamageNumber value="512" variant="critical" prefix="CRIT" />',
     states: ['damage', 'critical', 'heal', 'miss'],

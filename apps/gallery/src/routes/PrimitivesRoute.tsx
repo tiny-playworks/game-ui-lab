@@ -1,18 +1,30 @@
 import React from 'react';
 import {
+  AbilityBar,
+  AbilityTooltip,
+  CastBar,
+  ChoicePrompt,
   ComboCounter,
+  CompassBar,
   CooldownSlot,
+  DialogueBox,
   FloatingToast,
   GameUiProvider,
   HealthBar,
+  LocationTag,
   LootCard,
   LootStack,
+  MapMarker,
+  MiniMap,
+  NotificationStack,
   ObjectiveChip,
+  QuestLog,
   QuestTracker,
   RarityBorder,
   ResourceMeter,
   RewardReveal,
   StatusBadge,
+  TargetFrame,
 } from '@tiny-playworks/game-ui';
 import { LoopingDamagePreview } from '../components/LoopingDamagePreview';
 import { PageIntro } from '../components/PageIntro';
@@ -32,6 +44,35 @@ const questObjectives = [
   { id: 'beacon', label: 'Find beacon', state: 'complete' as const, meta: 'Main route' },
   { id: 'shards', label: 'Collect shards', progress: 2, max: 5, meta: 'Side quest' },
   { id: 'vault', label: 'Enter vault', state: 'locked' as const, meta: 'Locked' },
+];
+
+const abilityItems = [
+  { id: 'blink', label: 'Blink', icon: 'B', ready: true, cost: '20' },
+  { id: 'burst', label: 'Burst', icon: 'Q', progress: 0.58, cost: '35' },
+  { id: 'nova', label: 'Nova', icon: 'R', progress: 0.12, locked: true },
+];
+
+const mapMarkers = [
+  { id: 'ally', x: 20, y: 38, tone: 'ally' as const, label: 'Ally' },
+  { id: 'enemy', x: 72, y: 54, tone: 'enemy' as const, label: 'Patrol' },
+  { id: 'objective', x: 48, y: 28, tone: 'objective' as const, label: 'Beacon', active: true },
+];
+
+const compassMarkers = [
+  { id: 'gate', label: 'Gate', heading: 80, tone: 'objective' as const },
+  { id: 'patrol', label: 'Enemy', heading: 220, tone: 'enemy' as const },
+];
+
+const choices = [
+  { id: 'left', label: 'Left path', description: 'Safer route' },
+  { id: 'right', label: 'Break through', description: 'Faster but hostile' },
+];
+
+const notifications = [
+  { id: 'loot', title: 'Loot found', message: 'Neon shard added', variant: 'loot' as const },
+  { id: 'warn', title: 'Patrol nearby', message: 'Enemy scan rising', variant: 'warning' as const },
+  { id: 'ready', title: 'Skill ready', message: 'Blink is online', variant: 'success' as const },
+  { id: 'route', title: 'Route update', message: 'Beacon marked', variant: 'info' as const },
 ];
 
 function getPrimitiveDoc(name: string) {
@@ -84,6 +125,123 @@ export function PrimitivesRoute() {
       </section>
 
       <div className="overview-grid">
+        <PrimitiveCard
+          name="AbilityBar"
+          summary="Ability strip for ready, cooling, locked, and cost states."
+          tokenNote="Consumes ability-ready, locked, cooldown, surface, and spacing tokens."
+          {...getPrimitiveDoc('AbilityBar')}
+        >
+          <AbilityBar abilities={abilityItems} />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="AbilityTooltip"
+          summary="Compact ability detail card for description, cost, cooldown, and availability."
+          tokenNote="Uses ability-ready, locked, surface, and shadow tokens for readable hover detail."
+          {...getPrimitiveDoc('AbilityTooltip')}
+        >
+          <AbilityTooltip name="Blink" description="Dash through danger." cost="20 MP" cooldown="8s" />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="CastBar"
+          summary="Cast and channel progress bar for readable ability timing."
+          tokenNote="Consumes cast, ability-ready, debuff, and line tokens."
+          {...getPrimitiveDoc('CastBar')}
+        >
+          <CastBar label="Arc Beam" progress={0.72} state="channeling" />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="TargetFrame"
+          summary="Target card for focused enemies, bosses, allies, and neutral entities."
+          tokenNote="Combines target, health, shield, and status token language."
+          {...getPrimitiveDoc('TargetFrame')}
+        >
+          <TargetFrame
+            name="Warden"
+            faction="boss"
+            level="Lv.18"
+            health={420}
+            maxHealth={800}
+            statuses={[{ label: 'Burn', tone: 'debuff', duration: '8s' }]}
+          />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="MiniMap"
+          summary="Lightweight minimap for 0-100 marker coordinates."
+          tokenNote="Consumes map-line and marker tones for compact navigation surfaces."
+          {...getPrimitiveDoc('MiniMap')}
+        >
+          <MiniMap label="Sector map" markers={mapMarkers} />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="MapMarker"
+          summary="Standalone marker primitive for map-like surfaces."
+          tokenNote="Uses marker ally, enemy, objective, and muted tones."
+          {...getPrimitiveDoc('MapMarker')}
+        >
+          <div style={{ position: 'relative', width: 220, height: 120 }}>
+            <MapMarker x={48} y={28} tone="objective" label="Beacon" active />
+          </div>
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="CompassBar"
+          summary="Directional strip with current heading and compact markers."
+          tokenNote="Consumes map-line and marker tones without adding navigation state."
+          {...getPrimitiveDoc('CompassBar')}
+        >
+          <CompassBar heading={90} markers={compassMarkers} />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="LocationTag"
+          summary="Compact location label with zone, danger, and status."
+          tokenNote="Uses map and marker tones to show area risk at a glance."
+          {...getPrimitiveDoc('LocationTag')}
+        >
+          <LocationTag name="Ash Gate" zone="North" danger="hostile" status="Enemy patrol" />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="DialogueBox"
+          summary="Narrative dialogue box for speaker, text, and portrait slot."
+          tokenNote="Consumes dialogue, speaker, surface, and line tokens."
+          {...getPrimitiveDoc('DialogueBox')}
+        >
+          <DialogueBox speaker="Mira" text="Hold the gate. The beacon is almost online." tone="ally" />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="ChoicePrompt"
+          summary="Choice list for interactive narrative beats without internal state."
+          tokenNote="Uses choice, surface, and spacing tokens for clear decision affordance."
+          {...getPrimitiveDoc('ChoicePrompt')}
+        >
+          <ChoicePrompt title="Choose route" choices={choices} />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="QuestLog"
+          summary="Quest log surface that groups QuestTracker panels."
+          tokenNote="Reuses quest tracker and choice accent tokens for page-level narrative UI."
+          {...getPrimitiveDoc('QuestLog')}
+        >
+          <QuestLog activeId="signal" quests={[{ id: 'signal', title: 'Signal Hunt', objectives: questObjectives }]} />
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="NotificationStack"
+          summary="Capped notification stack built from floating toast primitives."
+          tokenNote="Reuses notification and toast token language with overflow handling."
+          {...getPrimitiveDoc('NotificationStack')}
+        >
+          <NotificationStack notifications={notifications} limit={3} />
+        </PrimitiveCard>
+
         <PrimitiveCard
           name="DamageNumber"
           summary="Floating combat text for damage, heal, critical, and miss states."

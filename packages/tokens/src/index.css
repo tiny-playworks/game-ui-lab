@@ -32,6 +32,21 @@
   --game-ui-debuff: #ff6b6b;
   --game-ui-cooldown-mask: rgba(4, 8, 18, 0.72);
 
+  --game-ui-ability-ready: #55f7d2;
+  --game-ui-ability-locked: #64748b;
+  --game-ui-cast: #1ee6ff;
+  --game-ui-target: #ff4d7d;
+
+  --game-ui-map-line: rgba(129, 230, 217, 0.22);
+  --game-ui-marker-ally: #5cff9d;
+  --game-ui-marker-enemy: #ff4d7d;
+  --game-ui-marker-objective: #ffd166;
+
+  --game-ui-dialogue: rgba(25, 35, 63, 0.94);
+  --game-ui-choice: #b47cff;
+  --game-ui-speaker: #ffd166;
+  --game-ui-notification: #55f7d2;
+
   --game-ui-radius-sm: 6px;
   --game-ui-radius-md: 10px;
   --game-ui-radius-lg: 16px;
@@ -48,4 +63,3 @@
   --game-ui-duration-slow: 720ms;
   --game-ui-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
-

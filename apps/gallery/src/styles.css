@@ -486,7 +486,7 @@ code {
 
 .sandbox-frame,
 .primitive-stage__arena {
-  min-height: min(620px, 72vh);
+  min-height: min(720px, 82vh);
 }
 
 .route-grid__stage {
@@ -585,6 +585,14 @@ code {
   backdrop-filter: blur(14px);
 }
 
+.target-dock {
+  position: absolute;
+  top: 56px;
+  right: 22px;
+  z-index: 4;
+  width: min(340px, calc(100% - 44px));
+}
+
 .hud-status-row {
   display: flex;
   flex-wrap: wrap;
@@ -607,6 +615,52 @@ code {
   display: flex;
   gap: 10px;
   align-items: end;
+}
+
+.ability-dock {
+  position: absolute;
+  bottom: 24px;
+  left: min(360px, 38%);
+  z-index: 4;
+  max-width: min(380px, calc(100% - 44px));
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.ability-dock::-webkit-scrollbar {
+  display: none;
+}
+
+.cast-dock {
+  position: absolute;
+  right: min(360px, 33%);
+  bottom: 118px;
+  left: min(360px, 33%);
+  z-index: 4;
+}
+
+.dialogue-dock {
+  position: absolute;
+  right: 22px;
+  bottom: 112px;
+  z-index: 4;
+  width: min(360px, calc(100% - 44px));
+}
+
+.map-dock {
+  position: absolute;
+  bottom: 92px;
+  left: 22px;
+  z-index: 4;
+  display: grid;
+  width: min(250px, calc(100% - 44px));
+  gap: 8px;
+}
+
+.map-dock .game-ui-mini-map {
+  width: 100%;
+  height: 132px;
 }
 
 .rarity-chip {
@@ -648,6 +702,10 @@ code {
   display: grid;
   gap: 10px;
   justify-items: end;
+}
+
+.toast-stack .game-ui-notification-stack {
+  width: min(360px, 100%);
 }
 
 .token-hero,
@@ -1029,7 +1087,7 @@ code {
 
   .sandbox-frame,
   .primitive-stage__arena {
-    min-height: 520px;
+    min-height: 720px;
   }
 }
 
@@ -1099,6 +1157,45 @@ code {
     right: 14px;
     left: 14px;
     width: auto;
+  }
+
+  .target-dock {
+    top: 212px;
+    right: 14px;
+    left: 14px;
+    width: auto;
+  }
+
+  .map-dock {
+    right: 14px;
+    bottom: 188px;
+    left: 14px;
+    width: auto;
+  }
+
+  .ability-dock {
+    right: 14px;
+    bottom: 72px;
+    left: 14px;
+    max-width: none;
+  }
+
+  .cast-dock {
+    right: 14px;
+    bottom: 140px;
+    left: 14px;
+  }
+
+  .dialogue-dock {
+    right: 14px;
+    bottom: 314px;
+    left: 14px;
+    width: auto;
+  }
+
+  .combo-dock {
+    right: 14px;
+    bottom: 14px;
   }
 
   .cooldown-dock {

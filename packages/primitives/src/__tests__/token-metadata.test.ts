@@ -8,9 +8,33 @@ describe('token metadata export', () => {
       'rarity',
       'hud',
       'motion',
+      'ability',
+      'map',
+      'narrative',
       'glow',
       'radius',
       'spacing',
+    ]);
+  });
+
+  it('exposes the expansion token metadata used by ability, map, and narrative primitives', () => {
+    expect(gameUiTokenGroups.find((group) => group.id === 'ability')?.tokens.map((token) => token.cssVar)).toEqual([
+      '--game-ui-ability-ready',
+      '--game-ui-ability-locked',
+      '--game-ui-cast',
+      '--game-ui-target',
+    ]);
+    expect(gameUiTokenGroups.find((group) => group.id === 'map')?.tokens.map((token) => token.cssVar)).toEqual([
+      '--game-ui-map-line',
+      '--game-ui-marker-ally',
+      '--game-ui-marker-enemy',
+      '--game-ui-marker-objective',
+    ]);
+    expect(gameUiTokenGroups.find((group) => group.id === 'narrative')?.tokens.map((token) => token.cssVar)).toEqual([
+      '--game-ui-dialogue',
+      '--game-ui-choice',
+      '--game-ui-speaker',
+      '--game-ui-notification',
     ]);
   });
 
@@ -45,5 +69,7 @@ describe('token metadata export', () => {
     expect(gameUiTokens.radiusLg).toBe('var(--game-ui-radius-lg)');
     expect(gameUiTokenVars.space1).toBe('--game-ui-space-1');
     expect(gameUiTokenVars.health).toBe('--game-ui-health');
+    expect(gameUiTokens.abilityReady).toBe('var(--game-ui-ability-ready)');
+    expect(gameUiTokenVars.markerObjective).toBe('--game-ui-marker-objective');
   });
 });

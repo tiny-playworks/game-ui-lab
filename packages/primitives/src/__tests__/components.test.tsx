@@ -1,21 +1,33 @@
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from '@rstest/core';
 import {
+  AbilityBar,
+  AbilityTooltip,
+  CastBar,
+  ChoicePrompt,
   ComboCounter,
+  CompassBar,
   CooldownSlot,
   DamageNumber,
+  DialogueBox,
   FloatingToast,
   GameUiProvider,
   HealthBar,
+  LocationTag,
   LootCard,
   LootStack,
+  MapMarker,
+  MiniMap,
+  NotificationStack,
   ObjectiveChip,
+  QuestLog,
   QuestTracker,
   RarityBorder,
   ResourceMeter,
   RewardReveal,
   StatusBadge,
+  TargetFrame,
 } from '../index';
 
 afterEach(() => {
@@ -149,6 +161,137 @@ describe('game ui primitives', () => {
     expect(screen.getByText('Find beacon').textContent).toBe('Find beacon');
     expect(screen.getByText('Collect shards').textContent).toBe('Collect shards');
     expect(screen.getByText('Enter vault').textContent).toBe('Enter vault');
+  });
+
+  it('renders an ability bar with ready and locked slots', () => {
+    render(
+      <AbilityBar
+        abilities={[
+          { id: 'blink', label: 'Blink', icon: 'B', ready: true, cost: '20' },
+          { id: 'nova', label: 'Nova', icon: 'N', progress: 0.25, locked: true },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('group', { name: 'Ability bar' }).textContent).toContain('20');
+    expect(screen.getByRole('status', { name: 'Blink ready' }).getAttribute('data-ready')).toBe('true');
+    expect(screen.getByRole('status', { name: 'Nova disabled' }).getAttribute('data-disabled')).toBe('true');
+  });
+
+  it('renders ability tooltip metadata', () => {
+    render(<AbilityTooltip name="Blink" description="Dash through danger." cost="20 MP" cooldown="8s" state="ready" />);
+
+    expect(screen.getByRole('tooltip', { name: 'Blink ready' }).getAttribute('data-state')).toBe('ready');
+    expect(screen.getByText('Cost 20 MP').textContent).toBe('Cost 20 MP');
+    expect(screen.getByText('Cooldown 8s').textContent).toBe('Cooldown 8s');
+  });
+
+  it('renders cast bar state and progress', () => {
+    render(<CastBar label="Arc Beam" progress={0.72} state="channeling" />);
+
+    expect(screen.getByRole('status', { name: 'Arc Beam channeling 72%' }).getAttribute('data-state')).toBe('channeling');
+    expect(screen.getByText('72%').textContent).toBe('72%');
+  });
+
+  it('renders a target frame with health and statuses', () => {
+    render(
+      <TargetFrame
+        name="Warden"
+        faction="boss"
+        health={420}
+        maxHealth={800}
+        statuses={[{ label: 'Burn', tone: 'debuff', duration: '8s' }]}
+      />,
+    );
+
+    expect(screen.getByRole('status', { name: 'Warden boss target' }).getAttribute('data-faction')).toBe('boss');
+    expect(screen.getByText('Burn').textContent).toBe('Burn');
+  });
+
+  it('renders standalone and grouped map markers', () => {
+    render(
+      <>
+        <MapMarker x={25} y={70} tone="objective" label="Beacon" active />
+        <MiniMap
+          label="Sector map"
+          markers={[
+            { id: 'ally', x: 18, y: 40, tone: 'ally', label: 'Ally' },
+            { id: 'enemy', x: 72, y: 52, tone: 'enemy', label: 'Enemy' },
+          ]}
+        />
+      </>,
+    );
+
+    const marker = screen.getByLabelText('Beacon objective marker');
+    expect(marker.getAttribute('data-tone')).toBe('objective');
+    expect(marker.getAttribute('data-active')).toBe('true');
+    expect(marker.getAttribute('style')).toContain('--game-ui-marker-x: 25%');
+    expect(screen.getByLabelText('Sector map with 2 markers').textContent).toContain('Sector map');
+  });
+
+  it('renders compass markers and location danger', () => {
+    render(
+      <>
+        <CompassBar heading={90} markers={[{ id: 'gate', label: 'Gate', heading: 120, tone: 'objective' }]} />
+        <LocationTag name="Ash Gate" zone="North" danger="hostile" status="Enemy patrol" />
+      </>,
+    );
+
+    expect(screen.getByRole('status', { name: 'Compass 90deg' }).textContent).toContain('Gate');
+    expect(screen.getByLabelText('Ash Gate hostile location').getAttribute('data-danger')).toBe('hostile');
+  });
+
+  it('renders dialogue and choice prompt callbacks', () => {
+    let selected = '';
+
+    render(
+      <>
+        <DialogueBox speaker="Mira" text="Hold the gate." tone="ally" />
+        <ChoicePrompt
+          title="Choose route"
+          choices={[
+            { id: 'left', label: 'Left path', description: 'Safer' },
+            { id: 'right', label: 'Right path', disabled: true },
+          ]}
+          onChoice={(id) => {
+            selected = id;
+          }}
+        />
+      </>,
+    );
+
+    expect(screen.getByLabelText('Mira dialogue').textContent).toContain('Hold the gate.');
+    fireEvent.click(screen.getByRole('button', { name: 'Left path Safer' }));
+    expect(selected).toBe('left');
+  });
+
+  it('renders quest log and notification stack', () => {
+    render(
+      <>
+        <QuestLog
+          activeId="signal"
+          quests={[
+            {
+              id: 'signal',
+              title: 'Signal Hunt',
+              objectives: [{ id: 'beacon', label: 'Find beacon', state: 'complete' }],
+            },
+          ]}
+        />
+        <NotificationStack
+          notifications={[
+            { id: 'loot', title: 'Loot', message: 'Cache found', variant: 'loot' },
+            { id: 'warn', title: 'Warning', message: 'Patrol nearby', variant: 'warning' },
+            { id: 'info', title: 'Info', message: 'Route updated', variant: 'info' },
+            { id: 'ok', title: 'Ready', message: 'Skill online', variant: 'success' },
+          ]}
+          limit={2}
+        />
+      </>,
+    );
+
+    expect(screen.getByLabelText('Quest log').textContent).toContain('Signal Hunt');
+    expect(screen.getByLabelText('Notifications 4 items').textContent).toContain('+2 more');
   });
 
   it('renders a loot stack with capped visible items', () => {

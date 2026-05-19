@@ -14,6 +14,9 @@ const groupLabels = {
   color: '颜色',
   rarity: '稀有度',
   hud: 'HUD',
+  ability: '技能',
+  map: '地图',
+  narrative: '叙事',
   motion: '动效',
   glow: '光效',
   radius: '圆角',
@@ -27,6 +30,9 @@ const customTokenStyle = {
   [gameUiTokenVars.shield]: '#7dd3fc',
   [gameUiTokenVars.mana]: '#48f5ff',
   [gameUiTokenVars.rarityLegendary]: '#ffb000',
+  [gameUiTokenVars.abilityReady]: '#76ff7a',
+  [gameUiTokenVars.markerObjective]: '#ffdd66',
+  [gameUiTokenVars.choice]: '#ff7ad9',
   [gameUiTokenVars.shadowGlow]: '0 0 32px rgba(255, 122, 217, 0.34)',
 } as CSSProperties;
 

@@ -4,6 +4,18 @@ import { primitiveDocs } from '../lib/primitiveDocs';
 describe('primitive docs metadata', () => {
   it('documents every public primitive shown in the gallery', () => {
     expect(primitiveDocs.map((doc) => doc.name)).toEqual([
+      'AbilityBar',
+      'AbilityTooltip',
+      'CastBar',
+      'TargetFrame',
+      'MiniMap',
+      'MapMarker',
+      'CompassBar',
+      'LocationTag',
+      'DialogueBox',
+      'ChoicePrompt',
+      'QuestLog',
+      'NotificationStack',
       'DamageNumber',
       'FloatingToast',
       'ComboCounter',

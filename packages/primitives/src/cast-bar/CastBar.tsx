@@ -1,0 +1,38 @@
+import React from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+
+export type CastBarState = 'casting' | 'channeling' | 'complete' | 'interrupted';
+
+export interface CastBarProps {
+  label: string;
+  progress: number;
+  state?: CastBarState;
+  meta?: ReactNode;
+  className?: string;
+}
+
+function clampPercent(progress: number) {
+  return `${Math.min(100, Math.max(0, progress * 100))}%`;
+}
+
+export function CastBar({ label, progress, state = 'casting', meta, className }: CastBarProps) {
+  const percent = Math.round(Math.min(1, Math.max(0, progress)) * 100);
+
+  return (
+    <div
+      className={['game-ui-cast-bar', className].filter(Boolean).join(' ')}
+      data-state={state}
+      role="status"
+      aria-label={`${label} ${state} ${percent}%`}
+      style={{ '--game-ui-cast-progress': clampPercent(progress) } as CSSProperties}
+    >
+      <span className="game-ui-cast-bar__topline">
+        <strong>{label}</strong>
+        <span>{meta ?? `${percent}%`}</span>
+      </span>
+      <span className="game-ui-cast-bar__track" aria-hidden="true">
+        <span className="game-ui-cast-bar__fill" />
+      </span>
+    </div>
+  );
+}

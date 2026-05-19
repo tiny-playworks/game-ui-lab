@@ -25,6 +25,18 @@ export const gameUiTokenVars = {
   stamina: '--game-ui-stamina',
   debuff: '--game-ui-debuff',
   cooldownMask: '--game-ui-cooldown-mask',
+  abilityReady: '--game-ui-ability-ready',
+  abilityLocked: '--game-ui-ability-locked',
+  cast: '--game-ui-cast',
+  target: '--game-ui-target',
+  mapLine: '--game-ui-map-line',
+  markerAlly: '--game-ui-marker-ally',
+  markerEnemy: '--game-ui-marker-enemy',
+  markerObjective: '--game-ui-marker-objective',
+  dialogue: '--game-ui-dialogue',
+  choice: '--game-ui-choice',
+  speaker: '--game-ui-speaker',
+  notification: '--game-ui-notification',
   radiusSm: '--game-ui-radius-sm',
   radiusMd: '--game-ui-radius-md',
   radiusLg: '--game-ui-radius-lg',
@@ -49,7 +61,17 @@ export const gameUiTokens = Object.fromEntries(
   [K in GameUiTokenName]: `var(${(typeof gameUiTokenVars)[K]})`;
 };
 
-export type GameUiTokenGroupId = 'color' | 'rarity' | 'hud' | 'motion' | 'glow' | 'radius' | 'spacing';
+export type GameUiTokenGroupId =
+  | 'color'
+  | 'rarity'
+  | 'hud'
+  | 'ability'
+  | 'map'
+  | 'narrative'
+  | 'motion'
+  | 'glow'
+  | 'radius'
+  | 'spacing';
 export type GameUiTokenSampleKind = 'swatch' | 'text' | 'border' | 'motion' | 'shadow' | 'radius' | 'spacing';
 
 export interface GameUiTokenDefinition {
@@ -297,6 +319,123 @@ export const gameUiTokenGroups: GameUiTokenGroupDefinition[] = [
         group: 'motion',
         description: 'Shared ease curve for responsive, readable feedback.',
         sample: { kind: 'motion', label: 'ease-out' },
+      },
+    ],
+  },
+  {
+    id: 'ability',
+    title: 'Ability tokens',
+    description: 'Ability and target tones for skill bars, cast feedback, and target frames.',
+    tokens: [
+      {
+        name: 'Ability ready',
+        cssVar: '--game-ui-ability-ready',
+        value: '#55f7d2',
+        group: 'ability',
+        description: 'Ready-state highlight for usable abilities.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Ability locked',
+        cssVar: '--game-ui-ability-locked',
+        value: '#64748b',
+        group: 'ability',
+        description: 'Muted locked-state tone for unavailable abilities.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Cast',
+        cssVar: '--game-ui-cast',
+        value: '#1ee6ff',
+        group: 'ability',
+        description: 'Cast and channel progress highlight.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Target',
+        cssVar: '--game-ui-target',
+        value: '#ff4d7d',
+        group: 'ability',
+        description: 'Target frame emphasis for focused entities.',
+        sample: { kind: 'swatch' },
+      },
+    ],
+  },
+  {
+    id: 'map',
+    title: 'Map tokens',
+    description: 'Map grid and marker tones for compact navigation surfaces.',
+    tokens: [
+      {
+        name: 'Map line',
+        cssVar: '--game-ui-map-line',
+        value: 'rgba(129, 230, 217, 0.22)',
+        group: 'map',
+        description: 'Subtle minimap grid and compass line color.',
+        sample: { kind: 'border' },
+      },
+      {
+        name: 'Marker ally',
+        cssVar: '--game-ui-marker-ally',
+        value: '#5cff9d',
+        group: 'map',
+        description: 'Friendly marker tone.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Marker enemy',
+        cssVar: '--game-ui-marker-enemy',
+        value: '#ff4d7d',
+        group: 'map',
+        description: 'Hostile marker tone.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Marker objective',
+        cssVar: '--game-ui-marker-objective',
+        value: '#ffd166',
+        group: 'map',
+        description: 'Objective marker tone.',
+        sample: { kind: 'swatch' },
+      },
+    ],
+  },
+  {
+    id: 'narrative',
+    title: 'Narrative tokens',
+    description: 'Dialogue, choice, speaker, and notification tones for narrative UI.',
+    tokens: [
+      {
+        name: 'Dialogue',
+        cssVar: '--game-ui-dialogue',
+        value: 'rgba(25, 35, 63, 0.94)',
+        group: 'narrative',
+        description: 'Dialogue panel surface.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Choice',
+        cssVar: '--game-ui-choice',
+        value: '#b47cff',
+        group: 'narrative',
+        description: 'Choice prompt accent tone.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Speaker',
+        cssVar: '--game-ui-speaker',
+        value: '#ffd166',
+        group: 'narrative',
+        description: 'Speaker name and portrait accent tone.',
+        sample: { kind: 'swatch' },
+      },
+      {
+        name: 'Notification',
+        cssVar: '--game-ui-notification',
+        value: '#55f7d2',
+        group: 'narrative',
+        description: 'System notification accent tone.',
+        sample: { kind: 'swatch' },
       },
     ],
   },
