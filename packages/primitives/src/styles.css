@@ -369,6 +369,139 @@
   font-size: 11px;
 }
 
+.game-ui-objective-chip {
+  --game-ui-objective-color: var(--game-ui-accent);
+  --game-ui-objective-progress: 0%;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--game-ui-space-2);
+  min-width: 240px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--game-ui-objective-color), transparent 44%);
+  border-radius: var(--game-ui-radius-md);
+  background: var(--game-ui-surface);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-objective-chip[data-state="complete"] {
+  --game-ui-objective-color: var(--game-ui-heal);
+}
+
+.game-ui-objective-chip[data-state="locked"] {
+  --game-ui-objective-color: var(--game-ui-muted);
+  opacity: 0.62;
+}
+
+.game-ui-objective-chip__icon {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--game-ui-objective-color), transparent 34%);
+  border-radius: var(--game-ui-radius-sm);
+  color: var(--game-ui-objective-color);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.game-ui-objective-chip__body {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.game-ui-objective-chip__label {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-ui-objective-chip__meta,
+.game-ui-objective-chip__progress-text {
+  overflow: hidden;
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-ui-objective-chip__progress {
+  display: grid;
+  gap: 4px;
+  justify-items: end;
+  min-width: 58px;
+}
+
+.game-ui-objective-chip__track {
+  display: block;
+  overflow: hidden;
+  width: 58px;
+  height: 5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--game-ui-muted), transparent 74%);
+}
+
+.game-ui-objective-chip__fill {
+  display: block;
+  width: var(--game-ui-objective-progress);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--game-ui-objective-color);
+}
+
+.game-ui-quest-tracker {
+  display: grid;
+  gap: var(--game-ui-space-3);
+  min-width: 280px;
+  padding: 14px;
+  border: 1px solid var(--game-ui-line);
+  border-radius: var(--game-ui-radius-lg);
+  background: var(--game-ui-surface);
+  color: var(--game-ui-text);
+  font-family: var(--game-ui-font-sans);
+}
+
+.game-ui-quest-tracker__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--game-ui-space-2);
+}
+
+.game-ui-quest-tracker__copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.game-ui-quest-tracker__title {
+  overflow: hidden;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-ui-quest-tracker__subtitle,
+.game-ui-quest-tracker__count {
+  color: var(--game-ui-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.game-ui-quest-tracker__count {
+  color: var(--game-ui-accent);
+}
+
+.game-ui-quest-tracker__list {
+  display: grid;
+  gap: var(--game-ui-space-2);
+}
+
 .game-ui-loot-card {
   --game-ui-loot-rarity-color: var(--game-ui-rarity-common);
   display: grid;

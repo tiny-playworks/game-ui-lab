@@ -7,6 +7,8 @@ import {
   HealthBar,
   LootCard,
   LootStack,
+  ObjectiveChip,
+  QuestTracker,
   RarityBorder,
   ResourceMeter,
   RewardReveal,
@@ -24,6 +26,12 @@ const lootItems = [
   { id: 'core', name: 'Pulse Core', rarity: 'rare' as const, quantity: 1, subtitle: 'Upgrade' },
   { id: 'shard', name: 'Neon Shard', rarity: 'epic' as const, quantity: 3, value: '240g' },
   { id: 'cache', name: 'Ancient Cache', rarity: 'legendary' as const, quantity: 1, subtitle: 'Wave clear' },
+];
+
+const questObjectives = [
+  { id: 'beacon', label: 'Find beacon', state: 'complete' as const, meta: 'Main route' },
+  { id: 'shards', label: 'Collect shards', progress: 2, max: 5, meta: 'Side quest' },
+  { id: 'vault', label: 'Enter vault', state: 'locked' as const, meta: 'Locked' },
 ];
 
 function getPrimitiveDoc(name: string) {
@@ -168,6 +176,28 @@ export function PrimitivesRoute() {
             <StatusBadge label="Guard" tone="neutral" />
             <StatusBadge label="Overheat" tone="warning" />
           </div>
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="ObjectiveChip"
+          summary="Single quest objective chip for active, complete, locked, and progress states."
+          tokenNote="Consumes accent, heal, muted, line, surface, radius, and spacing tokens for compact quest state."
+          {...getPrimitiveDoc('ObjectiveChip')}
+        >
+          <div className="sample-stack">
+            <ObjectiveChip label="Find beacon" state="complete" meta="Main route" />
+            <ObjectiveChip label="Collect shards" progress={2} max={5} meta="Side quest" />
+            <ObjectiveChip label="Enter vault" state="locked" meta="Locked" />
+          </div>
+        </PrimitiveCard>
+
+        <PrimitiveCard
+          name="QuestTracker"
+          summary="Quest panel that groups objectives and keeps the completion count visible."
+          tokenNote="Uses ObjectiveChip internally so tracker panels inherit the same objective state language."
+          {...getPrimitiveDoc('QuestTracker')}
+        >
+          <QuestTracker title="Signal Hunt" subtitle="Daily route" objectives={questObjectives} />
         </PrimitiveCard>
 
         <PrimitiveCard

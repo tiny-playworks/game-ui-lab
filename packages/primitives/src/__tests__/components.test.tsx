@@ -10,6 +10,8 @@ import {
   HealthBar,
   LootCard,
   LootStack,
+  ObjectiveChip,
+  QuestTracker,
   RarityBorder,
   ResourceMeter,
   RewardReveal,
@@ -112,6 +114,41 @@ describe('game ui primitives', () => {
     expect(screen.getByText('Neon Shard').textContent).toBe('Neon Shard');
     expect(screen.getByText('x3').textContent).toBe('x3');
     expect(screen.getByText('240g').textContent).toBe('240g');
+  });
+
+  it('renders objective chip states and progress', () => {
+    const { rerender } = render(<ObjectiveChip label="Collect shards" progress={2} max={5} />);
+
+    expect(screen.getByRole('status', { name: 'Collect shards active 2 / 5' }).getAttribute('data-state')).toBe('active');
+    expect(screen.getByText('2 / 5').textContent).toBe('2 / 5');
+
+    rerender(<ObjectiveChip label="Open gate" state="complete" />);
+
+    expect(screen.getByRole('status', { name: 'Open gate complete' }).getAttribute('data-state')).toBe('complete');
+
+    rerender(<ObjectiveChip label="Enter vault" state="locked" />);
+
+    expect(screen.getByRole('status', { name: 'Enter vault locked' }).getAttribute('data-state')).toBe('locked');
+  });
+
+  it('renders quest tracker objectives and completion count', () => {
+    render(
+      <QuestTracker
+        title="Signal Hunt"
+        subtitle="Daily route"
+        objectives={[
+          { id: 'beacon', label: 'Find beacon', state: 'complete' },
+          { id: 'shards', label: 'Collect shards', progress: 2, max: 5 },
+          { id: 'vault', label: 'Enter vault', state: 'locked' },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('region', { name: 'Signal Hunt 1 of 3 complete' }).textContent).toContain('1 / 3');
+    expect(screen.getByText('Daily route').textContent).toBe('Daily route');
+    expect(screen.getByText('Find beacon').textContent).toBe('Find beacon');
+    expect(screen.getByText('Collect shards').textContent).toBe('Collect shards');
+    expect(screen.getByText('Enter vault').textContent).toBe('Enter vault');
   });
 
   it('renders a loot stack with capped visible items', () => {

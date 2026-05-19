@@ -11,6 +11,8 @@ describe('primitive docs metadata', () => {
       'ResourceMeter',
       'CooldownSlot',
       'StatusBadge',
+      'ObjectiveChip',
+      'QuestTracker',
       'LootCard',
       'LootStack',
       'RewardReveal',

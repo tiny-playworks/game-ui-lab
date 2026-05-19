@@ -8,6 +8,8 @@ import {
   HealthBar,
   LootCard,
   LootStack,
+  ObjectiveChip,
+  QuestTracker,
   RarityBorder,
   ResourceMeter,
   RewardReveal,
@@ -23,6 +25,8 @@ type PrimitiveId =
   | 'combo-counter'
   | 'cooldown-slot'
   | 'status-badge'
+  | 'objective-chip'
+  | 'quest-tracker'
   | 'floating-toast'
   | 'rarity-border'
   | 'loot-card'
@@ -56,6 +60,12 @@ const lootItems = [
   { id: 'core', name: '共鸣核心', rarity: 'legendary' as const, quantity: 1, value: '999', subtitle: '高稀有度' },
   { id: 'dust', name: '余烬粉尘', rarity: 'common' as const, quantity: 12, value: '30', subtitle: '可分解' },
   { id: 'orb', name: '脉冲晶核', rarity: 'rare' as const, quantity: 2, value: '128', subtitle: '能量道具' },
+];
+
+const questObjectives = [
+  { id: 'beacon', label: '定位信标', state: 'complete' as const, meta: '主线' },
+  { id: 'shards', label: '收集星辉碎片', progress: 2, max: 5, meta: '支线' },
+  { id: 'vault', label: '进入遗迹核心', state: 'locked' as const, meta: '未解锁' },
 ];
 
 const commonRows: ApiRow[] = [
@@ -105,6 +115,7 @@ export function Demo() {
   return (
     <GameUiProvider>
       <HealthBar value={97} max={120} shield={18} label="生命" showValue />
+      <HealthBar value={420} max={800} tone="boss" label="Boss" showValue />
     </GameUiProvider>
   );
 }`,
@@ -134,6 +145,7 @@ export function Demo() {
   return (
     <GameUiProvider>
       <ResourceMeter value={67} max={90} kind="mana" label="法力" />
+      <ResourceMeter value={44} max={100} kind="stamina" label="耐力" />
     </GameUiProvider>
   );
 }`,
@@ -188,6 +200,8 @@ export function Demo() {
   return (
     <GameUiProvider>
       <CooldownSlot progress={0.62} label="爆发" icon="Q" />
+      <CooldownSlot progress={1} label="闪避" icon="E" />
+      <CooldownSlot progress={0.2} label="禁用" icon="R" disabled />
     </GameUiProvider>
   );
 }`,
@@ -216,6 +230,8 @@ export function Demo() {
   return (
     <GameUiProvider>
       <StatusBadge label="急速" tone="buff" count={3} duration="12秒" />
+      <StatusBadge label="灼烧" tone="debuff" duration="8秒" />
+      <StatusBadge label="打断" tone="warning" />
     </GameUiProvider>
   );
 }`,
@@ -230,6 +246,69 @@ export function Demo() {
     tokenEn: 'Uses status color and compact text tokens.',
     Preview: StatusBadgePreview,
   },
+  'objective-chip': {
+    id: 'objective-chip',
+    name: 'ObjectiveChip',
+    categoryZh: '任务',
+    categoryEn: 'Quest',
+    summaryZh: '单个任务目标，展示状态、进度和辅助信息。',
+    summaryEn: 'A single objective item for state, progress, and compact metadata.',
+    snippet: `import { ObjectiveChip, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <ObjectiveChip label="定位信标" state="complete" meta="主线" />
+      <ObjectiveChip label="收集星辉碎片" progress={2} max={5} meta="支线" />
+      <ObjectiveChip label="进入遗迹核心" state="locked" meta="未解锁" />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('label', '目标文案。', 'Objective label.', 'string', '-'),
+      row('state', '目标状态。', 'Objective state.', "'active' | 'complete' | 'locked'", "'active'"),
+      row('progress', '当前进度。', 'Current progress.', 'number', '-'),
+      row('max', '最大进度。', 'Maximum progress.', 'number', '-'),
+      row('icon', '自定义图标。', 'Custom icon.', 'ReactNode', '按 state 推导'),
+      row('meta', '辅助信息。', 'Compact metadata.', 'ReactNode', '-'),
+      ...commonRows,
+    ],
+    tokenZh: '复用任务状态、进度、边框和间距 token。',
+    tokenEn: 'Reuses objective state, progress, border, and spacing tokens.',
+    Preview: ObjectiveChipPreview,
+  },
+  'quest-tracker': {
+    id: 'quest-tracker',
+    name: 'QuestTracker',
+    categoryZh: '任务',
+    categoryEn: 'Quest',
+    summaryZh: '任务追踪面板，组合多个目标并展示完成数。',
+    summaryEn: 'A quest tracker panel that groups objectives and shows completion count.',
+    snippet: `import { QuestTracker, GameUiProvider } from '@tiny-playworks/game-ui';
+
+const objectives = [
+  { id: 'beacon', label: '定位信标', state: 'complete', meta: '主线' },
+  { id: 'shards', label: '收集星辉碎片', progress: 2, max: 5, meta: '支线' },
+  { id: 'vault', label: '进入遗迹核心', state: 'locked', meta: '未解锁' },
+];
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <QuestTracker title="信标追踪" subtitle="每日路线" objectives={objectives} />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('title', '面板标题。', 'Panel title.', 'string', '-'),
+      row('subtitle', '副标题。', 'Subtitle.', 'string', '-'),
+      row('objectives', '目标数组。', 'Objective array.', 'QuestTrackerObjective[]', '-'),
+      ...commonRows,
+    ],
+    tokenZh: '复用 ObjectiveChip、面板、边框和间距 token。',
+    tokenEn: 'Reuses ObjectiveChip, panel, border, and spacing tokens.',
+    Preview: QuestTrackerPreview,
+  },
   'floating-toast': {
     id: 'floating-toast',
     name: 'FloatingToast',
@@ -243,6 +322,7 @@ export function Demo() {
   return (
     <GameUiProvider>
       <FloatingToast title="命中已触发" message="基础反馈已经开始播放。" variant="info" />
+      <FloatingToast title="发现掉落" message="传奇掉落边框已激活。" variant="loot" />
     </GameUiProvider>
   );
 }`,
@@ -270,7 +350,10 @@ export function Demo() {
   return (
     <GameUiProvider>
       <RarityBorder tone="legendary">
-        <div>传奇掉落</div>
+        <div>
+          <strong>传奇掉落</strong>
+          <span>适合把奖励结果收在一个明确容器里。</span>
+        </div>
       </RarityBorder>
     </GameUiProvider>
   );
@@ -325,8 +408,10 @@ export function Demo() {
     snippet: `import { LootStack, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const items = [
-  { id: 'shard', name: '星辉碎片', rarity: 'epic', quantity: 3 },
-  { id: 'core', name: '共鸣核心', rarity: 'legendary' },
+  { id: 'shard', name: '星辉碎片', rarity: 'epic' as const, quantity: 3, value: '240', subtitle: '制作材料' },
+  { id: 'core', name: '共鸣核心', rarity: 'legendary' as const, quantity: 1, value: '999', subtitle: '高稀有度' },
+  { id: 'dust', name: '余烬粉尘', rarity: 'common' as const, quantity: 12, value: '30', subtitle: '可分解' },
+  { id: 'orb', name: '脉冲晶核', rarity: 'rare' as const, quantity: 2, value: '128', subtitle: '能量道具' },
 ];
 
 export function Demo() {
@@ -354,6 +439,13 @@ export function Demo() {
     summaryZh: '奖励揭示面板，组合标题、奖励栈和领取动作。',
     summaryEn: 'A reward reveal panel with title, loot stack, and action.',
     snippet: `import { RewardReveal, GameUiProvider } from '@tiny-playworks/game-ui';
+
+const items = [
+  { id: 'shard', name: '星辉碎片', rarity: 'epic' as const, quantity: 3, value: '240', subtitle: '制作材料' },
+  { id: 'core', name: '共鸣核心', rarity: 'legendary' as const, quantity: 1, value: '999', subtitle: '高稀有度' },
+  { id: 'dust', name: '余烬粉尘', rarity: 'common' as const, quantity: 12, value: '30', subtitle: '可分解' },
+  { id: 'orb', name: '脉冲晶核', rarity: 'rare' as const, quantity: 2, value: '128', subtitle: '能量道具' },
+];
 
 export function Demo() {
   return (
@@ -383,6 +475,8 @@ const overviewOrder: PrimitiveId[] = [
   'combo-counter',
   'cooldown-slot',
   'status-badge',
+  'objective-chip',
+  'quest-tracker',
   'floating-toast',
   'rarity-border',
   'loot-card',
@@ -545,6 +639,20 @@ function StatusBadgePreview() {
       <StatusBadge label="打断" tone="warning" />
     </div>
   );
+}
+
+function ObjectiveChipPreview() {
+  return (
+    <div className="docs-demo-stack">
+      <ObjectiveChip label="定位信标" state="complete" meta="主线" />
+      <ObjectiveChip label="收集星辉碎片" progress={2} max={5} meta="支线" />
+      <ObjectiveChip label="进入遗迹核心" state="locked" meta="未解锁" />
+    </div>
+  );
+}
+
+function QuestTrackerPreview() {
+  return <QuestTracker title="信标追踪" subtitle="每日路线" objectives={questObjectives} />;
 }
 
 function FloatingToastPreview() {

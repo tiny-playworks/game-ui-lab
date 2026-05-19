@@ -30,6 +30,8 @@ export default defineConfig({
             { text: 'ComboCounter', link: '/primitives/combo-counter' },
             { text: 'CooldownSlot', link: '/primitives/cooldown-slot' },
             { text: 'StatusBadge', link: '/primitives/status-badge' },
+            { text: 'ObjectiveChip', link: '/primitives/objective-chip' },
+            { text: 'QuestTracker', link: '/primitives/quest-tracker' },
             { text: 'FloatingToast', link: '/primitives/floating-toast' },
             { text: 'RarityBorder', link: '/primitives/rarity-border' },
             { text: 'LootCard', link: '/primitives/loot-card' },

@@ -92,6 +92,29 @@ export const primitiveDocs: PrimitiveDoc[] = [
     ],
   },
   {
+    name: 'ObjectiveChip',
+    usage: '<ObjectiveChip label="Collect shards" progress={2} max={5} meta="Side quest" />',
+    states: ['active', 'complete', 'locked', 'progress'],
+    props: [
+      { name: 'label', type: 'string', description: 'Objective label.' },
+      { name: 'state', type: 'active | complete | locked', description: 'Objective completion state.' },
+      { name: 'progress', type: 'number', description: 'Optional current progress.' },
+      { name: 'max', type: 'number', description: 'Optional maximum progress.' },
+      { name: 'meta', type: 'ReactNode', description: 'Compact secondary detail.' },
+    ],
+  },
+  {
+    name: 'QuestTracker',
+    usage: '<QuestTracker title="Signal Hunt" subtitle="Daily route" objectives={objectives} />',
+    states: ['active objectives', 'completed count', 'locked objectives'],
+    props: [
+      { name: 'title', type: 'string', description: 'Quest tracker title.' },
+      { name: 'subtitle', type: 'string', description: 'Optional tracker subtitle.' },
+      { name: 'objectives', type: 'QuestTrackerObjective[]', description: 'Objective list rendered as chips.' },
+      { name: 'className', type: 'string', description: 'Optional class name for layout control.' },
+    ],
+  },
+  {
     name: 'LootCard',
     usage: '<LootCard name="Neon Shard" rarity="epic" quantity={3} value="240g" />',
     states: ['common', 'rare', 'epic', 'legendary', 'selected'],
