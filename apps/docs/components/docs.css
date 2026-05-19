@@ -171,6 +171,19 @@ html.dark,
   font-weight: 650;
 }
 
+.docs-live-lab {
+  display: grid;
+  gap: 14px;
+}
+
+.docs-live-lab__frame {
+  width: 100%;
+  min-height: min(760px, 82vh);
+  border: 1px solid var(--docs-line);
+  border-radius: 12px;
+  background: #060912;
+}
+
 .docs-demo-block {
   display: grid;
   overflow: hidden;

@@ -14,7 +14,7 @@ import {
   ResourceMeter,
   StatusBadge,
   TargetFrame,
-} from '../../../packages/primitives/src';
+} from '@tiny-playworks/game-ui';
 import { useDocsLocale } from './locale';
 import './docs.css';
 

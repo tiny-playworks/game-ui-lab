@@ -26,7 +26,7 @@ import {
   RewardReveal,
   StatusBadge,
   TargetFrame,
-} from '../../../packages/primitives/src';
+} from '@tiny-playworks/game-ui';
 import { DocShell } from './doc-shell';
 import { Localized, useDocsLocale } from './locale';
 

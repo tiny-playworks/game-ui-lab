@@ -1,6 +1,7 @@
 import { DocShell } from '../../components/doc-shell';
 import { Localized } from '../../components/locale';
 import { LabPreview } from '../../components/lab-preview';
+import { LiveLabFrame } from '../../components/live-lab-frame';
 
 <DocShell
   eyebrowZh="实验台"
@@ -14,9 +15,10 @@ import { LabPreview } from '../../components/lab-preview';
     <Localized
       as="p"
       className="docs-section__text"
-      zh="单个组件的 API 请看 Primitives；这里主要看组合效果。"
-      en="See Primitives for individual APIs; this page focuses on composition."
+      zh="开发态会在这里嵌入真正的 gallery 实验台；单个组件的 API 请看 Primitives。"
+      en="In local development this page embeds the real gallery lab. See Primitives for individual APIs."
     />
+    <LiveLabFrame />
   </section>
 
   <LabPreview />

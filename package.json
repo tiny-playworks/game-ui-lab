@@ -9,7 +9,7 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "dev": "pnpm --filter @tiny-playworks/game-ui-docs dev",
+    "dev": "node ./scripts/dev.mjs",
     "dev:lab": "pnpm --filter @tiny-playworks/game-ui-gallery dev",
     "build": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui build && pnpm --filter @tiny-playworks/game-ui-gallery build && pnpm --filter @tiny-playworks/game-ui-docs build",
     "build:pages": "pnpm --filter @tiny-playworks/game-ui-docs build:pages",

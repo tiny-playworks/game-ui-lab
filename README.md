@@ -119,7 +119,7 @@ nvm use 24.15.0
 pnpm install
 ```
 
-Run the Rspress docs site:
+Run the local docs and embedded lab:
 
 ```bash
 pnpm dev

@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { gameUiTokenGroups, gameUiTokens, gameUiTokenVars } from '../../../packages/tokens/src';
+import { gameUiTokenGroups, gameUiTokens, gameUiTokenVars } from '@tiny-playworks/tokens';
 import {
   CooldownSlot,
   FloatingToast,
@@ -7,7 +7,7 @@ import {
   HealthBar,
   LootCard,
   ResourceMeter,
-} from '../../../packages/primitives/src';
+} from '@tiny-playworks/game-ui';
 import { Localized, useDocsLocale } from './locale';
 
 const groupLabels = {

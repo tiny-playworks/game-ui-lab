@@ -1,10 +1,23 @@
 import { defineConfig } from '@rspress/core';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
 export default defineConfig({
   root: 'docs',
   base: '/game-ui-lab/',
   title: 'Tiny Playworks Game UI',
   description: 'Motion-first React primitives for game-like web interfaces.',
+  builderConfig: {
+    resolve: {
+      alias: {
+        '@tiny-playworks/game-ui': resolve(repoRoot, 'packages/primitives/src/index.ts'),
+        '@tiny-playworks/tokens': resolve(repoRoot, 'packages/tokens/src/index.ts'),
+        '@tiny-playworks/tokens/css': resolve(repoRoot, 'packages/tokens/src/index.css'),
+      },
+    },
+  },
   themeConfig: {
     nav: [
       { text: '指南 / Guide', link: '/guide/getting-started' },
