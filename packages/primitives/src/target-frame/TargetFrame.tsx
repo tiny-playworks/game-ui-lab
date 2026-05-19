@@ -3,6 +3,14 @@ import { HealthBar } from '../health-bar';
 import { StatusBadge } from '../status-badge';
 import type { HealthBarTone } from '../health-bar';
 import type { StatusBadgeProps } from '../status-badge';
+import {
+  mergeClass,
+  targetFrameCopyClass,
+  targetFrameHeaderClass,
+  targetFrameMetaClass,
+  targetFrameRecipe,
+  targetFrameStatusesClass,
+} from '../styles';
 
 export type TargetFaction = 'ally' | 'enemy' | 'neutral' | 'boss';
 
@@ -36,21 +44,21 @@ export function TargetFrame({
 }: TargetFrameProps) {
   return (
     <section
-      className={['game-ui-target-frame', className].filter(Boolean).join(' ')}
+      className={mergeClass(targetFrameRecipe({ faction }), className)}
       data-faction={faction}
       role="status"
       aria-label={`${name} ${faction} target`}
     >
-      <header className="game-ui-target-frame__header">
-        <span>
+      <header className={targetFrameHeaderClass}>
+        <span className={targetFrameCopyClass}>
           <strong>{name}</strong>
-          {level ? <em>{level}</em> : null}
+          {level ? <em className={targetFrameMetaClass}>{level}</em> : null}
         </span>
-        <span className="game-ui-target-frame__faction">{faction}</span>
+        <span className={targetFrameMetaClass}>{faction}</span>
       </header>
       <HealthBar value={health} max={maxHealth} shield={shield} tone={healthToneByFaction[faction]} label="Target HP" showValue />
       {statuses.length ? (
-        <div className="game-ui-target-frame__statuses">
+        <div className={targetFrameStatusesClass}>
           {statuses.map((status) => (
             <StatusBadge key={status.label} {...status} />
           ))}

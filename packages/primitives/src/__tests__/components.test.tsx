@@ -45,6 +45,21 @@ describe('game ui primitives', () => {
     expect(screen.getByText('ready').parentElement?.getAttribute('data-game-ui-theme')).toBe('default');
   });
 
+  it('renders provider theme and scoped token overrides', () => {
+    render(
+      <GameUiProvider theme="arcade" tokens={{ accent: '#ffffff' }} style={{ marginTop: 12 }}>
+        <span>arcade</span>
+      </GameUiProvider>,
+    );
+
+    const provider = screen.getByText('arcade').parentElement;
+
+    expect(provider?.getAttribute('data-game-ui-theme')).toBe('arcade');
+    expect(provider?.getAttribute('style')).toContain('margin-top: 12px');
+    expect(provider?.getAttribute('style')).toContain('--game-ui-accent: #ffffff');
+    expect(provider?.getAttribute('style')).toContain('--game-ui-colors-accent: #ffffff');
+  });
+
   it('renders a damage number variant', () => {
     render(<DamageNumber value="128" variant="critical" prefix="CRIT" />);
 
@@ -69,7 +84,7 @@ describe('game ui primitives', () => {
   it('renders a rarity border tone', () => {
     render(<RarityBorder tone="legendary">Legendary cache</RarityBorder>);
 
-    expect(screen.getByText('Legendary cache').closest('.game-ui-rarity-border')?.getAttribute('data-tone')).toBe('legendary');
+    expect(screen.getByText('Legendary cache').getAttribute('data-tone')).toBe('legendary');
   });
 
   it('renders health states with shield and values', () => {

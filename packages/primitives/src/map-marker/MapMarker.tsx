@@ -1,5 +1,11 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
+import {
+  mapMarkerDotRecipe,
+  mapMarkerLabelClass,
+  mapMarkerRecipe,
+  mergeClass,
+} from '../styles';
 
 export type MapMarkerTone = 'ally' | 'enemy' | 'objective' | 'neutral';
 
@@ -20,7 +26,7 @@ function clampCoordinate(value: number) {
 export function MapMarker({ x, y, tone = 'neutral', label, active = false, icon, className }: MapMarkerProps) {
   return (
     <span
-      className={['game-ui-map-marker', className].filter(Boolean).join(' ')}
+      className={mergeClass(mapMarkerRecipe({ tone, active }), className)}
       data-tone={tone}
       data-active={active}
       role="img"
@@ -30,8 +36,8 @@ export function MapMarker({ x, y, tone = 'neutral', label, active = false, icon,
         '--game-ui-marker-y': clampCoordinate(y),
       } as CSSProperties}
     >
-      <span className="game-ui-map-marker__dot" aria-hidden="true">{icon}</span>
-      {label ? <span className="game-ui-map-marker__label">{label}</span> : null}
+      <span className={mapMarkerDotRecipe({ active })} aria-hidden="true">{icon}</span>
+      {label ? <span className={mapMarkerLabelClass}>{label}</span> : null}
     </span>
   );
 }

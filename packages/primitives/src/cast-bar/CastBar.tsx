@@ -1,5 +1,13 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
+import {
+  castBarFillClass,
+  castBarRecipe,
+  castBarToplineClass,
+  castBarToplineStrongClass,
+  castBarTrackClass,
+  mergeClass,
+} from '../styles';
 
 export type CastBarState = 'casting' | 'channeling' | 'complete' | 'interrupted';
 
@@ -20,18 +28,18 @@ export function CastBar({ label, progress, state = 'casting', meta, className }:
 
   return (
     <div
-      className={['game-ui-cast-bar', className].filter(Boolean).join(' ')}
+      className={mergeClass(castBarRecipe({ state }), className)}
       data-state={state}
       role="status"
       aria-label={`${label} ${state} ${percent}%`}
       style={{ '--game-ui-cast-progress': clampPercent(progress) } as CSSProperties}
     >
-      <span className="game-ui-cast-bar__topline">
-        <strong>{label}</strong>
+      <span className={castBarToplineClass}>
+        <strong className={castBarToplineStrongClass}>{label}</strong>
         <span>{meta ?? `${percent}%`}</span>
       </span>
-      <span className="game-ui-cast-bar__track" aria-hidden="true">
-        <span className="game-ui-cast-bar__fill" />
+      <span className={castBarTrackClass} aria-hidden="true">
+        <span className={castBarFillClass} />
       </span>
     </div>
   );

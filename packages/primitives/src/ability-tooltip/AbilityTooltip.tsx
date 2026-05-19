@@ -1,5 +1,13 @@
 import React from 'react';
 import type { ReactNode } from 'react';
+import {
+  abilityTooltipDescriptionClass,
+  abilityTooltipKindClass,
+  abilityTooltipMetaClass,
+  abilityTooltipNameClass,
+  abilityTooltipRecipe,
+  mergeClass,
+} from '../styles';
 
 export type AbilityTooltipState = 'ready' | 'cooling' | 'locked';
 
@@ -24,15 +32,15 @@ export function AbilityTooltip({
 }: AbilityTooltipProps) {
   return (
     <article
-      className={['game-ui-ability-tooltip', className].filter(Boolean).join(' ')}
+      className={mergeClass(abilityTooltipRecipe({ state }), className)}
       data-state={state}
       role="tooltip"
       aria-label={`${name} ${state}`}
     >
-      <span className="game-ui-ability-tooltip__kind">{kind}</span>
-      <strong className="game-ui-ability-tooltip__name">{name}</strong>
-      <span className="game-ui-ability-tooltip__description">{description}</span>
-      <span className="game-ui-ability-tooltip__meta">
+      <span className={abilityTooltipKindClass}>{kind}</span>
+      <strong className={abilityTooltipNameClass}>{name}</strong>
+      <span className={abilityTooltipDescriptionClass}>{description}</span>
+      <span className={abilityTooltipMetaClass}>
         {cost ? <span>Cost {cost}</span> : null}
         {cooldown ? <span>Cooldown {cooldown}</span> : null}
       </span>

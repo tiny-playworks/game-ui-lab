@@ -1,5 +1,13 @@
 import React from 'react';
 import type { CSSProperties } from 'react';
+import {
+  mergeClass,
+  resourceMeterFillClass,
+  resourceMeterLabelClass,
+  resourceMeterRecipe,
+  resourceMeterTrackClass,
+  resourceMeterValueClass,
+} from '../styles';
 
 export type ResourceMeterKind = 'mana' | 'energy' | 'stamina';
 
@@ -40,17 +48,17 @@ export function ResourceMeter({
 
   return (
     <div
-      className={['game-ui-resource-meter', className].filter(Boolean).join(' ')}
+      className={mergeClass(resourceMeterRecipe({ kind }), className)}
       data-kind={kind}
       role="status"
       aria-label={`${label} ${formatAmount(value)} of ${formatAmount(max)}`}
       style={{ '--game-ui-resource-ratio': `${ratio * 100}%` } as CSSProperties}
     >
-      <span className="game-ui-resource-meter__label">{label}</span>
-      <span className="game-ui-resource-meter__track" aria-hidden="true">
-        <span className="game-ui-resource-meter__fill" />
+      <span className={resourceMeterLabelClass}>{label}</span>
+      <span className={resourceMeterTrackClass} aria-hidden="true">
+        <span className={resourceMeterFillClass} />
       </span>
-      <span className="game-ui-resource-meter__value">
+      <span className={resourceMeterValueClass}>
         {formatAmount(value)} / {formatAmount(max)}
       </span>
     </div>

@@ -1,5 +1,16 @@
 import React from 'react';
 import type { CSSProperties } from 'react';
+import {
+  healthBarFillClass,
+  healthBarLabelClass,
+  healthBarRecipe,
+  healthBarShieldClass,
+  healthBarShieldValueClass,
+  healthBarToplineClass,
+  healthBarTrackClass,
+  healthBarValueClass,
+  mergeClass,
+} from '../styles';
 
 export type HealthBarTone = 'hero' | 'danger' | 'boss';
 
@@ -43,7 +54,7 @@ export function HealthBar({
 
   return (
     <div
-      className={['game-ui-health-bar', className].filter(Boolean).join(' ')}
+      className={mergeClass(healthBarRecipe({ tone, empty: isEmpty }), className)}
       data-tone={tone}
       data-empty={isEmpty}
       data-full={isFull}
@@ -55,19 +66,19 @@ export function HealthBar({
         '--game-ui-shield-ratio': `${shieldRatio * 100}%`,
       } as CSSProperties}
     >
-      <span className="game-ui-health-bar__topline">
-        <span className="game-ui-health-bar__label">{label}</span>
+      <span className={healthBarToplineClass}>
+        <span className={healthBarLabelClass}>{label}</span>
         {showValue ? (
-          <span className="game-ui-health-bar__value">
+          <span className={healthBarValueClass}>
             {formatAmount(value)} / {formatAmount(max)}
           </span>
         ) : null}
       </span>
-      <span className="game-ui-health-bar__track" aria-hidden="true">
-        <span className="game-ui-health-bar__fill" />
-        {hasShield ? <span className="game-ui-health-bar__shield" /> : null}
+      <span className={healthBarTrackClass} aria-hidden="true">
+        <span className={healthBarFillClass} />
+        {hasShield ? <span className={healthBarShieldClass} /> : null}
       </span>
-      {hasShield ? <span className="game-ui-health-bar__shield-value">+{formatAmount(shield)}</span> : null}
+      {hasShield ? <span className={healthBarShieldValueClass}>+{formatAmount(shield)}</span> : null}
     </div>
   );
 }

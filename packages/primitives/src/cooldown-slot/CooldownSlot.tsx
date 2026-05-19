@@ -1,5 +1,12 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
+import {
+  cooldownSlotIconClass,
+  cooldownSlotLabelClass,
+  cooldownSlotMaskClass,
+  cooldownSlotRecipe,
+  mergeClass,
+} from '../styles';
 
 export interface CooldownSlotProps {
   progress: number;
@@ -28,18 +35,18 @@ export function CooldownSlot({
 
   return (
     <div
-      className={['game-ui-cooldown-slot', className].filter(Boolean).join(' ')}
+      className={mergeClass(cooldownSlotRecipe({ ready, disabled }), className)}
       data-ready={ready}
       data-disabled={disabled}
       role="status"
       aria-label={ariaLabel}
       style={{ '--game-ui-cooldown-progress': `${100 - percent}%` } as CSSProperties}
     >
-      <span className="game-ui-cooldown-slot__icon" aria-hidden="true">
+      <span className={cooldownSlotIconClass} aria-hidden="true">
         {icon ?? label.slice(0, 1)}
       </span>
-      <span className="game-ui-cooldown-slot__mask" aria-hidden="true" />
-      <span className="game-ui-cooldown-slot__label">{label}</span>
+      <span className={cooldownSlotMaskClass} aria-hidden="true" />
+      <span className={cooldownSlotLabelClass}>{label}</span>
     </div>
   );
 }

@@ -1,6 +1,16 @@
 import React from 'react';
 import { ObjectiveChip } from '../objective-chip';
 import type { ObjectiveChipProps } from '../objective-chip';
+import {
+  mergeClass,
+  questTrackerClass,
+  questTrackerCopyClass,
+  questTrackerCountClass,
+  questTrackerHeaderClass,
+  questTrackerListClass,
+  questTrackerSubtitleClass,
+  questTrackerTitleClass,
+} from '../styles';
 
 export interface QuestTrackerObjective extends ObjectiveChipProps {
   id: string;
@@ -23,18 +33,18 @@ export function QuestTracker({ title, subtitle, objectives, className }: QuestTr
 
   return (
     <section
-      className={['game-ui-quest-tracker', className].filter(Boolean).join(' ')}
+      className={mergeClass(questTrackerClass, className)}
       role="region"
       aria-label={`${title} ${completeCount} of ${objectives.length} complete`}
     >
-      <header className="game-ui-quest-tracker__header">
-        <span className="game-ui-quest-tracker__copy">
-          <strong className="game-ui-quest-tracker__title">{title}</strong>
-          {subtitle ? <span className="game-ui-quest-tracker__subtitle">{subtitle}</span> : null}
+      <header className={questTrackerHeaderClass}>
+        <span className={questTrackerCopyClass}>
+          <strong className={questTrackerTitleClass}>{title}</strong>
+          {subtitle ? <span className={questTrackerSubtitleClass}>{subtitle}</span> : null}
         </span>
-        <span className="game-ui-quest-tracker__count">{countText}</span>
+        <span className={questTrackerCountClass}>{countText}</span>
       </header>
-      <div className="game-ui-quest-tracker__list">
+      <div className={questTrackerListClass}>
         {objectives.map(({ id, ...objective }) => (
           <ObjectiveChip key={id} {...objective} />
         ))}

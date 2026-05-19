@@ -1,5 +1,15 @@
 import React from 'react';
 import type { ReactNode } from 'react';
+import {
+  lootCardBodyClass,
+  lootCardIconClass,
+  lootCardMetaClass,
+  lootCardNameClass,
+  lootCardQuantityClass,
+  lootCardRecipe,
+  lootCardTextClass,
+  mergeClass,
+} from '../styles';
 
 export type LootRarity = 'common' | 'rare' | 'epic' | 'legendary';
 
@@ -36,21 +46,21 @@ export function LootCard({
 
   return (
     <article
-      className={['game-ui-loot-card', className].filter(Boolean).join(' ')}
+      className={mergeClass(lootCardRecipe({ rarity, selected }), className)}
       data-rarity={rarity}
       data-selected={selected}
       aria-label={`${name} ${rarity} loot`}
     >
-      <span className="game-ui-loot-card__icon" aria-hidden="true">
+      <span className={lootCardIconClass} aria-hidden="true">
         {icon ?? name.slice(0, 1)}
       </span>
-      <span className="game-ui-loot-card__body">
-        <span className="game-ui-loot-card__name">{name}</span>
-        {subtitle ? <span className="game-ui-loot-card__subtitle">{subtitle}</span> : null}
+      <span className={lootCardBodyClass}>
+        <span className={lootCardNameClass}>{name}</span>
+        {subtitle ? <span className={lootCardTextClass}>{subtitle}</span> : null}
       </span>
-      <span className="game-ui-loot-card__meta">
-        {quantityText ? <span className="game-ui-loot-card__quantity">{quantityText}</span> : null}
-        {value ? <span className="game-ui-loot-card__value">{value}</span> : null}
+      <span className={lootCardMetaClass}>
+        {quantityText ? <span className={lootCardQuantityClass}>{quantityText}</span> : null}
+        {value ? <span className={lootCardTextClass}>{value}</span> : null}
       </span>
     </article>
   );

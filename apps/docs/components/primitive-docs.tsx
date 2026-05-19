@@ -513,9 +513,9 @@ export function Demo() {
 export function Demo() {
   return (
     <GameUiProvider>
-      <DamageNumber value="128" variant="critical" prefix="暴击" />
-      <DamageNumber value="42" variant="heal" prefix="治疗" />
-      <DamageNumber value="MISS" variant="miss" />
+      <DamageNumber className="docs-static-motion" value="128" variant="critical" prefix="暴击" />
+      <DamageNumber className="docs-static-motion" value="42" variant="heal" prefix="治疗" />
+      <DamageNumber className="docs-static-motion" value="MISS" variant="miss" />
     </GameUiProvider>
   );
 }`,

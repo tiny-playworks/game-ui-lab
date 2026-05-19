@@ -13,8 +13,9 @@ export default defineConfig({
     resolve: {
       alias: {
         '@tiny-playworks/game-ui': resolve(repoRoot, 'packages/primitives/src/index.ts'),
+        '@tiny-playworks/game-ui/styles.css': resolve(repoRoot, 'packages/primitives/dist/styles.css'),
         '@tiny-playworks/tokens': resolve(repoRoot, 'packages/tokens/src/index.ts'),
-        '@tiny-playworks/tokens/css': resolve(repoRoot, 'packages/tokens/src/index.css'),
+        '@tiny-playworks/tokens/css': resolve(repoRoot, 'packages/tokens/dist/index.css'),
       },
     },
   },

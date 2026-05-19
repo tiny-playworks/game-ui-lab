@@ -1,4 +1,4 @@
-import { cpSync, rmSync } from 'node:fs';
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
@@ -17,4 +17,25 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1);
 }
 
-cpSync(resolve(packageDir, 'src/index.css'), resolve(distDir, 'index.css'));
+const { createGameUiThemeCss, gameUiThemeNames } = await import('../dist/index.js');
+const css = [
+  '/* Generated from @tiny-playworks/tokens. Do not edit by hand. */',
+  ':root,',
+  '[data-game-ui-theme="default"] {',
+  '  color-scheme: dark;',
+  ...createGameUiThemeCss('default'),
+  '}',
+  '',
+  ...gameUiThemeNames
+    .filter((themeName) => themeName !== 'default')
+    .flatMap((themeName) => [
+      `[data-game-ui-theme="${themeName}"] {`,
+      '  color-scheme: dark;',
+      ...createGameUiThemeCss(themeName),
+      '}',
+      '',
+    ]),
+].join('\n');
+
+mkdirSync(distDir, { recursive: true });
+writeFileSync(resolve(distDir, 'index.css'), `${css}\n`);

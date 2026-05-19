@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "rspress dev",
-    "build": "rspress build",
+    "dev": "pnpm --filter @tiny-playworks/game-ui codegen && pnpm --filter @tiny-playworks/game-ui build:styles && rspress dev",
+    "build": "pnpm --filter @tiny-playworks/game-ui codegen && pnpm --filter @tiny-playworks/game-ui build:styles && rspress build",
     "build:pages": "node ./scripts/build-pages.mjs",
     "preview": "rspress preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "pnpm --filter @tiny-playworks/game-ui build && tsc --noEmit",
     "visual:smoke": "node ./scripts/smoke-pages.mjs"
   },
   "dependencies": {

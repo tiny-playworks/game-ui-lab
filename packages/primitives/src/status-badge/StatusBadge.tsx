@@ -1,4 +1,5 @@
 import React from 'react';
+import { mergeClass, statusBadgeMetaClass, statusBadgeRecipe } from '../styles';
 
 export type StatusBadgeTone = 'buff' | 'debuff' | 'neutral' | 'warning';
 
@@ -22,14 +23,14 @@ export function StatusBadge({
 
   return (
     <span
-      className={['game-ui-status-badge', className].filter(Boolean).join(' ')}
+      className={mergeClass(statusBadgeRecipe({ tone }), className)}
       data-tone={tone}
       role="status"
       aria-label={`${label} ${tone}${stackLabel}${durationLabel}`}
     >
-      <span className="game-ui-status-badge__label">{label}</span>
-      {count ? <span className="game-ui-status-badge__count">x{count}</span> : null}
-      {duration ? <span className="game-ui-status-badge__duration">{duration}</span> : null}
+      <span>{label}</span>
+      {count ? <span className={statusBadgeMetaClass}>x{count}</span> : null}
+      {duration ? <span className={statusBadgeMetaClass}>{duration}</span> : null}
     </span>
   );
 }

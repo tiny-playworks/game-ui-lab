@@ -1,5 +1,17 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
+import {
+  mergeClass,
+  objectiveChipBodyClass,
+  objectiveChipFillClass,
+  objectiveChipIconClass,
+  objectiveChipLabelClass,
+  objectiveChipMetaClass,
+  objectiveChipProgressClass,
+  objectiveChipProgressTextClass,
+  objectiveChipRecipe,
+  objectiveChipTrackClass,
+} from '../styles';
 
 export type ObjectiveState = 'active' | 'complete' | 'locked';
 
@@ -56,24 +68,24 @@ export function ObjectiveChip({
 
   return (
     <article
-      className={['game-ui-objective-chip', className].filter(Boolean).join(' ')}
+      className={mergeClass(objectiveChipRecipe({ state }), className)}
       data-state={state}
       role="status"
       aria-label={ariaLabel}
       style={progressRatio ? ({ '--game-ui-objective-progress': progressRatio } as CSSProperties) : undefined}
     >
-      <span className="game-ui-objective-chip__icon" aria-hidden="true">
+      <span className={objectiveChipIconClass} aria-hidden="true">
         {icon ?? getStateIcon(state)}
       </span>
-      <span className="game-ui-objective-chip__body">
-        <strong className="game-ui-objective-chip__label">{label}</strong>
-        {meta ? <span className="game-ui-objective-chip__meta">{meta}</span> : null}
+      <span className={objectiveChipBodyClass}>
+        <strong className={objectiveChipLabelClass}>{label}</strong>
+        {meta ? <span className={objectiveChipMetaClass}>{meta}</span> : null}
       </span>
       {progressText ? (
-        <span className="game-ui-objective-chip__progress">
-          <span className="game-ui-objective-chip__progress-text">{progressText}</span>
-          <span className="game-ui-objective-chip__track" aria-hidden="true">
-            <span className="game-ui-objective-chip__fill" />
+        <span className={objectiveChipProgressClass}>
+          <span className={objectiveChipProgressTextClass}>{progressText}</span>
+          <span className={objectiveChipTrackClass} aria-hidden="true">
+            <span className={objectiveChipFillClass} />
           </span>
         </span>
       ) : null}

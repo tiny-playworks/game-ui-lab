@@ -211,8 +211,7 @@ html.dark,
     0 28px 80px rgba(3, 7, 18, 0.28);
 }
 
-.docs-game-stage .game-ui-damage-number,
-.lab-preview .game-ui-damage-number {
+.docs-static-motion {
   opacity: 1 !important;
   transform: none !important;
 }
@@ -489,7 +488,7 @@ html.dark,
   background: rgba(9, 14, 28, 0.76);
 }
 
-.lab-preview__hud-item .game-ui-combo-counter {
+.lab-preview__combo {
   display: grid;
   gap: 4px;
 }
@@ -499,24 +498,17 @@ html.dark,
   grid-column: 1 / -1;
 }
 
-.lab-preview__hud-item .game-ui-target-frame,
-.lab-preview__hud-item .game-ui-health-bar,
-.lab-preview__hud-item .game-ui-resource-meter,
-.lab-preview__hud-item .game-ui-cast-bar,
-.lab-preview__hud-item .game-ui-ability-bar,
-.lab-preview__hud-item .game-ui-mini-map,
-.lab-preview__hud-item .game-ui-dialogue-box,
-.lab-preview__hud-item .game-ui-notification-stack {
+.lab-preview__game-ui-fill {
   width: 100%;
   min-width: 0;
   max-width: 100%;
 }
 
-.lab-preview__hud-item .game-ui-ability-bar {
+.lab-preview__ability-bar {
   overflow-x: auto;
 }
 
-.lab-preview__hud-item .game-ui-mini-map {
+.lab-preview__mini-map {
   width: 100%;
   height: 150px;
 }
@@ -531,7 +523,7 @@ html.dark,
   min-width: 0;
 }
 
-.docs-token-scene__scope {
+.docs-token-scene {
   display: grid;
   gap: 12px;
   min-height: 360px;
@@ -563,11 +555,11 @@ html.dark,
   align-items: stretch;
 }
 
-.docs-token-scene__loot .game-ui-loot-card {
+.docs-token-scene__loot-item {
   flex: 1 1 180px;
 }
 
-.docs-token-scene__loot .game-ui-toast {
+.docs-token-scene__toast {
   flex: 1 1 220px;
 }
 

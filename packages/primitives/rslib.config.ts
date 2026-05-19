@@ -5,11 +5,15 @@ export default defineConfig({
     {
       format: 'esm',
       syntax: 'es2022',
+      bundle: true,
+      autoExternal: false,
       dts: true,
     },
     {
       format: 'cjs',
       syntax: 'es2022',
+      bundle: true,
+      autoExternal: false,
     },
   ],
   source: {
@@ -18,7 +22,6 @@ export default defineConfig({
     },
   },
   output: {
-    externals: ['react', 'react-dom', 'react/jsx-runtime', 'motion/react'],
+    externals: ['react', 'react-dom', 'react/jsx-runtime', 'motion/react', '@tiny-playworks/tokens'],
   },
 });
-

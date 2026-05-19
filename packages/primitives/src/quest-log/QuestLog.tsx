@@ -1,6 +1,13 @@
 import React from 'react';
 import { QuestTracker } from '../quest-tracker';
 import type { QuestTrackerObjective } from '../quest-tracker';
+import {
+  mergeClass,
+  questLogActiveClass,
+  questLogClass,
+  questLogHeaderClass,
+  questLogListClass,
+} from '../styles';
 
 export interface QuestLogQuest {
   id: string;
@@ -18,23 +25,22 @@ export interface QuestLogProps {
 
 export function QuestLog({ title = 'Quest log', quests, activeId, className }: QuestLogProps) {
   return (
-    <section className={['game-ui-quest-log', className].filter(Boolean).join(' ')} aria-label={title}>
-      <header className="game-ui-quest-log__header">
+    <section className={mergeClass(questLogClass, className)} aria-label={title}>
+      <header className={questLogHeaderClass}>
         <strong>{title}</strong>
         <span>{quests.length} quests</span>
       </header>
-      <div className="game-ui-quest-log__list">
+      <div className={questLogListClass}>
         {quests.map((quest) => (
           <QuestTracker
             key={quest.id}
-            className="game-ui-quest-log__quest"
             title={quest.title}
             subtitle={quest.subtitle}
             objectives={quest.objectives}
           />
         ))}
       </div>
-      {activeId ? <span className="game-ui-quest-log__active">Tracking {activeId}</span> : null}
+      {activeId ? <span className={questLogActiveClass}>Tracking {activeId}</span> : null}
     </section>
   );
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ReactNode } from 'react';
+import { mergeClass, rarityBorderRecipe } from '../styles';
 
 export type RarityBorderTone = 'common' | 'rare' | 'epic' | 'legendary';
 
@@ -18,7 +19,7 @@ export function RarityBorder({
 }: RarityBorderProps) {
   return (
     <div
-      className={['game-ui-rarity-border', className].filter(Boolean).join(' ')}
+      className={mergeClass(rarityBorderRecipe({ tone, active }), className)}
       data-tone={tone}
       data-active={active}
     >
@@ -26,4 +27,3 @@ export function RarityBorder({
     </div>
   );
 }
-

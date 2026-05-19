@@ -107,7 +107,7 @@ import '@tiny-playworks/game-ui/styles.css';
 ```
 
 Do not import from internal package paths such as `packages/primitives/src/*`.
-The `@tiny-playworks/game-ui` entry already brings in its styles, so consumers do not need a separate CSS import.
+The `@tiny-playworks/game-ui` JavaScript entry does not inject styles. Always import `@tiny-playworks/game-ui/styles.css` once in the app entry.
 
 ## Commands
 

@@ -191,6 +191,7 @@ export function LabPreview() {
             <div className="lab-preview__numbers">
               <p className="lab-preview__stage-kicker">{isZh ? frame.titleZh : frame.titleEn}</p>
               <DamageNumber
+                className="docs-static-motion"
                 value={frame.damage}
                 variant={frame.rarity === 'legendary' ? 'critical' : 'damage'}
                 prefix={isZh ? (frame.rarity === 'legendary' ? '传说' : '暴击') : frame.rarity === 'legendary' ? 'LEG' : 'CRIT'}
@@ -200,6 +201,7 @@ export function LabPreview() {
               <div className="lab-preview__hud-item lab-preview__hud-item--wide">
                 <span className="lab-preview__hud-label">{isZh ? '目标' : 'Target'}</span>
                 <TargetFrame
+                  className="lab-preview__game-ui-fill"
                   name={isZh ? '遗迹守卫' : 'Warden'}
                   faction={frame.rarity === 'legendary' ? 'boss' : 'enemy'}
                   level="Lv.18"
@@ -210,15 +212,16 @@ export function LabPreview() {
               </div>
               <div className="lab-preview__hud-item">
                 <span className="lab-preview__hud-label">{isZh ? '生命' : 'HP'}</span>
-                <HealthBar value={frame.health} max={120} shield={frame.shield} label={isZh ? '生命' : 'HP'} showValue />
+                <HealthBar className="lab-preview__game-ui-fill" value={frame.health} max={120} shield={frame.shield} label={isZh ? '生命' : 'HP'} showValue />
               </div>
               <div className="lab-preview__hud-item">
                 <span className="lab-preview__hud-label">{isZh ? '法力' : 'Mana'}</span>
-                <ResourceMeter value={frame.mana} max={90} kind="mana" label={isZh ? '法力' : 'Mana'} />
+                <ResourceMeter className="lab-preview__game-ui-fill" value={frame.mana} max={90} kind="mana" label={isZh ? '法力' : 'Mana'} />
               </div>
               <div className="lab-preview__hud-item">
                 <span className="lab-preview__hud-label">{isZh ? '连击' : 'Combo'}</span>
                 <ComboCounter
+                  className="lab-preview__combo"
                   count={frame.combo}
                   label={isZh ? '连击' : 'Combo'}
                   tier={
@@ -236,11 +239,11 @@ export function LabPreview() {
               </div>
               <div className="lab-preview__hud-item">
                 <span className="lab-preview__hud-label">{isZh ? '爆发' : 'Burst'}</span>
-                <AbilityBar abilities={abilityItems} label={isZh ? '技能栏' : 'Ability bar'} />
+                <AbilityBar className="lab-preview__game-ui-fill lab-preview__ability-bar" abilities={abilityItems} label={isZh ? '技能栏' : 'Ability bar'} />
               </div>
               <div className="lab-preview__hud-item">
                 <span className="lab-preview__hud-label">{isZh ? '施法' : 'Cast'}</span>
-                <CastBar label={isZh ? '奥术光束' : 'Arc Beam'} progress={frame.cast} state={frame.cast >= 1 ? 'complete' : 'channeling'} />
+                <CastBar className="lab-preview__game-ui-fill" label={isZh ? '奥术光束' : 'Arc Beam'} progress={frame.cast} state={frame.cast >= 1 ? 'complete' : 'channeling'} />
               </div>
               <div className="lab-preview__hud-item">
                 <span className="lab-preview__hud-label">{isZh ? '状态' : 'Status'}</span>
@@ -248,7 +251,7 @@ export function LabPreview() {
               </div>
               <div className="lab-preview__hud-item">
                 <span className="lab-preview__hud-label">{isZh ? '地图' : 'Map'}</span>
-                <MiniMap label={isZh ? frame.mapLabelZh : frame.mapLabelEn} markers={mapMarkers} />
+                <MiniMap className="lab-preview__game-ui-fill lab-preview__mini-map" label={isZh ? frame.mapLabelZh : frame.mapLabelEn} markers={mapMarkers} />
                 <LocationTag
                   name={isZh ? frame.mapLabelZh : frame.mapLabelEn}
                   zone={isZh ? '北区' : 'North'}
@@ -258,11 +261,11 @@ export function LabPreview() {
               </div>
               <div className="lab-preview__hud-item lab-preview__hud-item--wide">
                 <span className="lab-preview__hud-label">{isZh ? '叙事' : 'Narrative'}</span>
-                <DialogueBox speaker="Mira" text={isZh ? frame.dialogueZh : frame.dialogueEn} tone={frame.rarity === 'rare' ? 'warning' : 'ally'} />
+                <DialogueBox className="lab-preview__game-ui-fill" speaker="Mira" text={isZh ? frame.dialogueZh : frame.dialogueEn} tone={frame.rarity === 'rare' ? 'warning' : 'ally'} />
               </div>
               <div className="lab-preview__hud-item lab-preview__hud-item--toast">
                 <span className="lab-preview__hud-label">{isZh ? '反馈' : 'Toast'}</span>
-                <NotificationStack notifications={notifications} limit={2} />
+                <NotificationStack className="lab-preview__game-ui-fill" notifications={notifications} limit={2} />
               </div>
             </div>
           </div>

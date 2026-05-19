@@ -1,78 +1,126 @@
 export const gameUiTokenCssExport = '@tiny-playworks/tokens/css';
 
-export const gameUiTokenVars = {
-  background: '--game-ui-bg',
-  surface: '--game-ui-surface',
-  surfaceStrong: '--game-ui-surface-strong',
-  line: '--game-ui-line',
-  text: '--game-ui-text',
-  muted: '--game-ui-muted',
-  accent: '--game-ui-accent',
-  accentStrong: '--game-ui-accent-strong',
-  danger: '--game-ui-danger',
-  heal: '--game-ui-heal',
-  critical: '--game-ui-critical',
-  miss: '--game-ui-miss',
-  loot: '--game-ui-loot',
-  rarityCommon: '--game-ui-rarity-common',
-  rarityRare: '--game-ui-rarity-rare',
-  rarityEpic: '--game-ui-rarity-epic',
-  rarityLegendary: '--game-ui-rarity-legendary',
-  health: '--game-ui-health',
-  shield: '--game-ui-shield',
-  mana: '--game-ui-mana',
-  energy: '--game-ui-energy',
-  stamina: '--game-ui-stamina',
-  debuff: '--game-ui-debuff',
-  cooldownMask: '--game-ui-cooldown-mask',
-  abilityReady: '--game-ui-ability-ready',
-  abilityLocked: '--game-ui-ability-locked',
-  cast: '--game-ui-cast',
-  target: '--game-ui-target',
-  mapLine: '--game-ui-map-line',
-  markerAlly: '--game-ui-marker-ally',
-  markerEnemy: '--game-ui-marker-enemy',
-  markerObjective: '--game-ui-marker-objective',
-  dialogue: '--game-ui-dialogue',
-  choice: '--game-ui-choice',
-  speaker: '--game-ui-speaker',
-  notification: '--game-ui-notification',
-  radiusSm: '--game-ui-radius-sm',
-  radiusMd: '--game-ui-radius-md',
-  radiusLg: '--game-ui-radius-lg',
-  space1: '--game-ui-space-1',
-  space2: '--game-ui-space-2',
-  space3: '--game-ui-space-3',
-  space4: '--game-ui-space-4',
-  space5: '--game-ui-space-5',
-  shadowSoft: '--game-ui-shadow-soft',
-  shadowGlow: '--game-ui-shadow-glow',
-  durationFast: '--game-ui-duration-fast',
-  durationNormal: '--game-ui-duration-normal',
-  durationSlow: '--game-ui-duration-slow',
-  easeOut: '--game-ui-ease-out',
-} as const;
-
-export type GameUiTokenName = keyof typeof gameUiTokenVars;
-
-export const gameUiTokens = Object.fromEntries(
-  Object.entries(gameUiTokenVars).map(([key, value]) => [key, `var(${value})`]),
-) as {
-  [K in GameUiTokenName]: `var(${(typeof gameUiTokenVars)[K]})`;
-};
+export type GameUiThemeName = 'default' | 'arcade';
 
 export type GameUiTokenGroupId =
   | 'color'
   | 'rarity'
   | 'hud'
+  | 'motion'
   | 'ability'
   | 'map'
   | 'narrative'
-  | 'motion'
   | 'glow'
   | 'radius'
   | 'spacing';
+
 export type GameUiTokenSampleKind = 'swatch' | 'text' | 'border' | 'motion' | 'shadow' | 'radius' | 'spacing';
+
+type PandaTokenCategory = 'colors' | 'spacing' | 'radii' | 'shadows' | 'durations' | 'easings';
+
+interface GameUiTokenDefinitionInput {
+  key: string;
+  name: string;
+  cssVar: `--game-ui-${string}`;
+  value: string;
+  group: GameUiTokenGroupId;
+  pandaCategory: PandaTokenCategory;
+  pandaName: string;
+  description: string;
+  sample: {
+    kind: GameUiTokenSampleKind;
+    label?: string;
+  };
+}
+
+const tokenDefinitions = [
+  token('background', 'Background', '--game-ui-bg', '#080b13', 'color', 'colors', 'background', 'Base darkness for HUD scenes.', 'swatch'),
+  token('surface', 'Surface', '--game-ui-surface', 'rgba(16, 23, 42, 0.78)', 'color', 'colors', 'surface', 'Default panel surface.', 'swatch'),
+  token('surfaceStrong', 'Surface strong', '--game-ui-surface-strong', 'rgba(25, 35, 63, 0.92)', 'color', 'colors', 'surfaceStrong', 'Raised card and toast surface.', 'swatch'),
+  token('line', 'Line', '--game-ui-line', 'rgba(129, 230, 217, 0.28)', 'color', 'colors', 'line', 'Subtle border tone.', 'border'),
+  token('text', 'Text', '--game-ui-text', '#f8fafc', 'color', 'colors', 'text', 'Primary text tone.', 'text'),
+  token('muted', 'Muted', '--game-ui-muted', '#9fb0ce', 'color', 'colors', 'muted', 'Secondary labels and meta text.', 'text'),
+  token('accent', 'Accent', '--game-ui-accent', '#55f7d2', 'color', 'colors', 'accent', 'Primary active accent.', 'swatch'),
+  token('accentStrong', 'Accent strong', '--game-ui-accent-strong', '#1ee6ff', 'color', 'colors', 'accentStrong', 'High-energy accent edge.', 'swatch'),
+  token('danger', 'Danger', '--game-ui-danger', '#ff4d7d', 'color', 'colors', 'danger', 'Damage and hostile feedback.', 'swatch'),
+  token('heal', 'Heal', '--game-ui-heal', '#5cff9d', 'color', 'colors', 'heal', 'Recovery and success feedback.', 'swatch'),
+  token('critical', 'Critical', '--game-ui-critical', '#ffd166', 'color', 'colors', 'critical', 'Critical hit and combo highlight.', 'swatch'),
+  token('miss', 'Miss', '--game-ui-miss', '#b7c0d8', 'color', 'colors', 'miss', 'Missed or neutral combat text.', 'text'),
+  token('loot', 'Loot', '--game-ui-loot', '#b47cff', 'color', 'colors', 'loot', 'Loot and reward emphasis.', 'swatch'),
+
+  token('rarityCommon', 'Common', '--game-ui-rarity-common', '#9fb0ce', 'rarity', 'colors', 'rarityCommon', 'Baseline rarity frame tone.', 'border'),
+  token('rarityRare', 'Rare', '--game-ui-rarity-rare', '#4cc9f0', 'rarity', 'colors', 'rarityRare', 'Rare loot tone.', 'border'),
+  token('rarityEpic', 'Epic', '--game-ui-rarity-epic', '#b47cff', 'rarity', 'colors', 'rarityEpic', 'Epic loot tone.', 'border'),
+  token('rarityLegendary', 'Legendary', '--game-ui-rarity-legendary', '#ffd166', 'rarity', 'colors', 'rarityLegendary', 'Top rarity highlight.', 'border'),
+
+  token('health', 'Health', '--game-ui-health', '#ff4d7d', 'hud', 'colors', 'health', 'Primary health fill.', 'swatch'),
+  token('shield', 'Shield', '--game-ui-shield', '#4cc9f0', 'hud', 'colors', 'shield', 'Temporary protection fill.', 'swatch'),
+  token('mana', 'Mana', '--game-ui-mana', '#7c8cff', 'hud', 'colors', 'mana', 'Mana resource fill.', 'swatch'),
+  token('energy', 'Energy', '--game-ui-energy', '#ffd166', 'hud', 'colors', 'energy', 'Energy resource fill.', 'swatch'),
+  token('stamina', 'Stamina', '--game-ui-stamina', '#5cff9d', 'hud', 'colors', 'stamina', 'Stamina resource fill.', 'swatch'),
+  token('debuff', 'Debuff', '--game-ui-debuff', '#ff6b6b', 'hud', 'colors', 'debuff', 'Negative status tone.', 'swatch'),
+  token('cooldownMask', 'Cooldown mask', '--game-ui-cooldown-mask', 'rgba(4, 8, 18, 0.72)', 'hud', 'colors', 'cooldownMask', 'Cooldown overlay mask.', 'swatch'),
+
+  token('durationFast', 'Fast duration', '--game-ui-duration-fast', '160ms', 'motion', 'durations', 'fast', 'Fast micro-interaction duration.', 'motion'),
+  token('durationNormal', 'Normal duration', '--game-ui-duration-normal', '280ms', 'motion', 'durations', 'normal', 'Default transition duration.', 'motion'),
+  token('durationSlow', 'Slow duration', '--game-ui-duration-slow', '720ms', 'motion', 'durations', 'slow', 'Long feedback animation duration.', 'motion'),
+  token('easeOut', 'Ease out', '--game-ui-ease-out', 'cubic-bezier(0.16, 1, 0.3, 1)', 'motion', 'easings', 'out', 'Default exit and arrival easing.', 'motion'),
+
+  token('abilityReady', 'Ability ready', '--game-ui-ability-ready', '#55f7d2', 'ability', 'colors', 'abilityReady', 'Ready ability state.', 'swatch'),
+  token('abilityLocked', 'Ability locked', '--game-ui-ability-locked', '#64748b', 'ability', 'colors', 'abilityLocked', 'Locked ability state.', 'swatch'),
+  token('cast', 'Cast', '--game-ui-cast', '#1ee6ff', 'ability', 'colors', 'cast', 'Cast progress fill.', 'swatch'),
+  token('target', 'Target', '--game-ui-target', '#ff4d7d', 'ability', 'colors', 'target', 'Hostile target emphasis.', 'swatch'),
+
+  token('mapLine', 'Map line', '--game-ui-map-line', 'rgba(129, 230, 217, 0.22)', 'map', 'colors', 'mapLine', 'Map grid and frame line.', 'border'),
+  token('markerAlly', 'Ally marker', '--game-ui-marker-ally', '#5cff9d', 'map', 'colors', 'markerAlly', 'Ally marker tone.', 'swatch'),
+  token('markerEnemy', 'Enemy marker', '--game-ui-marker-enemy', '#ff4d7d', 'map', 'colors', 'markerEnemy', 'Enemy marker tone.', 'swatch'),
+  token('markerObjective', 'Objective marker', '--game-ui-marker-objective', '#ffd166', 'map', 'colors', 'markerObjective', 'Objective marker tone.', 'swatch'),
+
+  token('dialogue', 'Dialogue', '--game-ui-dialogue', 'rgba(25, 35, 63, 0.94)', 'narrative', 'colors', 'dialogue', 'Dialogue panel surface.', 'swatch'),
+  token('choice', 'Choice', '--game-ui-choice', '#b47cff', 'narrative', 'colors', 'choice', 'Choice and quest emphasis.', 'swatch'),
+  token('speaker', 'Speaker', '--game-ui-speaker', '#ffd166', 'narrative', 'colors', 'speaker', 'Speaker label tone.', 'swatch'),
+  token('notification', 'Notification', '--game-ui-notification', '#55f7d2', 'narrative', 'colors', 'notification', 'Notification count tone.', 'swatch'),
+
+  token('shadowSoft', 'Soft shadow', '--game-ui-shadow-soft', '0 14px 36px rgba(0, 0, 0, 0.38)', 'glow', 'shadows', 'soft', 'Default elevated panel shadow.', 'shadow'),
+  token('shadowGlow', 'Glow shadow', '--game-ui-shadow-glow', '0 0 28px rgba(85, 247, 210, 0.28)', 'glow', 'shadows', 'glow', 'Accent glow shadow.', 'shadow'),
+
+  token('radiusSm', 'Small radius', '--game-ui-radius-sm', '6px', 'radius', 'radii', 'sm', 'Small control radius.', 'radius'),
+  token('radiusMd', 'Medium radius', '--game-ui-radius-md', '10px', 'radius', 'radii', 'md', 'Default component radius.', 'radius'),
+  token('radiusLg', 'Large radius', '--game-ui-radius-lg', '16px', 'radius', 'radii', 'lg', 'Large HUD panel radius.', 'radius'),
+
+  token('space1', 'Space 1', '--game-ui-space-1', '4px', 'spacing', 'spacing', '1', 'Smallest spacing step.', 'spacing'),
+  token('space2', 'Space 2', '--game-ui-space-2', '8px', 'spacing', 'spacing', '2', 'Compact component gap.', 'spacing'),
+  token('space3', 'Space 3', '--game-ui-space-3', '12px', 'spacing', 'spacing', '3', 'Default component gap.', 'spacing'),
+  token('space4', 'Space 4', '--game-ui-space-4', '16px', 'spacing', 'spacing', '4', 'Large component gap.', 'spacing'),
+  token('space5', 'Space 5', '--game-ui-space-5', '24px', 'spacing', 'spacing', '5', 'Section and cluster spacing.', 'spacing'),
+] as const;
+
+function token(
+  key: string,
+  name: string,
+  cssVar: `--game-ui-${string}`,
+  value: string,
+  group: GameUiTokenGroupId,
+  pandaCategory: PandaTokenCategory,
+  pandaName: string,
+  description: string,
+  sampleKind: GameUiTokenSampleKind,
+): GameUiTokenDefinitionInput {
+  return {
+    key,
+    name,
+    cssVar,
+    value,
+    group,
+    pandaCategory,
+    pandaName,
+    description,
+    sample: { kind: sampleKind },
+  };
+}
+
+export type GameUiTokenName = (typeof tokenDefinitions)[number]['key'];
+export type GameUiTokenOverrides = Partial<Record<GameUiTokenName, string>>;
 
 export interface GameUiTokenDefinition {
   name: string;
@@ -93,451 +141,182 @@ export interface GameUiTokenGroupDefinition {
   tokens: GameUiTokenDefinition[];
 }
 
-export const gameUiTokenGroups: GameUiTokenGroupDefinition[] = [
-  {
-    id: 'color',
+const groupMeta: Record<GameUiTokenGroupId, { title: string; description: string }> = {
+  color: {
     title: 'Color tokens',
     description: 'Core scene colors for surface, readability, and combat feedback spikes.',
-    tokens: [
-      {
-        name: 'Background',
-        cssVar: '--game-ui-bg',
-        value: '#080b13',
-        group: 'color',
-        description: 'Base page darkness for the lab shell.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Surface',
-        cssVar: '--game-ui-surface',
-        value: 'rgba(16, 23, 42, 0.78)',
-        group: 'color',
-        description: 'Default panel surface for readable dark cards.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Surface strong',
-        cssVar: '--game-ui-surface-strong',
-        value: 'rgba(25, 35, 63, 0.92)',
-        group: 'color',
-        description: 'Raised card and toast surface for stronger separation.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Line',
-        cssVar: '--game-ui-line',
-        value: 'rgba(129, 230, 217, 0.28)',
-        group: 'color',
-        description: 'Subtle border tone for shells and data cards.',
-        sample: { kind: 'border' },
-      },
-      {
-        name: 'Text',
-        cssVar: '--game-ui-text',
-        value: '#f8fafc',
-        group: 'color',
-        description: 'High-contrast text tone used on dark surfaces.',
-        sample: { kind: 'text' },
-      },
-      {
-        name: 'Muted',
-        cssVar: '--game-ui-muted',
-        value: '#9fb0ce',
-        group: 'color',
-        description: 'Secondary copy tone for notes and labels.',
-        sample: { kind: 'text' },
-      },
-      {
-        name: 'Accent',
-        cssVar: '--game-ui-accent',
-        value: '#55f7d2',
-        group: 'color',
-        description: 'Primary active accent for navigation and lab feedback.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Danger',
-        cssVar: '--game-ui-danger',
-        value: '#ff4d7d',
-        group: 'color',
-        description: 'Damage emphasis color for hostile spikes.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Heal',
-        cssVar: '--game-ui-heal',
-        value: '#5cff9d',
-        group: 'color',
-        description: 'Recovery and success feedback highlight.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Critical',
-        cssVar: '--game-ui-critical',
-        value: '#ffd166',
-        group: 'color',
-        description: 'Critical-hit and combo energy highlight.',
-        sample: { kind: 'swatch' },
-      },
-    ],
   },
-  {
-    id: 'rarity',
+  rarity: {
     title: 'Rarity tokens',
     description: 'Tones that power rarity frames, loot chips, and collectible emphasis.',
-    tokens: [
-      {
-        name: 'Common',
-        cssVar: '--game-ui-rarity-common',
-        value: '#9fb0ce',
-        group: 'rarity',
-        description: 'Baseline rarity frame tone.',
-        sample: { kind: 'border' },
-      },
-      {
-        name: 'Rare',
-        cssVar: '--game-ui-rarity-rare',
-        value: '#4cc9f0',
-        group: 'rarity',
-        description: 'Rare tone for higher-value loot framing.',
-        sample: { kind: 'border' },
-      },
-      {
-        name: 'Epic',
-        cssVar: '--game-ui-rarity-epic',
-        value: '#b47cff',
-        group: 'rarity',
-        description: 'Epic tone for brighter rarity sweeps.',
-        sample: { kind: 'border' },
-      },
-      {
-        name: 'Legendary',
-        cssVar: '--game-ui-rarity-legendary',
-        value: '#ffd166',
-        group: 'rarity',
-        description: 'Top rarity highlight for strong border emphasis.',
-        sample: { kind: 'border' },
-      },
-    ],
   },
-  {
-    id: 'hud',
+  hud: {
     title: 'HUD tokens',
     description: 'Persistent overlay tones for health, resources, cooldowns, and status states.',
-    tokens: [
-      {
-        name: 'Health',
-        cssVar: '--game-ui-health',
-        value: '#ff4d7d',
-        group: 'hud',
-        description: 'Primary health fill for player and boss HUD bars.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Shield',
-        cssVar: '--game-ui-shield',
-        value: '#4cc9f0',
-        group: 'hud',
-        description: 'Shield overlay for temporary protection layers.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Mana',
-        cssVar: '--game-ui-mana',
-        value: '#7c8cff',
-        group: 'hud',
-        description: 'Mana resource fill for spell and ability costs.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Energy',
-        cssVar: '--game-ui-energy',
-        value: '#ffd166',
-        group: 'hud',
-        description: 'Energy resource fill for fast tactical actions.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Stamina',
-        cssVar: '--game-ui-stamina',
-        value: '#5cff9d',
-        group: 'hud',
-        description: 'Stamina resource fill for movement and endurance states.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Debuff',
-        cssVar: '--game-ui-debuff',
-        value: '#ff6b6b',
-        group: 'hud',
-        description: 'Negative status tone for persistent combat effects.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Cooldown mask',
-        cssVar: '--game-ui-cooldown-mask',
-        value: 'rgba(4, 8, 18, 0.72)',
-        group: 'hud',
-        description: 'Overlay mask used to show ability cooldown progress.',
-        sample: { kind: 'swatch' },
-      },
-    ],
   },
-  {
-    id: 'motion',
+  motion: {
     title: 'Motion tokens',
-    description: 'Shared durations and easing choices that keep feedback readable under dark contrast.',
-    tokens: [
-      {
-        name: 'Fast',
-        cssVar: '--game-ui-duration-fast',
-        value: '160ms',
-        group: 'motion',
-        description: 'Fast interaction timing for hover, nav, and state nudges.',
-        sample: { kind: 'motion', label: '160ms' },
-      },
-      {
-        name: 'Normal',
-        cssVar: '--game-ui-duration-normal',
-        value: '280ms',
-        group: 'motion',
-        description: 'Standard transition pace for toasts and card state changes.',
-        sample: { kind: 'motion', label: '280ms' },
-      },
-      {
-        name: 'Slow',
-        cssVar: '--game-ui-duration-slow',
-        value: '720ms',
-        group: 'motion',
-        description: 'Longer arc for animated combat float and ambient loops.',
-        sample: { kind: 'motion', label: '720ms' },
-      },
-      {
-        name: 'Ease out',
-        cssVar: '--game-ui-ease-out',
-        value: 'cubic-bezier(0.16, 1, 0.3, 1)',
-        group: 'motion',
-        description: 'Shared ease curve for responsive, readable feedback.',
-        sample: { kind: 'motion', label: 'ease-out' },
-      },
-    ],
+    description: 'Timing and easing used by feedback transitions.',
   },
-  {
-    id: 'ability',
+  ability: {
     title: 'Ability tokens',
-    description: 'Ability and target tones for skill bars, cast feedback, and target frames.',
-    tokens: [
-      {
-        name: 'Ability ready',
-        cssVar: '--game-ui-ability-ready',
-        value: '#55f7d2',
-        group: 'ability',
-        description: 'Ready-state highlight for usable abilities.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Ability locked',
-        cssVar: '--game-ui-ability-locked',
-        value: '#64748b',
-        group: 'ability',
-        description: 'Muted locked-state tone for unavailable abilities.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Cast',
-        cssVar: '--game-ui-cast',
-        value: '#1ee6ff',
-        group: 'ability',
-        description: 'Cast and channel progress highlight.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Target',
-        cssVar: '--game-ui-target',
-        value: '#ff4d7d',
-        group: 'ability',
-        description: 'Target frame emphasis for focused entities.',
-        sample: { kind: 'swatch' },
-      },
-    ],
+    description: 'Ability, cast, and target feedback tones.',
   },
-  {
-    id: 'map',
+  map: {
     title: 'Map tokens',
-    description: 'Map grid and marker tones for compact navigation surfaces.',
-    tokens: [
-      {
-        name: 'Map line',
-        cssVar: '--game-ui-map-line',
-        value: 'rgba(129, 230, 217, 0.22)',
-        group: 'map',
-        description: 'Subtle minimap grid and compass line color.',
-        sample: { kind: 'border' },
-      },
-      {
-        name: 'Marker ally',
-        cssVar: '--game-ui-marker-ally',
-        value: '#5cff9d',
-        group: 'map',
-        description: 'Friendly marker tone.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Marker enemy',
-        cssVar: '--game-ui-marker-enemy',
-        value: '#ff4d7d',
-        group: 'map',
-        description: 'Hostile marker tone.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Marker objective',
-        cssVar: '--game-ui-marker-objective',
-        value: '#ffd166',
-        group: 'map',
-        description: 'Objective marker tone.',
-        sample: { kind: 'swatch' },
-      },
-    ],
+    description: 'Map frame, marker, and objective tones.',
   },
-  {
-    id: 'narrative',
+  narrative: {
     title: 'Narrative tokens',
-    description: 'Dialogue, choice, speaker, and notification tones for narrative UI.',
-    tokens: [
-      {
-        name: 'Dialogue',
-        cssVar: '--game-ui-dialogue',
-        value: 'rgba(25, 35, 63, 0.94)',
-        group: 'narrative',
-        description: 'Dialogue panel surface.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Choice',
-        cssVar: '--game-ui-choice',
-        value: '#b47cff',
-        group: 'narrative',
-        description: 'Choice prompt accent tone.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Speaker',
-        cssVar: '--game-ui-speaker',
-        value: '#ffd166',
-        group: 'narrative',
-        description: 'Speaker name and portrait accent tone.',
-        sample: { kind: 'swatch' },
-      },
-      {
-        name: 'Notification',
-        cssVar: '--game-ui-notification',
-        value: '#55f7d2',
-        group: 'narrative',
-        description: 'System notification accent tone.',
-        sample: { kind: 'swatch' },
-      },
-    ],
+    description: 'Dialogue, choice, and notification tones.',
   },
-  {
-    id: 'glow',
+  glow: {
     title: 'Glow tokens',
-    description: 'Controlled shadows and glow peaks so the shell stays restrained while feedback remains bright.',
-    tokens: [
-      {
-        name: 'Soft shadow',
-        cssVar: '--game-ui-shadow-soft',
-        value: '0 14px 36px rgba(0, 0, 0, 0.38)',
-        group: 'glow',
-        description: 'Card elevation without turning the shell into a light source.',
-        sample: { kind: 'shadow' },
-      },
-      {
-        name: 'Glow shadow',
-        cssVar: '--game-ui-shadow-glow',
-        value: '0 0 28px rgba(85, 247, 210, 0.28)',
-        group: 'glow',
-        description: 'Controlled accent glow reserved for active feedback and highlights.',
-        sample: { kind: 'shadow' },
-      },
-    ],
+    description: 'Shadow and glow styles for elevated HUD layers.',
   },
-  {
-    id: 'radius',
+  radius: {
     title: 'Radius tokens',
-    description: 'Rounded geometry for chips, frames, and data cards.',
-    tokens: [
-      {
-        name: 'Radius sm',
-        cssVar: '--game-ui-radius-sm',
-        value: '6px',
-        group: 'radius',
-        description: 'Small edge radius for utility elements.',
-        sample: { kind: 'radius' },
-      },
-      {
-        name: 'Radius md',
-        cssVar: '--game-ui-radius-md',
-        value: '10px',
-        group: 'radius',
-        description: 'Standard radius for most cards and buttons.',
-        sample: { kind: 'radius' },
-      },
-      {
-        name: 'Radius lg',
-        cssVar: '--game-ui-radius-lg',
-        value: '16px',
-        group: 'radius',
-        description: 'Large radius for stage frames and major surfaces.',
-        sample: { kind: 'radius' },
-      },
-    ],
+    description: 'Corner radius scale for controls and panels.',
   },
-  {
-    id: 'spacing',
+  spacing: {
     title: 'Spacing tokens',
-    description: 'Core spacing scale for stacked cards, HUD clusters, and small utility rows.',
-    tokens: [
-      {
-        name: 'Space 1',
-        cssVar: '--game-ui-space-1',
-        value: '4px',
-        group: 'spacing',
-        description: 'Tight spacing for compact UI detail.',
-        sample: { kind: 'spacing' },
-      },
-      {
-        name: 'Space 2',
-        cssVar: '--game-ui-space-2',
-        value: '8px',
-        group: 'spacing',
-        description: 'Default gap for inline utility elements.',
-        sample: { kind: 'spacing' },
-      },
-      {
-        name: 'Space 3',
-        cssVar: '--game-ui-space-3',
-        value: '12px',
-        group: 'spacing',
-        description: 'Card interior spacing for token rows and callouts.',
-        sample: { kind: 'spacing' },
-      },
-      {
-        name: 'Space 4',
-        cssVar: '--game-ui-space-4',
-        value: '16px',
-        group: 'spacing',
-        description: 'Standard section gap for overview cards.',
-        sample: { kind: 'spacing' },
-      },
-      {
-        name: 'Space 5',
-        cssVar: '--game-ui-space-5',
-        value: '24px',
-        group: 'spacing',
-        description: 'Large spacing step for grouped stage content.',
-        sample: { kind: 'spacing' },
-      },
-    ],
+    description: 'Small spacing scale for dense HUD primitives.',
   },
-];
+};
+
+const groupOrder: GameUiTokenGroupId[] = ['color', 'rarity', 'hud', 'motion', 'ability', 'map', 'narrative', 'glow', 'radius', 'spacing'];
+
+export const gameUiTokenVars = Object.fromEntries(
+  tokenDefinitions.map((definition) => [definition.key, definition.cssVar]),
+) as {
+  [K in GameUiTokenName]: Extract<(typeof tokenDefinitions)[number], { key: K }>['cssVar'];
+};
+
+export const gameUiTokens = Object.fromEntries(
+  tokenDefinitions.map((definition) => [definition.key, `var(${definition.cssVar})`]),
+) as {
+  [K in GameUiTokenName]: `var(${(typeof gameUiTokenVars)[K]})`;
+};
+
+export const gameUiTokenGroups: GameUiTokenGroupDefinition[] = groupOrder.map((group) => ({
+  id: group,
+  ...groupMeta[group],
+  tokens: tokenDefinitions
+    .filter((definition) => definition.group === group)
+    .map(({ name, cssVar, value, description, sample }) => ({
+      name,
+      cssVar,
+      value,
+      group,
+      description,
+      sample,
+    })),
+}));
+
+export const gameUiThemeNames = ['default', 'arcade'] as const satisfies readonly GameUiThemeName[];
+
+const defaultThemeValues = Object.fromEntries(
+  tokenDefinitions.map((definition) => [definition.key, definition.value]),
+) as Record<GameUiTokenName, string>;
+
+const arcadeOverrides = {
+  background: '#090716',
+  surface: 'rgba(28, 20, 54, 0.78)',
+  surfaceStrong: 'rgba(41, 24, 76, 0.94)',
+  line: 'rgba(255, 122, 217, 0.36)',
+  accent: '#ff7ad9',
+  accentStrong: '#48f5ff',
+  danger: '#ff335f',
+  heal: '#76ff7a',
+  critical: '#ffb000',
+  loot: '#c084fc',
+  rarityRare: '#48f5ff',
+  rarityEpic: '#c084fc',
+  rarityLegendary: '#ffb000',
+  health: '#ff335f',
+  shield: '#7dd3fc',
+  mana: '#48f5ff',
+  abilityReady: '#76ff7a',
+  markerObjective: '#ffdd66',
+  choice: '#ff7ad9',
+  shadowGlow: '0 0 32px rgba(255, 122, 217, 0.34)',
+} satisfies GameUiTokenOverrides;
+
+export const gameUiThemes: Record<GameUiThemeName, Record<GameUiTokenName, string>> = {
+  default: defaultThemeValues,
+  arcade: {
+    ...defaultThemeValues,
+    ...arcadeOverrides,
+  },
+};
+
+export function createGameUiTokenStyle(tokens: GameUiTokenOverrides = {}) {
+  return Object.fromEntries(
+    Object.entries(tokens).flatMap(([key, value]) => {
+      if (!value) return [];
+
+      const definition = tokenDefinitions.find((item) => item.key === key);
+      if (!definition) return [];
+
+      return [
+        [definition.cssVar, value],
+        [getPandaCssVar(definition), value],
+      ];
+    }),
+  ) as Record<`--${string}`, string>;
+}
+
+export function createGameUiThemeCss(themeName: GameUiThemeName) {
+  const values = gameUiThemes[themeName];
+
+  return tokenDefinitions.flatMap((definition) => {
+    const value = values[definition.key as GameUiTokenName];
+
+    return [
+      `  ${definition.cssVar}: ${value};`,
+      `  ${getPandaCssVar(definition)}: ${value};`,
+    ];
+  });
+}
+
+function getPandaCssVar(definition: GameUiTokenDefinitionInput) {
+  return `--game-ui-${definition.pandaCategory}-${definition.pandaName.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`)}` as const;
+}
+
+function createPandaTokens(category: PandaTokenCategory) {
+  return Object.fromEntries(
+    tokenDefinitions
+      .filter((definition) => definition.pandaCategory === category)
+      .map((definition) => [
+        definition.pandaName,
+        {
+          value: definition.value,
+          description: definition.description,
+        },
+      ]),
+  );
+}
+
+export const gameUiPreset = {
+  name: '@tiny-playworks/game-ui',
+  theme: {
+    extend: {
+      tokens: {
+        fonts: {
+          sans: {
+            value: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+          },
+          display: {
+            value: '"Arial Black", Impact, {fonts.sans}',
+          },
+        },
+        colors: createPandaTokens('colors'),
+        spacing: createPandaTokens('spacing'),
+        radii: createPandaTokens('radii'),
+        shadows: createPandaTokens('shadows'),
+        durations: createPandaTokens('durations'),
+        easings: createPandaTokens('easings'),
+      },
+    },
+  },
+};

@@ -1,7 +1,14 @@
 import React from 'react';
-import type { ReactNode } from 'react';
 import { LootStack } from '../loot-stack';
 import type { LootStackItem } from '../loot-stack';
+import {
+  mergeClass,
+  rewardRevealActionClass,
+  rewardRevealHeaderClass,
+  rewardRevealRecipe,
+  rewardRevealStateClass,
+  rewardRevealTitleClass,
+} from '../styles';
 
 export type RewardRevealState = 'sealed' | 'revealed' | 'claimed';
 
@@ -36,18 +43,18 @@ export function RewardReveal({
 
   return (
     <section
-      className={['game-ui-reward-reveal', className].filter(Boolean).join(' ')}
+      className={mergeClass(rewardRevealRecipe({ state }), className)}
       data-state={state}
       role="status"
       aria-label={`${title} ${state} reward with ${pluralizeItems(items.length)}`}
     >
-      <div className="game-ui-reward-reveal__header">
-        <span className="game-ui-reward-reveal__state">{stateLabels[state]}</span>
-        <strong className="game-ui-reward-reveal__title">{title}</strong>
+      <div className={rewardRevealHeaderClass}>
+        <span className={rewardRevealStateClass}>{stateLabels[state]}</span>
+        <strong className={rewardRevealTitleClass}>{title}</strong>
       </div>
       <LootStack items={items} label="Reward contents" limit={3} />
       {canAct ? (
-        <button className="game-ui-reward-reveal__action" type="button" onClick={onAction}>
+        <button className={rewardRevealActionClass} type="button" onClick={onAction}>
           {actionLabel}
         </button>
       ) : null}

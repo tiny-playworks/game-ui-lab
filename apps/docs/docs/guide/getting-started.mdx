@@ -27,6 +27,7 @@ import { Localized } from '../../components/locale';
       en="Usage"
     />
     <pre className="docs-demo-block__code"><code>{`import { DamageNumber, GameUiProvider } from '@tiny-playworks/game-ui';
+import '@tiny-playworks/game-ui/styles.css';
 
 export function CombatPulse() {
   return (
@@ -38,8 +39,8 @@ export function CombatPulse() {
     <Localized
       as="p"
       className="docs-section__text"
-      zh="你不需要额外引 `@tiny-playworks/game-ui/styles.css`。包入口已经把样式一起带上了。"
-      en="You do not need to import `@tiny-playworks/game-ui/styles.css` manually. The package entry already brings the styles in."
+      zh="样式入口固定为 `@tiny-playworks/game-ui/styles.css`。组件 JS 不再隐式注入样式。"
+      en="The fixed style entry is `@tiny-playworks/game-ui/styles.css`. The component JS entry no longer injects styles implicitly."
     />
   </section>
 

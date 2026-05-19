@@ -1,5 +1,13 @@
 import React from 'react';
 import type { ReactNode } from 'react';
+import {
+  choicePromptChoiceClass,
+  choicePromptChoiceDescriptionClass,
+  choicePromptChoicesClass,
+  choicePromptClass,
+  choicePromptTitleClass,
+  mergeClass,
+} from '../styles';
 
 export interface ChoicePromptOption {
   id: string;
@@ -17,19 +25,19 @@ export interface ChoicePromptProps {
 
 export function ChoicePrompt({ title, choices, onChoice, className }: ChoicePromptProps) {
   return (
-    <section className={['game-ui-choice-prompt', className].filter(Boolean).join(' ')} role="group" aria-label={title}>
-      <strong className="game-ui-choice-prompt__title">{title}</strong>
-      <div className="game-ui-choice-prompt__choices">
+    <section className={mergeClass(choicePromptClass, className)} role="group" aria-label={title}>
+      <strong className={choicePromptTitleClass}>{title}</strong>
+      <div className={choicePromptChoicesClass}>
         {choices.map((choice) => (
           <button
             key={choice.id}
-            className="game-ui-choice-prompt__choice"
+            className={choicePromptChoiceClass}
             type="button"
             disabled={choice.disabled}
             onClick={() => onChoice?.(choice.id)}
           >
             <span>{choice.label}</span>
-            {choice.description ? <small>{choice.description}</small> : null}
+            {choice.description ? <small className={choicePromptChoiceDescriptionClass}>{choice.description}</small> : null}
           </button>
         ))}
       </div>

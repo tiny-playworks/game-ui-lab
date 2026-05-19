@@ -1,6 +1,13 @@
 import React from 'react';
 import type { CSSProperties } from 'react';
 import type { MapMarkerTone } from '../map-marker';
+import {
+  compassBarClass,
+  compassBarHeadingClass,
+  compassBarMarkerRecipe,
+  compassBarTrackClass,
+  mergeClass,
+} from '../styles';
 
 export interface CompassMarker {
   id: string;
@@ -27,13 +34,13 @@ function markerPosition(heading: number) {
 
 export function CompassBar({ heading, markers = [], label = 'Compass', className }: CompassBarProps) {
   return (
-    <div className={['game-ui-compass-bar', className].filter(Boolean).join(' ')} role="status" aria-label={`${label} ${headingLabel(heading)}`}>
-      <span className="game-ui-compass-bar__heading">{headingLabel(heading)}</span>
-      <span className="game-ui-compass-bar__track">
+    <div className={mergeClass(compassBarClass, className)} role="status" aria-label={`${label} ${headingLabel(heading)}`}>
+      <span className={compassBarHeadingClass}>{headingLabel(heading)}</span>
+      <span className={compassBarTrackClass}>
         {markers.map((marker) => (
           <span
             key={marker.id}
-            className="game-ui-compass-bar__marker"
+            className={compassBarMarkerRecipe({ tone: marker.tone ?? 'neutral' })}
             data-tone={marker.tone ?? 'neutral'}
             style={{ '--game-ui-compass-position': markerPosition(marker.heading) } as CSSProperties}
           >

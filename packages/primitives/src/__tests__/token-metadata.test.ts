@@ -1,5 +1,13 @@
 import { describe, expect, it } from '@rstest/core';
-import { gameUiTokenGroups, gameUiTokens, gameUiTokenVars } from '@tiny-playworks/tokens';
+import {
+  createGameUiTokenStyle,
+  gameUiPreset,
+  gameUiThemeNames,
+  gameUiThemes,
+  gameUiTokenGroups,
+  gameUiTokens,
+  gameUiTokenVars,
+} from '@tiny-playworks/tokens';
 
 describe('token metadata export', () => {
   it('exposes the documented token groups', () => {
@@ -71,5 +79,21 @@ describe('token metadata export', () => {
     expect(gameUiTokenVars.health).toBe('--game-ui-health');
     expect(gameUiTokens.abilityReady).toBe('var(--game-ui-ability-ready)');
     expect(gameUiTokenVars.markerObjective).toBe('--game-ui-marker-objective');
+  });
+
+  it('keeps theme names and token keys aligned', () => {
+    const tokenNames = Object.keys(gameUiTokenVars).sort();
+
+    expect(gameUiThemeNames).toEqual(['default', 'arcade']);
+    expect(Object.keys(gameUiThemes.default).sort()).toEqual(tokenNames);
+    expect(Object.keys(gameUiThemes.arcade).sort()).toEqual(tokenNames);
+  });
+
+  it('exposes panda preset and scoped token style helpers', () => {
+    const style = createGameUiTokenStyle({ accent: '#ffffff' });
+
+    expect(gameUiPreset.name).toBe('@tiny-playworks/game-ui');
+    expect(style['--game-ui-accent']).toBe('#ffffff');
+    expect(style['--game-ui-colors-accent']).toBe('#ffffff');
   });
 });

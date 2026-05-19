@@ -1,4 +1,5 @@
 import React from 'react';
+import { locationTagMetaClass, locationTagRecipe, mergeClass } from '../styles';
 
 export type LocationDanger = 'safe' | 'contested' | 'hostile';
 
@@ -12,10 +13,10 @@ export interface LocationTagProps {
 
 export function LocationTag({ name, zone, danger = 'safe', status, className }: LocationTagProps) {
   return (
-    <article className={['game-ui-location-tag', className].filter(Boolean).join(' ')} data-danger={danger} aria-label={`${name} ${danger} location`}>
-      <span className="game-ui-location-tag__zone">{zone ?? 'Location'}</span>
+    <article className={mergeClass(locationTagRecipe({ danger }), className)} data-danger={danger} aria-label={`${name} ${danger} location`}>
+      <span className={locationTagMetaClass}>{zone ?? 'Location'}</span>
       <strong>{name}</strong>
-      {status ? <span className="game-ui-location-tag__status">{status}</span> : null}
+      {status ? <span className={locationTagMetaClass}>{status}</span> : null}
     </article>
   );
 }

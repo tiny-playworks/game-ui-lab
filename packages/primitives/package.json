@@ -12,19 +12,20 @@
       "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json",
-    "./styles.css": "./src/styles.css"
+    "./styles.css": "./dist/styles.css"
   },
   "files": [
-    "dist",
-    "src/styles.css"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "rslib build",
-    "test": "rstest run",
-    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json"
+    "codegen": "pnpm --dir ../.. exec panda codegen",
+    "build:styles": "node ./scripts/build-styles.mjs",
+    "build": "pnpm run codegen && rslib build && pnpm run build:styles",
+    "test": "pnpm --filter @tiny-playworks/tokens build && pnpm run codegen && rstest run",
+    "typecheck": "pnpm run codegen && tsc --noEmit -p tsconfig.typecheck.json"
   },
   "dependencies": {
     "@tiny-playworks/tokens": "workspace:^",
@@ -38,6 +39,7 @@
     "@rslib/core": "^0.21.5",
     "@rstest/core": "^0.10.0",
     "@testing-library/jest-dom": "^6.9.1",
+    "@tiny-playworks/styled-system": "workspace:*",
     "@testing-library/react": "^16.3.1",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",

@@ -1,5 +1,4 @@
-import type { CSSProperties } from 'react';
-import { gameUiTokenGroups, gameUiTokens, gameUiTokenVars } from '@tiny-playworks/tokens';
+import { gameUiTokenGroups, gameUiTokens, type GameUiTokenOverrides, type GameUiThemeName } from '@tiny-playworks/tokens';
 import {
   CooldownSlot,
   FloatingToast,
@@ -23,32 +22,34 @@ const groupLabels = {
   spacing: '间距',
 };
 
-const customTokenStyle = {
-  [gameUiTokenVars.accent]: '#ff7ad9',
-  [gameUiTokenVars.line]: 'rgba(255, 122, 217, 0.38)',
-  [gameUiTokenVars.health]: '#ff335f',
-  [gameUiTokenVars.shield]: '#7dd3fc',
-  [gameUiTokenVars.mana]: '#48f5ff',
-  [gameUiTokenVars.rarityLegendary]: '#ffb000',
-  [gameUiTokenVars.abilityReady]: '#76ff7a',
-  [gameUiTokenVars.markerObjective]: '#ffdd66',
-  [gameUiTokenVars.choice]: '#ff7ad9',
-  [gameUiTokenVars.shadowGlow]: '0 0 32px rgba(255, 122, 217, 0.34)',
-} as CSSProperties;
+const customTokens = {
+  accent: '#ff7ad9',
+  line: 'rgba(255, 122, 217, 0.38)',
+  health: '#ff335f',
+  shield: '#7dd3fc',
+  mana: '#48f5ff',
+  rarityLegendary: '#ffb000',
+  abilityReady: '#76ff7a',
+  markerObjective: '#ffdd66',
+  choice: '#ff7ad9',
+  shadowGlow: '0 0 32px rgba(255, 122, 217, 0.34)',
+} satisfies GameUiTokenOverrides;
 
-const tokenCode = `import { gameUiTokens, gameUiTokenVars } from '@tiny-playworks/tokens';
+const tokenCode = `import { GameUiProvider, HealthBar, ResourceMeter, LootCard } from '@tiny-playworks/game-ui';
+import '@tiny-playworks/game-ui/styles.css';
 
-<div style={{
-  [gameUiTokenVars.health]: '#ff335f',
-  [gameUiTokenVars.mana]: '#48f5ff',
-  [gameUiTokenVars.rarityLegendary]: '#ffb000',
-  padding: gameUiTokens.space4,
-  gap: gameUiTokens.space3,
-}}>
+<GameUiProvider
+  theme="arcade"
+  tokens={{
+    health: '#ff335f',
+    mana: '#48f5ff',
+    rarityLegendary: '#ffb000',
+  }}
+>
   <HealthBar value={82} max={100} showValue />
   <ResourceMeter value={64} max={100} kind="mana" label="MP" />
   <LootCard name="星核" rarity="legendary" quantity={1} />
-</div>`;
+</GameUiProvider>`;
 
 export function TokenShowcase() {
   const { locale } = useDocsLocale();
@@ -59,8 +60,8 @@ export function TokenShowcase() {
       <section className="docs-section">
         <Localized as="h2" className="docs-section__title" zh="Token 如何影响组件" en="How tokens affect components" />
         <div className="docs-token-compare">
-          <TokenScene title={isZh ? '默认 token' : 'Default tokens'} />
-          <TokenScene title={isZh ? '局部覆盖后' : 'Scoped override'} style={customTokenStyle} />
+          <TokenScene title={isZh ? '默认主题' : 'Default theme'} />
+          <TokenScene title={isZh ? 'Arcade + 局部 token' : 'Arcade + scoped tokens'} theme="arcade" tokens={customTokens} />
         </div>
         <pre className="docs-demo-block__code"><code>{tokenCode}</code></pre>
       </section>
@@ -91,20 +92,18 @@ export function TokenShowcase() {
   );
 }
 
-function TokenScene({ title, style }: { title: string; style?: CSSProperties }) {
+function TokenScene({ title, theme = 'default', tokens }: { title: string; theme?: GameUiThemeName; tokens?: GameUiTokenOverrides }) {
   return (
-    <GameUiProvider className="docs-token-scene">
-      <div className="docs-token-scene__scope" style={style}>
-        <div className="docs-token-scene__bar">
-          <span>{title}</span>
-          <CooldownSlot label="Q" progress={0.64} ready={false} />
-        </div>
-        <HealthBar value={82} max={100} shield={18} label="HP" showValue />
-        <ResourceMeter value={64} max={100} kind="mana" label="MP" />
-        <div className="docs-token-scene__loot">
-          <LootCard name="星核" rarity="legendary" quantity={1} value="999" subtitle="Legendary" />
-          <FloatingToast title="Token Applied" message="Color, border, glow" variant="loot" />
-        </div>
+    <GameUiProvider className="docs-token-scene" theme={theme} tokens={tokens}>
+      <div className="docs-token-scene__bar">
+        <span>{title}</span>
+        <CooldownSlot label="Q" progress={0.64} ready={false} />
+      </div>
+      <HealthBar value={82} max={100} shield={18} label="HP" showValue />
+      <ResourceMeter value={64} max={100} kind="mana" label="MP" />
+      <div className="docs-token-scene__loot">
+        <LootCard className="docs-token-scene__loot-item" name="星核" rarity="legendary" quantity={1} value="999" subtitle="Legendary" />
+        <FloatingToast className="docs-token-scene__toast" title="Token Applied" message="Color, border, glow" variant="loot" />
       </div>
     </GameUiProvider>
   );

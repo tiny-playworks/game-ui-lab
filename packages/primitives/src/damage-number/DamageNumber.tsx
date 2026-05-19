@@ -1,6 +1,7 @@
 import { motion, type Transition } from 'motion/react';
 import React from 'react';
 import type { CSSProperties } from 'react';
+import { damageNumberPrefixClass, damageNumberRecipe, mergeClass } from '../styles';
 
 export type DamageNumberVariant = 'damage' | 'heal' | 'critical' | 'miss';
 
@@ -32,7 +33,7 @@ export function DamageNumber({
 
   return (
     <motion.span
-      className={['game-ui-damage-number', className].filter(Boolean).join(' ')}
+      className={mergeClass(damageNumberRecipe({ variant }), className)}
       data-variant={variant}
       style={{ ...style, '--game-ui-damage-size': size ? `${size}px` : undefined } as CSSProperties}
       initial={{ opacity: 0, y: 18, scale: isCritical ? 0.62 : 0.84, rotate: isCritical ? -5 : 0 }}
@@ -41,7 +42,7 @@ export function DamageNumber({
       role="status"
       aria-label={`${variant} ${value}`}
     >
-      {prefix ? <span className="game-ui-damage-number__prefix">{prefix}</span> : null}
+      {prefix ? <span className={damageNumberPrefixClass}>{prefix}</span> : null}
       {value}
     </motion.span>
   );

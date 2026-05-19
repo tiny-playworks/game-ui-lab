@@ -2,6 +2,15 @@ import React from 'react';
 import type { ReactNode } from 'react';
 import { LootCard } from '../loot-card';
 import type { LootRarity } from '../loot-card';
+import {
+  lootStackClass,
+  lootStackItemClass,
+  lootStackLabelClass,
+  lootStackListClass,
+  lootStackOverflowClass,
+  lootStackToplineClass,
+  mergeClass,
+} from '../styles';
 
 export interface LootStackItem {
   id: string;
@@ -31,14 +40,14 @@ export function LootStack({ items, label = 'Loot stack', limit = 4, className }:
   const ariaLabel = `${label} ${pluralizeItems(items.length)}`;
 
   return (
-    <div className={['game-ui-loot-stack', className].filter(Boolean).join(' ')}>
-      <div className="game-ui-loot-stack__topline">
-        <span className="game-ui-loot-stack__label">{label}</span>
-        <span className="game-ui-loot-stack__count">{pluralizeItems(items.length)}</span>
+    <div className={mergeClass(lootStackClass, className)}>
+      <div className={lootStackToplineClass}>
+        <span className={lootStackLabelClass}>{label}</span>
+        <span className={lootStackLabelClass}>{pluralizeItems(items.length)}</span>
       </div>
-      <ul className="game-ui-loot-stack__list" aria-label={ariaLabel} data-overflow={overflow}>
+      <ul className={lootStackListClass} aria-label={ariaLabel} data-overflow={overflow}>
         {visibleItems.map((item) => (
-          <li key={item.id} className="game-ui-loot-stack__item">
+          <li key={item.id} className={lootStackItemClass}>
             <LootCard
               name={item.name}
               rarity={item.rarity}
@@ -50,7 +59,7 @@ export function LootStack({ items, label = 'Loot stack', limit = 4, className }:
           </li>
         ))}
         {overflow > 0 ? (
-          <li className="game-ui-loot-stack__overflow">
+          <li className={lootStackOverflowClass}>
             <span>+{overflow} more</span>
           </li>
         ) : null}

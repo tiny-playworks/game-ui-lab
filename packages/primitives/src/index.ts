@@ -1,5 +1,3 @@
-import './styles.css';
-
 export { AbilityBar } from './ability-bar';
 export type { AbilityBarItem, AbilityBarProps } from './ability-bar';
 export { AbilityTooltip } from './ability-tooltip';

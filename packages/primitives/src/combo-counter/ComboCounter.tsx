@@ -1,5 +1,13 @@
 import { motion } from 'motion/react';
 import React from 'react';
+import {
+  comboCounterLabelClass,
+  comboCounterRecipe,
+  comboCounterSuffixClass,
+  comboCounterTierClass,
+  comboCounterValueClass,
+  mergeClass,
+} from '../styles';
 
 export interface ComboCounterProps {
   count: number;
@@ -25,7 +33,7 @@ export function ComboCounter({
 }: ComboCounterProps) {
   return (
     <motion.div
-      className={['game-ui-combo-counter', className].filter(Boolean).join(' ')}
+      className={mergeClass(comboCounterRecipe({ active }), className)}
       data-active={active}
       initial={false}
       animate={{ scale: active ? [1, 1.06, 1] : 0.96, opacity: active ? 1 : 0.62 }}
@@ -33,12 +41,12 @@ export function ComboCounter({
       role="status"
       aria-label={`${label} ${count}`}
     >
-      <span className="game-ui-combo-counter__label">{label}</span>
-      <span className="game-ui-combo-counter__value">
+      <span className={comboCounterLabelClass}>{label}</span>
+      <span className={comboCounterValueClass}>
         {count}
-        <span className="game-ui-combo-counter__suffix">x</span>
+        <span className={comboCounterSuffixClass}>x</span>
       </span>
-      <span className="game-ui-combo-counter__tier">{tier}</span>
+      <span className={comboCounterTierClass}>{tier}</span>
     </motion.div>
   );
 }

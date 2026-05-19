@@ -1,15 +1,32 @@
 import React from 'react';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import type { GameUiThemeName, GameUiTokenOverrides } from '@tiny-playworks/tokens';
+import { createGameUiTokenStyle } from '@tiny-playworks/tokens';
+import { mergeClass, providerRootClass } from '../styles';
 
 export interface GameUiProviderProps {
   children: ReactNode;
-  theme?: 'default';
+  theme?: GameUiThemeName;
+  tokens?: GameUiTokenOverrides;
   className?: string;
+  style?: CSSProperties;
 }
 
-export function GameUiProvider({ children, theme = 'default', className }: GameUiProviderProps) {
+export function GameUiProvider({
+  children,
+  theme = 'default',
+  tokens,
+  className,
+  style,
+}: GameUiProviderProps) {
+  const tokenStyle = createGameUiTokenStyle(tokens);
+
   return (
-    <div className={['game-ui-root', className].filter(Boolean).join(' ')} data-game-ui-theme={theme}>
+    <div
+      className={mergeClass(providerRootClass, className)}
+      data-game-ui-theme={theme}
+      style={{ ...style, ...tokenStyle }}
+    >
       {children}
     </div>
   );
