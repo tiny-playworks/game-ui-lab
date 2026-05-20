@@ -280,6 +280,13 @@ html.dark,
   padding: 0 28px 28px;
 }
 
+.encounter-demo__note {
+  margin: 0;
+  color: var(--game-ui-muted, #9fb0ce);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 .encounter-demo__controls button {
   min-height: 36px;
   padding: 0 14px;

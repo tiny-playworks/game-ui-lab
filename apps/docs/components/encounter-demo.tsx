@@ -5,7 +5,6 @@ import {
   GameUiProvider,
   GameUiRuntimeProvider,
   LootStack,
-  PartyFrame,
   useGameUiRuntime,
 } from '@tiny-playworks/game-ui';
 import { useDocsLocale } from './locale';
@@ -17,10 +16,16 @@ const rewardItems = [
   { id: 'dust', name: '余烬粉尘', rarity: 'common' as const, quantity: 12, value: '30', subtitle: 'Material' },
 ];
 
-const partyMembers = [
-  { id: 'pilot', name: 'Pilot', health: 320, maxHealth: 320, shield: 24, status: { label: 'Haste', tone: 'buff' as const, duration: '6s' } },
-  { id: 'support', name: 'Support', health: 280, maxHealth: 300, offline: false },
+const initialParty = [
+  { id: 'pilot', name: 'Pilot', health: 320, maxHealth: 320, shield: 24, status: { id: 'haste', label: 'Haste', tone: 'buff' as const, duration: '6s' } },
+  { id: 'support', name: 'Support', health: 280, maxHealth: 300 },
   { id: 'scout', name: 'Scout', health: 0, maxHealth: 260, offline: true },
+];
+
+const mapMarkers = [
+  { id: 'ally', x: 22, y: 42, tone: 'ally' as const, label: 'Ally' },
+  { id: 'enemy', x: 68, y: 55, tone: 'enemy' as const, label: 'Warden' },
+  { id: 'beacon', x: 48, y: 28, tone: 'objective' as const, label: 'Beacon', active: true },
 ];
 
 export function EncounterDemo() {
@@ -40,16 +45,38 @@ function EncounterRuntimeScene() {
   const [selectedAbility, setSelectedAbility] = useState('strike');
   const [burstProgress, setBurstProgress] = useState(1);
   const [selectedLoot, setSelectedLoot] = useState('core');
-  const [selectedPartyId, setSelectedPartyId] = useState('pilot');
   const hasMountedRef = useRef(false);
 
-  useEffect(() => {
+  function seedEncounter() {
     runtime.dispatch({
       type: 'target-health:update',
       payload: { name: isZh ? '遗迹守卫' : 'Warden', health: maxHealth, maxHealth },
     });
     runtime.upsertBuff({ id: 'armor-break', label: isZh ? '破甲' : 'Armor break', tone: 'debuff', duration: isZh ? '8秒' : '8s' });
     runtime.setCombo(0, isZh ? '连击' : 'Combo');
+    runtime.setParty({ members: initialParty, selectedId: 'pilot' });
+    runtime.trackQuest({
+      title: isZh ? '信标追踪' : 'Signal hunt',
+      subtitle: isZh ? '遭遇战' : 'Encounter',
+      objectives: [
+        { id: 'hit', label: isZh ? '造成伤害' : 'Deal damage', state: 'active' },
+        { id: 'defeat', label: isZh ? '击败守卫' : 'Defeat warden', state: 'locked' },
+      ],
+    });
+    runtime.setMapMarkers({
+      label: isZh ? '遗迹区' : 'Ruin sector',
+      markers: mapMarkers,
+      selectedId: 'enemy',
+    });
+    runtime.enqueueDialogue({
+      speaker: isZh ? '领航员' : 'Pilot',
+      text: isZh ? '目标已标记，保持连击。' : 'Target marked. Keep the combo alive.',
+      tone: 'ally',
+    });
+  }
+
+  useEffect(() => {
+    seedEncounter();
   }, [isZh, runtime]);
 
   useEffect(() => {
@@ -137,12 +164,25 @@ function EncounterRuntimeScene() {
         maxHealth: target?.maxHealth ?? maxHealth,
       },
     });
+    runtime.dispatch({
+      type: 'quest:objective:update',
+      payload: { id: 'hit', patch: { state: 'complete', progress: 1, max: 1 } },
+    });
 
     if (nextHealth === 0 && currentHealth > 0) {
+      runtime.dispatch({
+        type: 'quest:objective:update',
+        payload: { id: 'defeat', patch: { state: 'complete' } },
+      });
       runtime.notify({
         title: isZh ? '目标击败' : 'Target defeated',
-        message: isZh ? '奖励揭示事件已进入 modal layer。' : 'Reward reveal moved into the modal layer.',
+        message: isZh ? '奖励与叙事事件已入队。' : 'Reward and narrative events queued.',
         variant: 'loot',
+      });
+      runtime.enqueueDialogue({
+        speaker: isZh ? '遗迹守卫' : 'Warden',
+        text: isZh ? '核心……留给你们了。' : 'The core… is yours.',
+        tone: 'warning',
       });
       runtime.dispatch({
         type: 'reward-reveal:show',
@@ -183,32 +223,58 @@ function EncounterRuntimeScene() {
     runtime.clearLayer('feedback');
     runtime.clearLayer('notification');
     runtime.clearLayer('modal');
+    runtime.clearLayer('narrative');
     runtime.clearLayer('hud');
+    seedEncounter();
+  }
+
+  function openShop() {
     runtime.dispatch({
-      type: 'target-health:update',
-      payload: { name: isZh ? '遗迹守卫' : 'Warden', health: maxHealth, maxHealth },
+      type: 'shop:open',
+      payload: {
+        id: 'ruin-vendor',
+        title: isZh ? '遗迹商人' : 'Ruin vendor',
+        items: [
+          { id: 'potion', name: isZh ? '修复药剂' : 'Repair potion', rarity: 'common', price: 50, value: '50' },
+          { id: 'core', name: isZh ? '共鸣核心' : 'Resonance core', rarity: 'legendary', price: 999, value: '999' },
+        ],
+        currencies: [
+          { id: 'gold', label: isZh ? '金币' : 'Gold', amount: 420, tone: 'gold' },
+          { id: 'gem', label: isZh ? '宝石' : 'Gems', amount: 12, tone: 'gem' },
+        ],
+      },
     });
-    runtime.upsertBuff({ id: 'armor-break', label: isZh ? '破甲' : 'Armor break', tone: 'debuff', duration: isZh ? '8秒' : '8s' });
-    runtime.setCombo(0, isZh ? '连击' : 'Combo');
+  }
+
+  function openQuestLog() {
+    runtime.openQuestLog({
+      title: isZh ? '任务日志' : 'Quest log',
+      activeId: 'signal',
+      quests: [
+        {
+          id: 'signal',
+          title: isZh ? '信标追踪' : 'Signal hunt',
+          subtitle: isZh ? '遭遇战' : 'Encounter',
+          objectives: runtime.getState().layers.hud.quest?.objectives ?? [],
+        },
+      ],
+    });
+  }
+
+  function showBranchChoices() {
+    runtime.showChoices({
+      title: isZh ? '选择路线' : 'Choose route',
+      options: [
+        { id: 'left', label: isZh ? '左侧通道' : 'Left path', description: isZh ? '安全' : 'Safe' },
+        { id: 'right', label: isZh ? '强行突破' : 'Force breach', description: isZh ? '危险' : 'Risky' },
+      ],
+    });
   }
 
   return (
     <section className="encounter-demo">
       <GameUiLayerHost />
       <div className="encounter-demo__scene">
-        <div className="encounter-demo__party">
-          <PartyFrame
-            members={partyMembers}
-            selectedId={selectedPartyId}
-            onMemberSelect={(id) => setSelectedPartyId(id)}
-            label={isZh ? '小队' : 'Party'}
-          />
-          <p className="encounter-demo__note">
-            {isZh
-              ? 'PartyFrame 为场景内受控组件，暂未接入 runtime。'
-              : 'PartyFrame is controlled in-scene and is not wired to runtime yet.'}
-          </p>
-        </div>
         <div className="encounter-demo__hud">
           <AbilityBar
             abilities={abilities}
@@ -229,9 +295,18 @@ function EncounterRuntimeScene() {
       </div>
       <div className="encounter-demo__controls">
         <button type="button" onClick={() => handleAbility('strike')}>{isZh ? '攻击' : 'Attack'}</button>
-        <button type="button" onClick={() => handleAbility('burst')}>{isZh ? '释放技能' : 'Use Ability'}</button>
-        <button type="button" onClick={resetEncounter}>{isZh ? '重置战斗' : 'Reset'}</button>
+        <button type="button" onClick={() => handleAbility('burst')}>{isZh ? '爆发' : 'Burst'}</button>
+        <button type="button" onClick={openShop}>{isZh ? '商店' : 'Shop'}</button>
+        <button type="button" onClick={openQuestLog}>{isZh ? '任务日志' : 'Quest log'}</button>
+        <button type="button" onClick={showBranchChoices}>{isZh ? '分支选项' : 'Choices'}</button>
+        <button type="button" onClick={() => runtime.advanceDialogue()}>{isZh ? '下一句' : 'Next line'}</button>
+        <button type="button" onClick={resetEncounter}>{isZh ? '重置' : 'Reset'}</button>
       </div>
+      <p className="encounter-demo__note">
+        {isZh
+          ? 'HUD、叙事、商店、任务日志与反馈均通过 runtime 驱动；LayerHost 渲染各层。'
+          : 'HUD, narrative, shop, quest log, and feedback are runtime-driven and rendered by LayerHost.'}
+      </p>
     </section>
   );
 }

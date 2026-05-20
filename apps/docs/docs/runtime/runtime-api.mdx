@@ -12,11 +12,11 @@ import { Localized } from '../../components/locale';
 
 ## 分层模型 / Layer model
 
-- **hud**：combo、target、quest、map、buffs、cooldowns（AbilityBar）
+- **hud**：combo、target、quest、map、buffs、party、cooldowns（AbilityBar）
 - **feedback**：浮动伤害数字
 - **notification**：FloatingToast 栈
-- **narrative**：DialogueBox、ChoicePrompt（z-index 35）
-- **modal**：RewardReveal、ShopPanel（互斥）
+- **narrative**：DialogueBox 队列、ChoicePrompt（z-index 35）
+- **modal**：RewardReveal、ShopPanel、QuestLog（互斥）
 
 <Localized
   as="p"
@@ -32,6 +32,10 @@ runtime.trackQuest({ title: 'Beacon', objectives: [{ id: 'a', label: 'Find beaco
 runtime.setMapMarkers({ label: 'East gate', markers: [{ id: 'm1', tone: 'enemy', x: 40, y: 60 }] });
 runtime.upsertBuff({ id: 'haste', label: 'Haste', tone: 'buff', count: 2 });
 runtime.showDialogue({ speaker: 'Guide', text: 'Hold the line.' });
+runtime.enqueueDialogue({ speaker: 'Guide', text: 'Next line.' });
+runtime.advanceDialogue();
+runtime.setParty({ members: [{ id: 'pilot', name: 'Pilot', health: 80, maxHealth: 100 }], selectedId: 'pilot' });
+runtime.openQuestLog({ title: 'Log', quests: [{ id: 'a', title: 'Alpha', objectives: [] }] });
 runtime.showChoices({ title: 'Route', options: [{ id: 'left', label: 'Left' }] });
 ```
 
@@ -43,8 +47,10 @@ runtime.showChoices({ title: 'Route', options: [{ id: 'left', label: 'Left' }] }
 | Quest | `quest:track`, `quest:objective:update`, `quest:clear` |
 | Map | `map:set`, `map:marker:update`, `map:select`, `map:clear` |
 | Buff | `buff:upsert`, `buff:remove`, `buff:clear` |
-| Dialogue | `dialogue:show`, `dialogue:dismiss` |
+| Dialogue | `dialogue:show`, `dialogue:enqueue`, `dialogue:advance`, `dialogue:dismiss` |
+| Party | `party:set`, `party:member:update`, `party:select`, `party:clear` |
 | Choice | `choice:show`, `choice:select`, `choice:clear` |
-| Shop | `shop:open`, `shop:close`（与 reward 互斥） |
+| Shop | `shop:open`, `shop:close`（与 reward / questLog 互斥） |
+| Quest log | `quest-log:open`, `quest-log:close`, `quest-log:activate` |
 
 </DocShell>

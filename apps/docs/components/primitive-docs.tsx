@@ -973,6 +973,8 @@ export function Demo() {
       row('slots', '格子数组。', 'Slot array.', 'InventoryGridSlot[]', '-'),
       row('columns', '列数。', 'Column count.', 'number', '4'),
       row('onSlotSelect', '选择回调。', 'Select callback.', '(id, slot) => void', '-'),
+      row('onSlotMove', '拖拽交换回调。', 'Drag move callback.', '(fromId, toId, from, to) => void', '-'),
+      row('draggingId', '正在拖拽的格子 id。', 'Dragging slot id.', 'string', '-'),
       ...commonRows,
     ],
     tokenZh: '使用 inventory slot empty/equipped token。',

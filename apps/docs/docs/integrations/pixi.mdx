@@ -1,0 +1,48 @@
+import { DocShell } from '../../components/doc-shell';
+import { Localized } from '../../components/locale';
+
+<DocShell
+  eyebrowZh="集成"
+  eyebrowEn="Integrations"
+  titleZh="Pixi.js 反馈桥接"
+  titleEn="Pixi.js feedback bridge"
+  summaryZh="在 Canvas 游戏里订阅 headless runtime，把伤害数字与通知同步到 Pixi 容器（alpha）。"
+  summaryEn="Subscribe to the headless runtime in canvas games and mirror damage and toast feedback into a Pixi container (alpha)."
+>
+
+## 安装 / Install
+
+```bash
+pnpm add @tiny-playworks/game-ui-pixi @tiny-playworks/game-ui-runtime pixi.js
+```
+
+## 用法 / Usage
+
+```ts
+import { createGameUiRuntime } from '@tiny-playworks/game-ui-runtime';
+import { createPixiFeedbackBridge } from '@tiny-playworks/game-ui-pixi';
+
+const runtime = createGameUiRuntime();
+
+const detach = createPixiFeedbackBridge(runtime, {
+  container: feedbackLayer,
+  factory: {
+    createLabel(text, options) {
+      const label = new PIXI.Text({ text, style: { fill: options?.variant === 'heal' ? '#5cff9d' : '#ff4d7d' } });
+      return label;
+    },
+  },
+  stageWidth: 1280,
+  stageHeight: 720,
+});
+
+runtime.emitDamage({ value: 128, variant: 'critical', anchor: { x: 50, y: 40 } });
+```
+
+<Localized
+  as="p"
+  zh="React 项目仍推荐使用 GameUiLayerHost；Pixi 桥接适合纯 Canvas 或混合渲染场景。"
+  en="React apps should still prefer GameUiLayerHost; the Pixi bridge targets canvas-only or hybrid render paths."
+/>
+
+</DocShell>

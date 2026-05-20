@@ -27,6 +27,7 @@ export default defineConfig({
       { text: '运行时 / Runtime', link: '/runtime/encounter-demo' },
       { text: '令牌 / Tokens', link: '/tokens/' },
       { text: '实验台 / Lab', link: '/lab/' },
+      { text: '集成 / Integrations', link: '/integrations/pixi' },
     ],
     sidebar: {
       '/guide/': [
@@ -92,6 +93,12 @@ export default defineConfig({
             { text: 'Encounter Demo', link: '/runtime/encounter-demo' },
             { text: 'Runtime API', link: '/runtime/runtime-api' },
           ],
+        },
+      ],
+      '/integrations/': [
+        {
+          text: 'Integrations',
+          items: [{ text: 'Pixi bridge', link: '/integrations/pixi' }],
         },
       ],
     },

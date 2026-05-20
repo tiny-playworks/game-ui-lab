@@ -24,7 +24,10 @@ const routes = [
   { path: '/game-ui-lab/primitives/quest-tracker', name: 'primitive-quest-tracker', keyText: 'QuestTracker' },
   { path: '/game-ui-lab/primitives/loot-card', name: 'primitive-loot-card', keyText: 'LootCard' },
   { path: '/game-ui-lab/primitives/buff-bar', name: 'primitive-buff-bar', keyText: 'BuffBar' },
+  { path: '/game-ui-lab/primitives/inventory-grid', name: 'primitive-inventory-grid', keyText: 'InventoryGrid' },
+  { path: '/game-ui-lab/primitives/shop-panel', name: 'primitive-shop-panel', keyText: 'ShopPanel' },
   { path: '/game-ui-lab/runtime/runtime-api', name: 'runtime-api', keyText: 'Runtime API' },
+  { path: '/game-ui-lab/integrations/pixi', name: 'integration-pixi', keyText: 'Pixi.js feedback bridge' },
   { path: '/game-ui-lab/runtime/encounter-demo', name: 'runtime-encounter-demo', keyText: 'Encounter Demo' },
   { path: '/game-ui-lab/lab/', name: 'lab-home', keyText: '同一个设计系统里的实验舞台' },
 ];

@@ -635,6 +635,41 @@ describe('game ui primitives', () => {
     expect(screen.getAllByRole('listitem')[1].getAttribute('data-locked')).toBe('true');
   });
 
+  it('moves inventory items between slots', () => {
+    const moves: string[] = [];
+    const slots = [
+      { id: 'a', item: { id: 'core', name: 'Core', rarity: 'rare' as const } },
+      { id: 'b' },
+    ];
+    const dataTransfer = {
+      data: {} as Record<string, string>,
+      effectAllowed: 'move',
+      dropEffect: 'move',
+      setData(type: string, value: string) {
+        this.data[type] = value;
+      },
+      getData(type: string) {
+        return this.data[type] ?? '';
+      },
+    };
+
+    render(
+      <InventoryGrid
+        slots={slots}
+        onSlotMove={(fromId, toId) => moves.push(`${fromId}->${toId}`)}
+      />,
+    );
+
+    const from = screen.getAllByRole('listitem')[0];
+    const to = screen.getAllByRole('listitem')[1];
+
+    fireEvent.dragStart(from, { dataTransfer });
+    fireEvent.dragOver(to, { dataTransfer });
+    fireEvent.drop(to, { dataTransfer });
+
+    expect(moves).toEqual(['a->b']);
+  });
+
   it('renders currency bar entries', () => {
     render(
       <CurrencyBar

@@ -11,6 +11,9 @@ import { DamageNumber } from '../damage-number';
 import { DialogueBox } from '../dialogue-box';
 import { FloatingToast } from '../floating-toast';
 import { MiniMap } from '../mini-map';
+import { PartyFrame } from '../party-frame';
+import type { PartyFrameMember } from '../party-frame';
+import { QuestLog } from '../quest-log';
 import { QuestTracker } from '../quest-tracker';
 import { RewardReveal } from '../reward-reveal';
 import { ShopPanel } from '../shop-panel';
@@ -59,13 +62,37 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
     [hud.buffs],
   );
 
+  const partyMembers: PartyFrameMember[] = useMemo(
+    () =>
+      (hud.party?.members ?? []).map((member) => ({
+        id: member.id,
+        name: member.name,
+        health: member.health,
+        maxHealth: member.maxHealth,
+        shield: member.shield,
+        offline: member.offline,
+        status: member.status
+          ? {
+              label: member.status.label,
+              tone: member.status.tone,
+              count: member.status.count,
+              duration: member.status.duration,
+            }
+          : undefined,
+      })),
+    [hud.party?.members],
+  );
+
+  const activeDialogue = narrative?.dialogueQueue?.[0];
+
   const hasHudContent = Boolean(
     hud.combo ||
       hud.target ||
       hud.quest ||
       hud.map ||
       buffItems.length ||
-      abilityItems.length,
+      abilityItems.length ||
+      partyMembers.length,
   );
 
   return (
@@ -96,6 +123,14 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
             ) : null}
             {buffItems.length ? <BuffBar buffs={buffItems} limit={8} /> : null}
             {abilityItems.length ? <AbilityBar abilities={abilityItems} label="Abilities" /> : null}
+            {partyMembers.length ? (
+              <PartyFrame
+                members={partyMembers}
+                selectedId={hud.party?.selectedId}
+                label="Party"
+                onMemberSelect={(id) => runtime.dispatch({ type: 'party:select', id })}
+              />
+            ) : null}
           </div>
         ) : null}
       </div>
@@ -127,29 +162,39 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
       <div
         className={mergeClass(gameUiLayerClass, gameUiNarrativeLayerClass)}
         data-game-ui-layer="narrative"
-        data-active={Boolean(narrative?.dialogue || narrative?.choices)}
+        data-active={Boolean(activeDialogue || narrative?.choices)}
       >
-        {narrative?.dialogue ? (
-          <DialogueBox
-            speaker={narrative.dialogue.speaker}
-            text={narrative.dialogue.text}
-            tone={narrative.dialogue.tone}
-            portrait={narrative.dialogue.portrait}
-          />
+        {activeDialogue ? (
+          <div data-game-ui-dialogue-queue={narrative?.dialogueQueue?.length ?? 0}>
+            <DialogueBox
+              speaker={activeDialogue.speaker}
+              text={activeDialogue.text}
+              tone={activeDialogue.tone}
+              portrait={activeDialogue.portrait}
+            />
+            {(narrative?.dialogueQueue?.length ?? 0) > 1 ? (
+              <button type="button" onClick={() => runtime.advanceDialogue()}>
+                Continue
+              </button>
+            ) : null}
+          </div>
         ) : null}
         {narrative?.choices ? (
           <ChoicePrompt
             title={narrative.choices.title ?? 'Choose'}
             choices={narrative.choices.options}
             selectedId={narrative.choices.selectedId}
-            onChoice={(id) => runtime.dispatch({ type: 'choice:select', id })}
+            onChoice={(id) => {
+              runtime.dispatch({ type: 'choice:select', id });
+              runtime.dispatch({ type: 'choice:clear' });
+            }}
           />
         ) : null}
       </div>
       <div
         className={mergeClass(gameUiLayerClass, gameUiModalLayerClass)}
         data-game-ui-layer="modal"
-        data-active={Boolean(modal.reward || modal.shop)}
+        data-active={Boolean(modal.reward || modal.shop || modal.questLog)}
       >
         {modal.reward ? (
           <RewardReveal
@@ -177,6 +222,14 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
               runtime.notify({ title: 'Purchased', message: `Bought ${id}`, variant: 'success' });
               runtime.dispatch({ type: 'shop:close' });
             }}
+          />
+        ) : null}
+        {modal.questLog ? (
+          <QuestLog
+            title={modal.questLog.title}
+            quests={modal.questLog.quests}
+            activeId={modal.questLog.activeId}
+            onActiveChange={(id) => runtime.dispatch({ type: 'quest-log:activate', id })}
           />
         ) : null}
       </div>

@@ -10,7 +10,7 @@ describe('game ui runtime', () => {
     expect(state.layers.notification.toasts).toHaveLength(0);
     expect(state.layers.hud.cooldowns).toEqual({});
     expect(state.layers.modal.reward).toBeUndefined();
-    expect(state.layers.narrative).toEqual({});
+    expect(state.layers.narrative).toEqual({ dialogueQueue: [] });
   });
 
   it('emits damage and returns a stable id', () => {
@@ -118,18 +118,57 @@ describe('game ui runtime', () => {
     expect(runtime.getState().layers.hud.buffs).toEqual([]);
   });
 
-  it('shows dialogue and choices in narrative layer', () => {
+  it('queues dialogue and advances the narrative layer', () => {
     const runtime = createGameUiRuntime();
 
-    runtime.showDialogue({ speaker: 'Guide', text: 'Hold position.' });
+    runtime.enqueueDialogue({ speaker: 'Guide', text: 'Hold position.' });
+    runtime.enqueueDialogue({ speaker: 'Guide', text: 'Move out.' });
+
+    expect(runtime.getState().layers.narrative?.dialogueQueue).toHaveLength(2);
+    expect(runtime.getState().layers.narrative?.dialogueQueue[0].speaker).toBe('Guide');
+
+    runtime.advanceDialogue();
+
+    expect(runtime.getState().layers.narrative?.dialogueQueue).toHaveLength(1);
+    expect(runtime.getState().layers.narrative?.dialogueQueue[0].text).toBe('Move out.');
+  });
+
+  it('shows choices in narrative layer', () => {
+    const runtime = createGameUiRuntime();
+
     runtime.showChoices({
       title: 'Route',
       options: [{ id: 'left', label: 'Left path' }],
     });
     runtime.dispatch({ type: 'choice:select', id: 'left' });
 
-    expect(runtime.getState().layers.narrative?.dialogue?.speaker).toBe('Guide');
     expect(runtime.getState().layers.narrative?.choices?.selectedId).toBe('left');
+  });
+
+  it('sets party members and selection', () => {
+    const runtime = createGameUiRuntime();
+
+    runtime.setParty({
+      members: [{ id: 'pilot', name: 'Pilot', health: 80, maxHealth: 100 }],
+      selectedId: 'pilot',
+    });
+    runtime.dispatch({ type: 'party:select', id: 'pilot' });
+
+    expect(runtime.getState().layers.hud.party?.members[0].name).toBe('Pilot');
+    expect(runtime.getState().layers.hud.party?.selectedId).toBe('pilot');
+  });
+
+  it('opens quest log modal and activates a quest', () => {
+    const runtime = createGameUiRuntime();
+
+    runtime.openQuestLog({
+      title: 'Log',
+      quests: [{ id: 'a', title: 'Alpha', objectives: [{ id: 'o1', label: 'Step' }] }],
+      activeId: 'a',
+    });
+    runtime.dispatch({ type: 'quest-log:activate', id: 'a' });
+
+    expect(runtime.getState().layers.modal.questLog?.activeId).toBe('a');
   });
 
   it('opens shop and clears reward modal', () => {

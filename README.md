@@ -171,6 +171,8 @@ Public site routes:
 - `/primitives` - Primitive overview
 - `/tokens` - Token overview
 - `/runtime/encounter-demo` - Runtime-driven vertical slice
+- `/runtime/runtime-api` - Headless runtime events and layers
+- `/integrations/pixi` - Pixi.js feedback bridge (alpha)
 - `/lab` - Docs-native feedback lab
 
 Build all packages and docs:
@@ -202,10 +204,10 @@ pnpm typecheck
 Prepare a release bundle locally:
 
 ```bash
-pnpm release 0.3.0
+pnpm release 0.4.0
 ```
 
-This updates package versions, runs `test` / `typecheck` / `build`, and writes publishable tarballs to `.release/v0.3.0/`.
+This updates package versions, runs `test` / `typecheck` / `build`, and writes publishable tarballs to `.release/v0.4.0/`.
 
 Manual publish remains available:
 
@@ -220,30 +222,24 @@ cd ../primitives
 npm publish --access public
 ```
 
-If GitHub Actions has a valid `NPM_TOKEN` secret, pushing a tag such as `v0.3.0` can publish automatically. The workflow checks that package versions already equal the tag version before publishing.
+If GitHub Actions has a valid `NPM_TOKEN` secret, pushing a tag such as `v0.4.0` can publish automatically. The workflow checks that package versions already equal the tag version before publishing.
 
 If your npm account enforces 2FA for publish, the token itself must be a granular token with write permission and `Bypass 2FA` enabled. If that option is not enabled, the workflow will fail during `npm publish`.
 
-## Phase 2 Scope
+## Roadmap
 
-Phase 2 makes the project publicly consumable:
+Current release line: **0.4.x** primitives + headless runtime. See [CHANGELOG.md](./CHANGELOG.md).
 
-- pnpm monorepo
-- `packages/tokens`
-- `packages/primitives`
-- `apps/docs`
-- Panda preset based token foundation
-- Rspress docs as the public Pages entry
-- built-in Docs lab under `/lab`
-- public API boundary from `@tiny-playworks/game-ui`
-- npm-ready `@tiny-playworks/tokens` and `@tiny-playworks/game-ui`
-- basic render and token tests
+Near-term (in repo):
+
+- Runtime: party HUD, narrative dialogue queue, quest log modal
+- `InventoryGrid` drag-and-drop between slots
+- `@tiny-playworks/game-ui-pixi` alpha bridge for canvas games
 
 Deferred:
 
-- Pixi.js overlay package
 - Figma plugin or sync automation
-- business components
+- Full skill tree, weapon wheel, enterprise business components
 
 ## Token foundation
 

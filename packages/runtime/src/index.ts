@@ -126,6 +126,34 @@ export interface ChoiceRuntimeRecord {
   selectedId?: string;
 }
 
+export interface PartyMemberRuntimeRecord {
+  id: string;
+  name: string;
+  health: number;
+  maxHealth: number;
+  shield?: number;
+  status?: StatusBadgeRuntimeRecord;
+  offline?: boolean;
+}
+
+export interface PartyRuntimeRecord {
+  members: PartyMemberRuntimeRecord[];
+  selectedId?: string;
+}
+
+export interface QuestLogQuestRuntimeRecord {
+  id: string;
+  title: string;
+  subtitle?: string;
+  objectives: QuestTrackerObjectiveRuntimeRecord[];
+}
+
+export interface QuestLogRuntimeRecord {
+  title?: string;
+  quests: QuestLogQuestRuntimeRecord[];
+  activeId?: string;
+}
+
 export interface ShopRuntimeRecord {
   id: string;
   title: string;
@@ -149,6 +177,7 @@ export interface GameUiRuntimeState {
       quest?: QuestRuntimeRecord;
       map?: MapRuntimeRecord;
       buffs?: StatusBadgeRuntimeRecord[];
+      party?: PartyRuntimeRecord;
     };
     feedback: {
       damage: DamageEventRecord[];
@@ -157,12 +186,13 @@ export interface GameUiRuntimeState {
       toasts: ToastEventRecord[];
     };
     narrative?: {
-      dialogue?: DialogueRuntimeRecord;
+      dialogueQueue: DialogueRuntimeRecord[];
       choices?: ChoiceRuntimeRecord;
     };
     modal: {
       reward?: RewardRevealRuntimeRecord;
       shop?: ShopRuntimeRecord;
+      questLog?: QuestLogRuntimeRecord;
     };
     debug: {
       events: string[];
@@ -191,7 +221,16 @@ export type GameUiEvent =
   | { type: 'buff:remove'; id: string }
   | { type: 'buff:clear' }
   | { type: 'dialogue:show'; payload: DialogueRuntimeRecord }
+  | { type: 'dialogue:enqueue'; payload: DialogueRuntimeRecord }
+  | { type: 'dialogue:advance' }
   | { type: 'dialogue:dismiss' }
+  | { type: 'party:set'; payload: PartyRuntimeRecord }
+  | { type: 'party:member:update'; payload: { id: string; patch: Partial<PartyMemberRuntimeRecord> } }
+  | { type: 'party:select'; id: string }
+  | { type: 'party:clear' }
+  | { type: 'quest-log:open'; payload: QuestLogRuntimeRecord }
+  | { type: 'quest-log:close' }
+  | { type: 'quest-log:activate'; id: string }
   | { type: 'choice:show'; payload: ChoiceRuntimeRecord }
   | { type: 'choice:select'; id: string }
   | { type: 'choice:clear' }
@@ -216,6 +255,10 @@ export interface GameUiRuntime {
   setMapMarkers(map: MapRuntimeRecord): void;
   upsertBuff(buff: StatusBadgeRuntimeRecord): void;
   showDialogue(dialogue: DialogueRuntimeRecord): void;
+  enqueueDialogue(dialogue: DialogueRuntimeRecord): void;
+  advanceDialogue(): void;
+  setParty(party: PartyRuntimeRecord): void;
+  openQuestLog(questLog: QuestLogRuntimeRecord): void;
   showChoices(choices: ChoiceRuntimeRecord): void;
   clearLayer(layer: GameUiLayerName): void;
 }
@@ -235,6 +278,15 @@ const defaultOptions = {
 const emptyHud = (): GameUiRuntimeState['layers']['hud'] => ({
   cooldowns: {},
 });
+
+type NarrativeLayerState = NonNullable<GameUiRuntimeState['layers']['narrative']>;
+
+function narrativeLayer(current: GameUiRuntimeState): NarrativeLayerState {
+  return {
+    dialogueQueue: current.layers.narrative?.dialogueQueue ?? [],
+    choices: current.layers.narrative?.choices,
+  };
+}
 
 export function createGameUiRuntime(options: GameUiRuntimeOptions = {}): GameUiRuntime {
   const runtimeOptions = { ...defaultOptions, ...options };
@@ -298,6 +350,18 @@ export function createGameUiRuntime(options: GameUiRuntimeOptions = {}): GameUiR
     showDialogue(dialogue) {
       dispatch({ type: 'dialogue:show', payload: dialogue });
     },
+    enqueueDialogue(dialogue) {
+      dispatch({ type: 'dialogue:enqueue', payload: dialogue });
+    },
+    advanceDialogue() {
+      dispatch({ type: 'dialogue:advance' });
+    },
+    setParty(party) {
+      dispatch({ type: 'party:set', payload: party });
+    },
+    openQuestLog(questLog) {
+      dispatch({ type: 'quest-log:open', payload: questLog });
+    },
     showChoices(choices) {
       dispatch({ type: 'choice:show', payload: choices });
     },
@@ -317,7 +381,7 @@ function createInitialState(): GameUiRuntimeState {
       notification: {
         toasts: [],
       },
-      narrative: {},
+      narrative: { dialogueQueue: [] },
       modal: {},
       debug: {
         events: [],
@@ -606,36 +670,164 @@ function reduceState(
         layers: {
           ...current.layers,
           narrative: {
-            ...current.layers.narrative,
-            dialogue: event.payload,
+            ...narrativeLayer(current),
+            dialogueQueue: [event.payload],
           },
         },
       };
+    case 'dialogue:enqueue': {
+      const narrative = narrativeLayer(current);
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          narrative: {
+            ...narrative,
+            dialogueQueue: [...narrative.dialogueQueue, event.payload],
+          },
+        },
+      };
+    }
+    case 'dialogue:advance': {
+      const narrative = narrativeLayer(current);
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          narrative: {
+            ...narrative,
+            dialogueQueue: narrative.dialogueQueue.slice(1),
+          },
+        },
+      };
+    }
     case 'dialogue:dismiss':
       return {
         ...current,
         layers: {
           ...current.layers,
           narrative: {
-            ...current.layers.narrative,
-            dialogue: undefined,
+            ...narrativeLayer(current),
+            dialogueQueue: [],
           },
         },
       };
+    case 'party:set':
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          hud: {
+            ...current.layers.hud,
+            party: event.payload,
+          },
+        },
+      };
+    case 'party:member:update': {
+      const party = current.layers.hud.party;
+      if (!party) {
+        return current;
+      }
+
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          hud: {
+            ...current.layers.hud,
+            party: {
+              ...party,
+              members: party.members.map((member) =>
+                member.id === event.payload.id ? { ...member, ...event.payload.patch } : member,
+              ),
+            },
+          },
+        },
+      };
+    }
+    case 'party:select': {
+      const party = current.layers.hud.party;
+      if (!party) {
+        return current;
+      }
+
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          hud: {
+            ...current.layers.hud,
+            party: { ...party, selectedId: event.id },
+          },
+        },
+      };
+    }
+    case 'party:clear':
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          hud: {
+            ...current.layers.hud,
+            party: undefined,
+          },
+        },
+      };
+    case 'quest-log:open':
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          modal: {
+            ...current.layers.modal,
+            questLog: event.payload,
+            reward: undefined,
+            shop: undefined,
+          },
+        },
+      };
+    case 'quest-log:close':
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          modal: {
+            ...current.layers.modal,
+            questLog: undefined,
+          },
+        },
+      };
+    case 'quest-log:activate': {
+      const questLog = current.layers.modal.questLog;
+      if (!questLog) {
+        return current;
+      }
+
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          modal: {
+            ...current.layers.modal,
+            questLog: { ...questLog, activeId: event.id },
+          },
+        },
+      };
+    }
     case 'choice:show':
       return {
         ...current,
         layers: {
           ...current.layers,
           narrative: {
-            ...current.layers.narrative,
+            ...narrativeLayer(current),
             choices: event.payload,
           },
         },
       };
     case 'choice:select': {
-      const choices = current.layers.narrative?.choices;
-      if (!choices) {
+      const narrative = narrativeLayer(current);
+      if (!narrative.choices) {
         return current;
       }
 
@@ -644,8 +836,8 @@ function reduceState(
         layers: {
           ...current.layers,
           narrative: {
-            ...current.layers.narrative,
-            choices: { ...choices, selectedId: event.id },
+            ...narrative,
+            choices: { ...narrative.choices, selectedId: event.id },
           },
         },
       };
@@ -656,7 +848,7 @@ function reduceState(
         layers: {
           ...current.layers,
           narrative: {
-            ...current.layers.narrative,
+            ...narrativeLayer(current),
             choices: undefined,
           },
         },
@@ -669,6 +861,7 @@ function reduceState(
           modal: {
             reward: event.payload,
             shop: undefined,
+            questLog: undefined,
           },
         },
       };
@@ -710,6 +903,7 @@ function reduceState(
           modal: {
             shop: event.payload,
             reward: undefined,
+            questLog: undefined,
           },
         },
       };
@@ -743,7 +937,7 @@ function clearRuntimeLayer(current: GameUiRuntimeState, layer: GameUiLayerName):
   }
 
   if (layer === 'narrative') {
-    return { ...current, layers: { ...current.layers, narrative: {} } };
+    return { ...current, layers: { ...current.layers, narrative: { dialogueQueue: [] } } };
   }
 
   if (layer === 'modal') {
