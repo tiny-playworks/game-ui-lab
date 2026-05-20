@@ -11,7 +11,7 @@ This is not another React business UI library. The project focuses on motion-fir
 ## What This Project Is
 
 - A React + TypeScript primitive kit for game-like web UI.
-- A token-driven UI layer built on CSS variables.
+- A Panda CSS driven UI layer built on design tokens, recipes, and static CSS output.
 - A Docs-native lab page for testing combined feedback behavior in motion.
 - A foundation for future Pixi.js overlay experiments.
 
@@ -157,6 +157,30 @@ Run type checks:
 pnpm typecheck
 ```
 
+## Release
+
+Prepare a release bundle locally:
+
+```bash
+pnpm release 0.2.0
+```
+
+This updates both package versions, runs `test` / `typecheck` / `build`, and writes publishable tarballs to `.release/v0.2.0/`.
+
+Manual publish remains available:
+
+```bash
+cd packages/tokens
+npm publish --access public
+
+cd ../primitives
+npm publish --access public
+```
+
+If GitHub Actions has a valid `NPM_TOKEN` secret, pushing a tag such as `v0.2.0` can publish automatically. The workflow checks that both package versions already equal the tag version before publishing.
+
+If your npm account enforces 2FA for publish, the token itself must be a granular token with write permission and `Bypass 2FA` enabled. If that option is not enabled, the workflow will fail during `npm publish`.
+
 ## Phase 2 Scope
 
 Phase 2 makes the project publicly consumable:
@@ -165,7 +189,7 @@ Phase 2 makes the project publicly consumable:
 - `packages/tokens`
 - `packages/primitives`
 - `apps/docs`
-- CSS variable token foundation
+- Panda preset based token foundation
 - Rspress docs as the public Pages entry
 - built-in Docs lab under `/lab`
 - public API boundary from `@tiny-playworks/game-ui`
@@ -180,9 +204,10 @@ Deferred:
 
 ## Token foundation
 
-Current tokens are a CSS variables foundation exported from `@tiny-playworks/tokens`.
+Current tokens are a single-source design token system exported from `@tiny-playworks/tokens`.
 
-- The Docs token pages and Lab use them as project assets through structured metadata.
+- The package exports token metadata, theme names, scoped token override helpers, and a Panda preset.
+- The generated CSS still exposes stable `--game-ui-*` variables for direct consumption and local overrides.
 - This is not a full Figma sync pipeline in the current phase.
 - Rspress carries the docs, token overview, primitive pages, and live Lab in one runtime.
 

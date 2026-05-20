@@ -6,8 +6,8 @@ import { Localized } from '../../components/locale';
   eyebrowEn="Getting Started"
   titleZh="Getting Started"
   titleEn="Getting Started"
-  summaryZh="安装包，从公开入口导入组件。"
-  summaryEn="Install the packages and import components from the public entry."
+  summaryZh="安装包，从公开入口导入组件和静态样式。"
+  summaryEn="Install the packages and import components and static styles from the public entry."
 >
   <section className="docs-section">
     <Localized
@@ -31,7 +31,7 @@ import '@tiny-playworks/game-ui/styles.css';
 
 export function CombatPulse() {
   return (
-    <GameUiProvider>
+    <GameUiProvider theme="arcade" tokens={{ accent: '#ff7ad9' }}>
       <DamageNumber value="512" variant="critical" prefix="CRIT" />
     </GameUiProvider>
   );

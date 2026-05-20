@@ -1,0 +1,61 @@
+name: Publish npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Use pnpm 11
+        run: corepack prepare pnpm@11.1.2 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate release version
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          expected="${GITHUB_REF_NAME#v}"
+          tokens_version="$(node -p "require('./packages/tokens/package.json').version")"
+          game_ui_version="$(node -p "require('./packages/primitives/package.json').version")"
+          test "$tokens_version" = "$expected"
+          test "$game_ui_version" = "$expected"
+
+      - name: Test
+        run: pnpm test
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish tokens
+        run: pnpm --filter @tiny-playworks/tokens publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish game-ui
+        run: pnpm --filter @tiny-playworks/game-ui publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,6 +1,5 @@
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { basename, join, resolve } from 'node:path';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const repoRoot = resolve(import.meta.dirname, '..');
@@ -14,37 +13,15 @@ if (!version || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z-.]+)?$/.test(version)) {
 }
 
 const releaseTag = `v${version}`;
-const packageTags = [`tokens-v${version}`, `game-ui-v${version}`];
-const releaseCommitMessage = `chore: release ${releaseTag}`;
-const releaseTempDir = mkdtempSync(join(tmpdir(), 'game-ui-release-'));
-const releaseAssetsDir = resolve(releaseTempDir, 'assets');
-mkdirSync(releaseAssetsDir, { recursive: true });
+const releaseDir = resolve(repoRoot, '.release', releaseTag);
 
 run('git', ['diff', '--quiet'], { allowFailure: false });
 run('git', ['diff', '--cached', '--quiet'], { allowFailure: false });
 const worktreeStatus = run('git', ['status', '--porcelain'], { allowFailure: false }).stdout.trim();
-const currentBranch = run('git', ['branch', '--show-current'], { allowFailure: false }).stdout.trim();
 
 if (worktreeStatus) {
-  fail('Release requires a clean git worktree, including untracked files.');
+  fail('Release preparation requires a clean git worktree, including untracked files.');
 }
-
-if (currentBranch !== 'main') {
-  fail('Release must run from main.');
-}
-
-run('git', ['fetch', '--tags', 'origin'], { allowFailure: false });
-
-if (run('git', ['rev-parse', '--verify', '--quiet', releaseTag], { allowFailure: true }).status === 0) {
-  fail(`Local tag ${releaseTag} already exists.`);
-}
-
-if (run('git', ['ls-remote', '--tags', 'origin', releaseTag], { allowFailure: true }).stdout.trim()) {
-  fail(`Remote tag ${releaseTag} already exists.`);
-}
-
-run('gh', ['auth', 'status'], { allowFailure: false });
-run('npm', ['whoami'], { allowFailure: false });
 
 updatePackageVersion(tokensDir, version);
 updatePackageVersion(primitivesDir, version);
@@ -53,55 +30,41 @@ run('pnpm', ['test'], { allowFailure: false });
 run('pnpm', ['typecheck'], { allowFailure: false });
 run('pnpm', ['build'], { allowFailure: false });
 
-run('pnpm', ['--filter', '@tiny-playworks/tokens', 'pack', '--pack-destination', releaseAssetsDir], { allowFailure: false });
-run('pnpm', ['--filter', '@tiny-playworks/game-ui', 'pack', '--pack-destination', releaseAssetsDir], { allowFailure: false });
+rmSync(releaseDir, { force: true, recursive: true });
+mkdirSync(releaseDir, { recursive: true });
 
-run('git', ['add', 'packages/tokens/package.json', 'packages/primitives/package.json'], { allowFailure: false });
-run('git', ['commit', '-m', releaseCommitMessage], { allowFailure: false });
+run('pnpm', ['--filter', '@tiny-playworks/tokens', 'pack', '--pack-destination', releaseDir], { allowFailure: false });
+run('pnpm', ['--filter', '@tiny-playworks/game-ui', 'pack', '--pack-destination', releaseDir], { allowFailure: false });
 
-run('pnpm', ['--filter', '@tiny-playworks/tokens', 'publish', '--access', 'public', '--no-git-checks'], {
-  allowFailure: false,
-});
-run('pnpm', ['--filter', '@tiny-playworks/game-ui', 'publish', '--access', 'public', '--no-git-checks'], {
-  allowFailure: false,
-});
+const tarballs = findTarballs(releaseDir);
 
-run('git', ['tag', releaseTag], { allowFailure: false });
-
-for (const tag of packageTags) {
-  run('git', ['tag', tag], { allowFailure: false });
+if (tarballs.length !== 2) {
+  fail(`Expected 2 tarballs in ${releaseDir}, got ${tarballs.length}.`);
 }
 
-run('git', ['push', 'origin', 'main'], { allowFailure: false });
-run('git', ['push', 'origin', releaseTag, ...packageTags], { allowFailure: false });
-
-const releaseNotes = [
-  'Published packages:',
-  `- @tiny-playworks/tokens@${version}`,
-  `- @tiny-playworks/game-ui@${version}`,
+const nextSteps = [
+  `Prepared ${releaseTag}`,
   '',
-  'npm publish completed before this release was created.',
+  'Version files updated:',
+  `- packages/tokens/package.json -> ${version}`,
+  `- packages/primitives/package.json -> ${version}`,
+  '',
+  'Tarballs:',
+  ...tarballs.map((filePath) => `- ${filePath}`),
+  '',
+  'Manual publish commands:',
+  `- cd ${tokensDir} && npm publish --access public`,
+  `- cd ${primitivesDir} && npm publish --access public`,
+  '',
+  'After npm publish succeeds:',
+  `- git add packages/tokens/package.json packages/primitives/package.json pnpm-lock.yaml`,
+  `- git commit -m "chore: release ${releaseTag}"`,
+  `- git tag ${releaseTag}`,
+  `- git push origin HEAD`,
+  `- git push origin ${releaseTag}`,
 ].join('\n');
 
-const assets = findTarballs(releaseAssetsDir).map((filePath) => `${filePath}#${basename(filePath)}`);
-run(
-  'gh',
-  [
-    'release',
-    'create',
-    releaseTag,
-    '--title',
-    releaseTag,
-    '--generate-notes',
-    '--notes',
-    releaseNotes,
-    '--verify-tag',
-    ...assets,
-  ],
-  { allowFailure: false },
-);
-
-rmSync(releaseTempDir, { force: true, recursive: true });
+process.stdout.write(`${nextSteps}\n`);
 
 function updatePackageVersion(packageDir, nextVersion) {
   const packageJsonPath = resolve(packageDir, 'package.json');
