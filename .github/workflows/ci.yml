@@ -41,5 +41,11 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Setup Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
+
       - name: Visual smoke
+        env:
+          CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: pnpm visual:smoke

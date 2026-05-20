@@ -12,6 +12,8 @@ const docsDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const buildDir = resolve(docsDir, 'doc_build');
 const artifactDir = resolve(docsDir, 'smoke-artifacts');
 const chromePath = process.env.CHROME_BIN ?? findChrome();
+const debuggingPort = Number(process.env.DOCS_SMOKE_CHROME_PORT ?? 9222);
+const debuggerTimeoutMs = Number(process.env.DOCS_SMOKE_DEBUGGER_TIMEOUT_MS ?? (process.env.CI ? 30_000 : 10_000));
 const publicBase = '/game-ui-lab/';
 
 const routes = [
@@ -66,6 +68,9 @@ await new Promise((resolveListen) => {
   server.listen(port, host, resolveListen);
 });
 
+const userDataDir = join(artifactDir, '.chrome-profile');
+let chromeProcess;
+
 try {
   for (const route of routes) {
     for (const viewport of viewports) {
@@ -81,7 +86,6 @@ try {
         route,
         screenshotPath,
         url,
-        userDataDir: join(artifactDir, `.chrome-${slug}`),
         viewport,
       });
 
@@ -94,6 +98,7 @@ try {
 
   console.log(`Docs smoke passed. Screenshots: ${artifactDir}`);
 } finally {
+  stopProcessTree(chromeProcess?.pid);
   await new Promise((resolveClose) => {
     server.close(resolveClose);
   });
@@ -127,56 +132,82 @@ function contentType(filePath) {
   return 'application/octet-stream';
 }
 
-async function captureRoute({ route, screenshotPath, userDataDir, url, viewport }) {
-  const debuggingPort = 9_430 + routes.indexOf(route) * 10 + viewports.indexOf(viewport);
-  const chrome = spawn(chromePath, [
+async function captureRoute({ route, screenshotPath, url, viewport }) {
+  const cdp = await getCdpClient();
+
+  await cdp.send('Emulation.setDeviceMetricsOverride', {
+    width: viewport.width,
+    height: viewport.height,
+    deviceScaleFactor: 1,
+    mobile: viewport.mobile,
+  });
+
+  const loadPromise = cdp.waitFor('Page.loadEventFired');
+  await cdp.send('Page.navigate', { url });
+  await loadPromise;
+  await waitForText(cdp, route.keyText);
+
+  const screenshot = await cdp.send('Page.captureScreenshot', {
+    captureBeyondViewport: false,
+    format: 'png',
+  });
+
+  writeFileSync(screenshotPath, Buffer.from(screenshot.data, 'base64'));
+}
+
+async function getCdpClient() {
+  if (getCdpClient.client) {
+    return getCdpClient.client;
+  }
+
+  chromeProcess = spawnChrome(debuggingPort, userDataDir);
+  const webSocketDebuggerUrl = await waitForDebugger(debuggingPort, chromeProcess);
+  const cdp = await createCdpClient(webSocketDebuggerUrl);
+
+  await cdp.send('Page.enable');
+  await cdp.send('Runtime.enable');
+
+  getCdpClient.client = cdp;
+  return cdp;
+}
+
+function spawnChrome(portNumber, profileDir) {
+  mkdirSync(profileDir, { recursive: true });
+
+  const args = [
     '--headless=new',
     '--disable-gpu',
     '--no-first-run',
     '--no-default-browser-check',
-    `--remote-debugging-port=${debuggingPort}`,
-    `--user-data-dir=${userDataDir}`,
-    `--window-size=${viewport.width},${viewport.height}`,
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-background-networking',
+    '--disable-extensions',
+    `--remote-debugging-port=${portNumber}`,
+    `--user-data-dir=${profileDir}`,
     'about:blank',
-  ], {
-    stdio: 'ignore',
+  ];
+
+  return spawn(chromePath, args, {
+    detached: process.platform !== 'win32',
+    stdio: ['ignore', 'pipe', 'pipe'],
   });
-
-  try {
-    const webSocketDebuggerUrl = await waitForDebugger(debuggingPort);
-    const cdp = await createCdpClient(webSocketDebuggerUrl);
-
-    await cdp.send('Page.enable');
-    await cdp.send('Runtime.enable');
-    await cdp.send('Emulation.setDeviceMetricsOverride', {
-      width: viewport.width,
-      height: viewport.height,
-      deviceScaleFactor: 1,
-      mobile: viewport.mobile,
-    });
-
-    const loadPromise = cdp.waitFor('Page.loadEventFired');
-    await cdp.send('Page.navigate', { url });
-    await loadPromise;
-    await waitForText(cdp, route.keyText);
-
-    const screenshot = await cdp.send('Page.captureScreenshot', {
-      captureBeyondViewport: false,
-      format: 'png',
-    });
-
-    writeFileSync(screenshotPath, Buffer.from(screenshot.data, 'base64'));
-    cdp.close();
-  } finally {
-    stopProcessTree(chrome.pid);
-  }
 }
 
-async function waitForDebugger(portNumber) {
+async function waitForDebugger(portNumber, chrome) {
   const endpoint = `http://127.0.0.1:${portNumber}/json/list`;
-  const deadline = Date.now() + 10_000;
+  const deadline = Date.now() + debuggerTimeoutMs;
+  let lastError = '';
 
   while (Date.now() < deadline) {
+    if (chrome?.exitCode !== null) {
+      const stderr = chrome.stderr ? await readStream(chrome.stderr) : '';
+      throw new Error(
+        `Chrome exited before the debugger started (code ${chrome.exitCode}). stderr: ${stderr || '(empty)'}`,
+      );
+    }
+
     try {
       const response = await fetch(endpoint);
       if (response.ok) {
@@ -186,12 +217,25 @@ async function waitForDebugger(portNumber) {
           return pageTarget.webSocketDebuggerUrl;
         }
       }
-    } catch {
-      await delay(200);
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error);
     }
+
+    await delay(250);
   }
 
-  throw new Error(`Chrome debugging endpoint did not start on port ${portNumber}`);
+  throw new Error(
+    `Chrome debugging endpoint did not start on port ${portNumber} within ${debuggerTimeoutMs}ms. Last error: ${lastError || 'none'}`,
+  );
+}
+
+async function readStream(stream) {
+  const chunks = [];
+  for await (const chunk of stream) {
+    chunks.push(chunk);
+  }
+
+  return Buffer.concat(chunks).toString('utf8').trim();
 }
 
 async function waitForText(cdp, text) {
@@ -277,9 +321,13 @@ function stopProcessTree(pid) {
   }
 
   try {
-    process.kill(pid);
+    process.kill(-pid, 'SIGTERM');
   } catch {
-    // Process already exited.
+    try {
+      process.kill(pid, 'SIGTERM');
+    } catch {
+      // Process already exited.
+    }
   }
 }
 
@@ -293,7 +341,13 @@ function findChrome() {
         ]
       : process.platform === 'darwin'
         ? ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome']
-        : ['/usr/bin/google-chrome', '/usr/bin/google-chrome-stable', '/usr/bin/chromium', '/usr/bin/chromium-browser'];
+        : [
+            process.env.CHROME_PATH,
+            '/usr/bin/google-chrome',
+            '/usr/bin/google-chrome-stable',
+            '/usr/bin/chromium',
+            '/usr/bin/chromium-browser',
+          ];
 
   return candidates.find((candidate) => candidate && existsSync(candidate));
 }
