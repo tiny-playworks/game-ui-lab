@@ -66,3 +66,8 @@ jobs:
         run: pnpm --filter @tiny-playworks/game-ui publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish game-ui-pixi
+        run: pnpm --filter @tiny-playworks/game-ui-pixi publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

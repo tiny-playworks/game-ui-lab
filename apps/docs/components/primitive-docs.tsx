@@ -1012,9 +1012,6 @@ export function PrimitiveOverview() {
 
 export function PrimitiveDocPage({ id }: { id: PrimitiveId }) {
   const doc = docs[id];
-  const Preview = doc.Preview;
-  const { locale } = useDocsLocale();
-  const snippet = locale === 'zh' ? doc.snippetZh : doc.snippetEn;
 
   return (
     <DocShell
@@ -1025,6 +1022,18 @@ export function PrimitiveDocPage({ id }: { id: PrimitiveId }) {
       summaryZh={doc.summaryZh}
       summaryEn={doc.summaryEn}
     >
+      <PrimitiveDocPageBody doc={doc} />
+    </DocShell>
+  );
+}
+
+function PrimitiveDocPageBody({ doc }: { doc: PrimitiveDoc }) {
+  const Preview = doc.Preview;
+  const { locale } = useDocsLocale();
+  const snippet = locale === 'zh' ? doc.snippetZh : doc.snippetEn;
+
+  return (
+    <>
       <DemoBlock key={locale} titleZh="代码演示" titleEn="Examples" code={snippet}>
         <GameUiProvider className="docs-game-stage">
           <Preview />
@@ -1061,7 +1070,7 @@ export function PrimitiveDocPage({ id }: { id: PrimitiveId }) {
           />
         </a>
       </section>
-    </DocShell>
+    </>
   );
 }
 
