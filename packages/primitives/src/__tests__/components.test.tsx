@@ -226,6 +226,29 @@ describe('game ui primitives', () => {
     expect(screen.getByRole('status', { name: 'Nova disabled' }).getAttribute('data-disabled')).toBe('true');
   });
 
+  it('allows ability bars to customize rendered ability items', () => {
+    render(
+      <AbilityBar
+        selectedId="blink"
+        abilities={[
+          { id: 'blink', label: 'Blink', icon: 'B', ready: true, className: 'ability-item' },
+          { id: 'nova', label: 'Nova', icon: 'N', locked: true },
+        ]}
+        renderAbility={(ability, state, defaultNode) => (
+          <div data-testid={`ability-${ability.id}`} data-index={state.index} data-selected={state.selected} data-disabled={state.disabled}>
+            {defaultNode}
+            <span>{state.selected ? 'selected' : 'idle'}</span>
+          </div>
+        )}
+      />,
+    );
+
+    expect(screen.getByTestId('ability-blink').getAttribute('data-index')).toBe('0');
+    expect(screen.getByTestId('ability-blink').getAttribute('data-selected')).toBe('true');
+    expect(screen.getByTestId('ability-nova').getAttribute('data-disabled')).toBe('true');
+    expect(screen.getByText('selected').textContent).toBe('selected');
+  });
+
   it('renders ability tooltip metadata', () => {
     render(<AbilityTooltip name="Blink" description="Dash through danger." cost="20 MP" cooldown="8s" state="ready" />);
 
@@ -347,6 +370,29 @@ describe('game ui primitives', () => {
     expect(selected).toBe('left');
   });
 
+  it('exposes richer choice prompt option state and metadata', () => {
+    const selected: string[] = [];
+
+    render(
+      <ChoicePrompt
+        title="Choose route"
+        label="Route choices"
+        selectedId="right"
+        choices={[
+          { id: 'left', label: 'Left path', icon: 'L', meta: 'Safe', className: 'route-choice' },
+          { id: 'right', label: 'Right path', description: 'Fast', meta: 'Risky' },
+        ]}
+        onChoice={(id, choice) => selected.push(`${id}:${choice.label}`)}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Left path Safe' }));
+
+    expect(screen.getByRole('group', { name: 'Route choices' }).textContent).toContain('Risky');
+    expect(screen.getByRole('button', { name: 'Right path Fast Risky' }).getAttribute('data-selected')).toBe('true');
+    expect(selected).toEqual(['left:Left path']);
+  });
+
   it('renders quest log and notification stack', () => {
     render(
       <>
@@ -376,6 +422,59 @@ describe('game ui primitives', () => {
     expect(screen.getByLabelText('Notifications 4 items').textContent).toContain('+2 more');
   });
 
+  it('allows collection primitives to customize item and overflow rendering', () => {
+    render(
+      <>
+        <LootStack
+          label="Drops"
+          limit={1}
+          overflowLabel={(count) => `${count} hidden`}
+          renderItem={(item, state, defaultNode) => (
+            <li data-testid={`loot-${item.id}`} data-selected={state.selected}>
+              {defaultNode}
+            </li>
+          )}
+          selectedId="credits"
+          items={[
+            { id: 'credits', name: 'Credits', rarity: 'common', quantity: 120 },
+            { id: 'core', name: 'Pulse Core', rarity: 'rare', quantity: 1 },
+          ]}
+        />
+        <MiniMap
+          selectedId="enemy"
+          renderMarker={(marker, state, defaultNode) => (
+            <span data-testid={`marker-${marker.id}`} data-selected={state.selected}>
+              {defaultNode}
+            </span>
+          )}
+          markers={[
+            { id: 'ally', x: 18, y: 40, tone: 'ally', label: 'Ally' },
+            { id: 'enemy', x: 72, y: 52, tone: 'enemy', label: 'Enemy' },
+          ]}
+        />
+        <NotificationStack
+          limit={1}
+          overflowLabel={(count) => `${count} queued`}
+          renderNotification={(notification, state, defaultNode) => (
+            <div data-testid={`toast-${notification.id}`} data-index={state.index}>
+              {defaultNode}
+            </div>
+          )}
+          notifications={[
+            { id: 'loot', title: 'Loot', message: 'Cache found', variant: 'loot' },
+            { id: 'warn', title: 'Warning', message: 'Patrol nearby', variant: 'warning' },
+          ]}
+        />
+      </>,
+    );
+
+    expect(screen.getByTestId('loot-credits').getAttribute('data-selected')).toBe('true');
+    expect(screen.getByTestId('marker-enemy').getAttribute('data-selected')).toBe('true');
+    expect(screen.getByTestId('toast-loot').getAttribute('data-index')).toBe('0');
+    expect(screen.getByText('1 hidden').textContent).toBe('1 hidden');
+    expect(screen.getByText('1 queued').textContent).toBe('1 queued');
+  });
+
   it('activates quests through quest log callbacks', () => {
     const active: string[] = [];
 
@@ -397,6 +496,32 @@ describe('game ui primitives', () => {
 
     expect(active).toEqual(['signal']);
     expect(screen.getByRole('button').getAttribute('data-active')).toBe('true');
+  });
+
+  it('allows quest logs to customize quest and label rendering', () => {
+    render(
+      <QuestLog
+        activeId="signal"
+        questCountLabel={(count) => `${count} tracked`}
+        activeLabel={(id) => `Now tracking ${id}`}
+        renderQuest={(quest, state, defaultNode) => (
+          <div data-testid={`quest-${quest.id}`} data-selected={state.selected}>
+            {defaultNode}
+          </div>
+        )}
+        quests={[
+          {
+            id: 'signal',
+            title: 'Signal Hunt',
+            objectives: [{ id: 'beacon', label: 'Find beacon', state: 'complete' }],
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText('1 tracked').textContent).toBe('1 tracked');
+    expect(screen.getByText('Now tracking signal').textContent).toBe('Now tracking signal');
+    expect(screen.getByTestId('quest-signal').getAttribute('data-selected')).toBe('true');
   });
 
   it('renders a loot stack with capped visible items', () => {

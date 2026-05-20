@@ -57,4 +57,4 @@ export {
   useGameUiRuntime,
 } from './runtime';
 export type { GameUiLayerHostProps, GameUiRuntimeProviderProps } from './runtime';
-export type { GameUiMotionMode } from './types';
+export type { GameUiCollectionItemState, GameUiCollectionRenderer, GameUiMotionMode } from './types';

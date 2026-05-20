@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import {
   choicePromptChoiceClass,
   choicePromptChoiceDescriptionClass,
@@ -13,31 +13,42 @@ export interface ChoicePromptOption {
   id: string;
   label: string;
   description?: ReactNode;
+  icon?: ReactNode;
+  meta?: ReactNode;
   disabled?: boolean;
+  className?: string;
 }
 
 export interface ChoicePromptProps {
   title: string;
   choices: ChoicePromptOption[];
-  onChoice?: (id: string) => void;
+  selectedId?: string;
+  onChoice?: (id: string, choice: ChoicePromptOption) => void;
+  label?: string;
   className?: string;
+  style?: CSSProperties;
 }
 
-export function ChoicePrompt({ title, choices, onChoice, className }: ChoicePromptProps) {
+export function ChoicePrompt({ title, choices, selectedId, onChoice, label, className, style }: ChoicePromptProps) {
   return (
-    <section className={mergeClass(choicePromptClass, className)} role="group" aria-label={title}>
+    <section className={mergeClass(choicePromptClass, className)} role="group" aria-label={label ?? title} style={style}>
       <strong className={choicePromptTitleClass}>{title}</strong>
       <div className={choicePromptChoicesClass}>
         {choices.map((choice) => (
           <button
             key={choice.id}
-            className={choicePromptChoiceClass}
+            className={mergeClass(choicePromptChoiceClass, choice.className)}
             type="button"
             disabled={choice.disabled}
-            onClick={() => onChoice?.(choice.id)}
+            data-selected={selectedId === choice.id}
+            onClick={() => onChoice?.(choice.id, choice)}
           >
-            <span>{choice.label}</span>
+            <span>
+              {choice.icon ? <span aria-hidden="true">{choice.icon}</span> : null}
+              {choice.label}
+            </span>
             {choice.description ? <small className={choicePromptChoiceDescriptionClass}>{choice.description}</small> : null}
+            {choice.meta ? <small className={choicePromptChoiceDescriptionClass}>{choice.meta}</small> : null}
           </button>
         ))}
       </div>
