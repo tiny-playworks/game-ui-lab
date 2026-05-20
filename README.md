@@ -162,10 +162,10 @@ pnpm typecheck
 Prepare a release bundle locally:
 
 ```bash
-pnpm release 0.2.0
+pnpm release 0.2.1
 ```
 
-This updates both package versions, runs `test` / `typecheck` / `build`, and writes publishable tarballs to `.release/v0.2.0/`.
+This updates both package versions, runs `test` / `typecheck` / `build`, and writes publishable tarballs to `.release/v0.2.1/`.
 
 Manual publish remains available:
 
@@ -177,7 +177,7 @@ cd ../primitives
 npm publish --access public
 ```
 
-If GitHub Actions has a valid `NPM_TOKEN` secret, pushing a tag such as `v0.2.0` can publish automatically. The workflow checks that both package versions already equal the tag version before publishing.
+If GitHub Actions has a valid `NPM_TOKEN` secret, pushing a tag such as `v0.2.1` can publish automatically. The workflow checks that both package versions already equal the tag version before publishing.
 
 If your npm account enforces 2FA for publish, the token itself must be a granular token with write permission and `Bypass 2FA` enabled. If that option is not enabled, the workflow will fail during `npm publish`.
 
