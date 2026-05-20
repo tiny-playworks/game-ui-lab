@@ -2,6 +2,7 @@ import { motion, type Transition } from 'motion/react';
 import React from 'react';
 import type { CSSProperties } from 'react';
 import { damageNumberPrefixClass, damageNumberRecipe, mergeClass } from '../styles';
+import type { GameUiMotionMode } from '../types';
 
 export type DamageNumberVariant = 'damage' | 'heal' | 'critical' | 'miss';
 
@@ -10,6 +11,8 @@ export interface DamageNumberProps {
   variant?: DamageNumberVariant;
   prefix?: string;
   size?: number;
+  motion?: GameUiMotionMode;
+  onExitComplete?: () => void;
   className?: string;
   style?: CSSProperties;
 }
@@ -21,29 +24,56 @@ const transitions: Record<DamageNumberVariant, Transition> = {
   miss: { duration: 0.56, ease: [0.16, 1, 0.3, 1] },
 };
 
+const MotionSpan = motion.span ?? 'span';
+
 export function DamageNumber({
   value,
   variant = 'damage',
   prefix,
   size,
+  motion = 'live',
+  onExitComplete,
   className,
   style,
 }: DamageNumberProps) {
   const isCritical = variant === 'critical';
+  const damageStyle = { ...style, '--game-ui-damage-size': size ? `${size}px` : undefined } as CSSProperties;
+  const content = (
+    <>
+      {prefix ? <span className={damageNumberPrefixClass}>{prefix}</span> : null}
+      {value}
+    </>
+  );
+
+  if (motion !== 'live') {
+    return (
+      <span
+        className={mergeClass(damageNumberRecipe({ variant }), className)}
+        data-variant={variant}
+        data-motion={motion}
+        style={damageStyle}
+        role="status"
+        aria-label={`${variant} ${value}`}
+      >
+        {content}
+      </span>
+    );
+  }
 
   return (
-    <motion.span
+    <MotionSpan
       className={mergeClass(damageNumberRecipe({ variant }), className)}
       data-variant={variant}
-      style={{ ...style, '--game-ui-damage-size': size ? `${size}px` : undefined } as CSSProperties}
+      data-motion={motion}
+      style={damageStyle}
       initial={{ opacity: 0, y: 18, scale: isCritical ? 0.62 : 0.84, rotate: isCritical ? -5 : 0 }}
       animate={{ opacity: [0, 1, 1, 0], y: [18, -8, -28, -44], scale: isCritical ? [0.62, 1.32, 1, 0.92] : [0.84, 1.05, 1, 0.92] }}
       transition={transitions[variant]}
+      onAnimationComplete={onExitComplete}
       role="status"
       aria-label={`${variant} ${value}`}
     >
-      {prefix ? <span className={damageNumberPrefixClass}>{prefix}</span> : null}
-      {value}
-    </motion.span>
+      {content}
+    </MotionSpan>
   );
 }

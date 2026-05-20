@@ -1,0 +1,22 @@
+import { DocShell } from '../../components/doc-shell';
+import { Localized } from '../../components/locale';
+import { EncounterDemo } from '../../components/encounter-demo';
+
+<DocShell
+  eyebrowZh="Runtime"
+  eyebrowEn="Runtime"
+  titleZh="Encounter Demo"
+  titleEn="Encounter Demo"
+  summaryZh="用 headless runtime 驱动 HUD、反馈、通知和奖励层。"
+  summaryEn="Drive HUD, feedback, notifications, and rewards through the headless runtime."
+>
+  <section className="docs-product-section">
+    <Localized
+      as="h2"
+      className="docs-product-heading"
+      zh="战斗切片"
+      en="Encounter Slice"
+    />
+    <EncounterDemo />
+  </section>
+</DocShell>

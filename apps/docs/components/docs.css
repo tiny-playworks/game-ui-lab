@@ -188,8 +188,16 @@ html.dark,
   min-width: 0;
   padding: 24px;
   background:
-    radial-gradient(circle at 16% 10%, rgba(85, 247, 210, 0.18), transparent 30%),
-    radial-gradient(circle at 86% 8%, rgba(180, 124, 255, 0.16), transparent 30%),
+    radial-gradient(
+      circle at 16% 10%,
+      rgba(85, 247, 210, 0.18),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 86% 8%,
+      rgba(180, 124, 255, 0.16),
+      transparent 30%
+    ),
     linear-gradient(180deg, rgba(13, 24, 43, 0.96), var(--docs-stage));
 }
 
@@ -211,17 +219,89 @@ html.dark,
     0 28px 80px rgba(3, 7, 18, 0.28);
 }
 
-.docs-static-motion {
-  opacity: 1 !important;
-  transform: none !important;
-}
-
 .docs-demo-block__code {
   margin: 0;
   padding: 16px;
   overflow: auto;
   border-top: 1px solid var(--docs-line);
   background: var(--docs-code);
+}
+
+.encounter-demo {
+  position: relative;
+  overflow: hidden;
+  min-height: 560px;
+  border: 1px solid var(--docs-stage-line);
+  border-radius: 12px;
+  background:
+    radial-gradient(
+      circle at 58% 34%,
+      rgba(255, 209, 102, 0.18),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 18% 18%,
+      rgba(85, 247, 210, 0.16),
+      transparent 26%
+    ),
+    linear-gradient(180deg, rgba(13, 24, 43, 0.96), var(--docs-stage));
+  color: var(--docs-text);
+}
+
+.encounter-demo__scene {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 20px;
+  min-height: 480px;
+  padding: 28px;
+}
+
+.encounter-demo__target {
+  display: grid;
+  min-height: 280px;
+  place-items: center;
+}
+
+.encounter-demo__hud,
+.encounter-demo__loot {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.encounter-demo__controls {
+  position: relative;
+  z-index: 45;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 28px 28px;
+}
+
+.encounter-demo__controls button {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--docs-stage-line);
+  border-radius: 8px;
+  background: rgba(85, 247, 210, 0.12);
+  color: var(--docs-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+@media (max-width: 760px) {
+  .encounter-demo__scene {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .encounter-demo__controls {
+    padding: 0 18px 18px;
+  }
 }
 
 .docs-demo-block__code code {
@@ -327,7 +407,11 @@ html.dark,
   border-radius: 18px;
   background:
     radial-gradient(circle at 12% 0%, rgba(85, 247, 210, 0.2), transparent 34%),
-    radial-gradient(circle at 88% 16%, rgba(255, 126, 182, 0.18), transparent 28%),
+    radial-gradient(
+      circle at 88% 16%,
+      rgba(255, 126, 182, 0.18),
+      transparent 28%
+    ),
     linear-gradient(135deg, #081c1e, #090b19 72%);
   box-shadow: 0 28px 80px rgba(3, 7, 18, 0.28);
 }
@@ -421,8 +505,16 @@ html.dark,
   padding: 20px;
   border-color: rgba(255, 209, 102, 0.42);
   background:
-    radial-gradient(circle at 12% 18%, rgba(85, 247, 210, 0.16), transparent 30%),
-    radial-gradient(circle at 84% 12%, rgba(255, 209, 102, 0.14), transparent 28%),
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(85, 247, 210, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 84% 12%,
+      rgba(255, 209, 102, 0.14),
+      transparent 28%
+    ),
     linear-gradient(180deg, rgba(11, 19, 36, 0.98), #050b16);
 }
 
@@ -460,7 +552,11 @@ html.dark,
   border: 1px solid var(--docs-stage-line);
   border-radius: 12px;
   background:
-    radial-gradient(circle at 50% 50%, rgba(85, 247, 210, 0.18), transparent 45%),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(85, 247, 210, 0.18),
+      transparent 45%
+    ),
     linear-gradient(180deg, rgba(8, 11, 19, 0.74), rgba(8, 11, 19, 0.36));
 }
 
@@ -531,7 +627,11 @@ html.dark,
   border: 1px solid var(--docs-stage-line);
   border-radius: 12px;
   background:
-    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--game-ui-accent), transparent 78%), transparent 34%),
+    radial-gradient(
+      circle at 18% 0%,
+      color-mix(in srgb, var(--game-ui-accent), transparent 78%),
+      transparent 34%
+    ),
     linear-gradient(180deg, rgba(8, 13, 26, 0.94), var(--game-ui-bg));
   box-shadow: var(--game-ui-shadow-soft);
 }
@@ -624,7 +724,9 @@ html.dark,
 
 .docs-token-row > span:last-child {
   color: var(--docs-muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
   font-size: 12px;
   text-align: right;
 }

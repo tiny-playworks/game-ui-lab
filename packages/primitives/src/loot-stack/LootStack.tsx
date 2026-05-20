@@ -24,6 +24,8 @@ export interface LootStackItem {
 
 export interface LootStackProps {
   items: LootStackItem[];
+  selectedId?: string;
+  onItemSelect?: (id: string, item: LootStackItem) => void;
   label?: string;
   limit?: number;
   className?: string;
@@ -33,7 +35,14 @@ function pluralizeItems(count: number) {
   return count === 1 ? '1 item' : `${count} items`;
 }
 
-export function LootStack({ items, label = 'Loot stack', limit = 4, className }: LootStackProps) {
+export function LootStack({
+  items,
+  selectedId,
+  onItemSelect,
+  label = 'Loot stack',
+  limit = 4,
+  className,
+}: LootStackProps) {
   const visibleLimit = Math.max(0, Math.floor(limit));
   const visibleItems = items.slice(0, visibleLimit);
   const overflow = Math.max(0, items.length - visibleItems.length);
@@ -55,6 +64,8 @@ export function LootStack({ items, label = 'Loot stack', limit = 4, className }:
               value={item.value}
               subtitle={item.subtitle}
               icon={item.icon}
+              selected={selectedId === item.id}
+              onClick={onItemSelect ? () => onItemSelect(item.id, item) : undefined}
             />
           </li>
         ))}

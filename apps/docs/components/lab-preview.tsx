@@ -191,7 +191,7 @@ export function LabPreview() {
             <div className="lab-preview__numbers">
               <p className="lab-preview__stage-kicker">{isZh ? frame.titleZh : frame.titleEn}</p>
               <DamageNumber
-                className="docs-static-motion"
+                motion="static"
                 value={frame.damage}
                 variant={frame.rarity === 'legendary' ? 'critical' : 'damage'}
                 prefix={isZh ? (frame.rarity === 'legendary' ? '传说' : '暴击') : frame.rarity === 'legendary' ? 'LEG' : 'CRIT'}

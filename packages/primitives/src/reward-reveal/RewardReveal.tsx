@@ -18,6 +18,10 @@ export interface RewardRevealProps {
   state?: RewardRevealState;
   actionLabel?: string;
   onAction?: () => void;
+  revealLabel?: string;
+  claimLabel?: string;
+  onReveal?: () => void;
+  onClaim?: () => void;
   className?: string;
 }
 
@@ -37,9 +41,15 @@ export function RewardReveal({
   state = 'sealed',
   actionLabel,
   onAction,
+  revealLabel = 'Reveal',
+  claimLabel = 'Claim',
+  onReveal,
+  onClaim,
   className,
 }: RewardRevealProps) {
-  const canAct = Boolean(actionLabel) && state !== 'claimed';
+  const derivedActionLabel = actionLabel ?? (state === 'sealed' ? revealLabel : state === 'revealed' ? claimLabel : undefined);
+  const derivedAction = onAction ?? (state === 'sealed' ? onReveal : state === 'revealed' ? onClaim : undefined);
+  const shouldRenderAction = state !== 'claimed' && Boolean(derivedActionLabel) && (Boolean(actionLabel) || Boolean(derivedAction));
 
   return (
     <section
@@ -53,9 +63,9 @@ export function RewardReveal({
         <strong className={rewardRevealTitleClass}>{title}</strong>
       </div>
       <LootStack items={items} label="Reward contents" limit={3} />
-      {canAct ? (
-        <button className={rewardRevealActionClass} type="button" onClick={onAction}>
-          {actionLabel}
+      {shouldRenderAction ? (
+        <button className={rewardRevealActionClass} type="button" onClick={derivedAction}>
+          {derivedActionLabel}
         </button>
       ) : null}
     </section>

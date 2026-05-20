@@ -1,6 +1,6 @@
 {
   "name": "@tiny-playworks/game-ui",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -24,11 +24,12 @@
   "scripts": {
     "codegen": "pnpm --dir ../.. exec panda codegen",
     "build:styles": "node ./scripts/build-styles.mjs",
-    "build": "pnpm run codegen && rslib build && pnpm run build:styles",
-    "test": "pnpm --filter @tiny-playworks/tokens build && pnpm run codegen && rstest run",
-    "typecheck": "pnpm run codegen && tsc --noEmit -p tsconfig.typecheck.json"
+    "build": "pnpm --filter @tiny-playworks/game-ui-runtime build && pnpm run codegen && rslib build && pnpm run build:styles",
+    "test": "pnpm --filter @tiny-playworks/tokens build && pnpm --filter @tiny-playworks/game-ui-runtime build && pnpm run codegen && rstest run",
+    "typecheck": "pnpm --filter @tiny-playworks/game-ui-runtime build && pnpm run codegen && tsc --noEmit -p tsconfig.typecheck.json"
   },
   "dependencies": {
+    "@tiny-playworks/game-ui-runtime": "workspace:^",
     "@tiny-playworks/tokens": "workspace:^",
     "motion": "^12.38.0"
   },

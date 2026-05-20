@@ -14,6 +14,7 @@ export default defineConfig({
       alias: {
         '@tiny-playworks/game-ui': resolve(repoRoot, 'packages/primitives/src/index.ts'),
         '@tiny-playworks/game-ui/styles.css': resolve(repoRoot, 'packages/primitives/dist/styles.css'),
+        '@tiny-playworks/game-ui-runtime': resolve(repoRoot, 'packages/runtime/src/index.ts'),
         '@tiny-playworks/tokens': resolve(repoRoot, 'packages/tokens/src/index.ts'),
         '@tiny-playworks/tokens/css': resolve(repoRoot, 'packages/tokens/dist/index.css'),
       },
@@ -23,6 +24,7 @@ export default defineConfig({
     nav: [
       { text: '指南 / Guide', link: '/guide/getting-started' },
       { text: '原语 / Primitives', link: '/primitives/' },
+      { text: '运行时 / Runtime', link: '/runtime/encounter-demo' },
       { text: '令牌 / Tokens', link: '/tokens/' },
       { text: '实验台 / Lab', link: '/lab/' },
     ],
@@ -71,6 +73,12 @@ export default defineConfig({
         {
           text: 'Tokens',
           items: [{ text: 'Overview', link: '/tokens/' }],
+        },
+      ],
+      '/runtime/': [
+        {
+          text: 'Runtime',
+          items: [{ text: 'Encounter Demo', link: '/runtime/encounter-demo' }],
         },
       ],
     },

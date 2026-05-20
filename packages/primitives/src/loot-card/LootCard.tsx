@@ -21,6 +21,7 @@ export interface LootCardProps {
   subtitle?: string;
   icon?: ReactNode;
   selected?: boolean;
+  onClick?: () => void;
   className?: string;
 }
 
@@ -40,16 +41,28 @@ export function LootCard({
   subtitle,
   icon,
   selected = false,
+  onClick,
   className,
 }: LootCardProps) {
   const quantityText = formatQuantity(quantity);
+  const Component = onClick ? 'button' : 'article';
+  const componentProps = onClick
+    ? {
+        type: 'button' as const,
+        onClick,
+        'aria-pressed': selected,
+        'aria-label': `${name} ${rarity} loot`,
+      }
+    : {
+        'aria-label': `${name} ${rarity} loot`,
+      };
 
   return (
-    <article
+    <Component
       className={mergeClass(lootCardRecipe({ rarity, selected }), className)}
       data-rarity={rarity}
       data-selected={selected}
-      aria-label={`${name} ${rarity} loot`}
+      {...componentProps}
     >
       <span className={lootCardIconClass} aria-hidden="true">
         {icon ?? name.slice(0, 1)}
@@ -62,6 +75,6 @@ export function LootCard({
         {quantityText ? <span className={lootCardQuantityClass}>{quantityText}</span> : null}
         {value ? <span className={lootCardTextClass}>{value}</span> : null}
       </span>
-    </article>
+    </Component>
   );
 }

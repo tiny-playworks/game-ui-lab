@@ -49,6 +49,7 @@ This is not another React business UI library. The project focuses on motion-fir
 - `RewardReveal`: sealed, revealed, and claimed reward panel for loot flow moments.
 - `RarityBorder`: token-driven rarity frame for common, rare, epic, and legendary states.
 - `GameUiProvider`: theme root for Game UI primitives.
+- `GameUiRuntimeProvider` / `GameUiLayerHost`: React adapter for the headless event runtime.
 
 ## Public API
 
@@ -66,7 +67,9 @@ import {
   DamageNumber,
   DialogueBox,
   FloatingToast,
+  GameUiLayerHost,
   GameUiProvider,
+  GameUiRuntimeProvider,
   HealthBar,
   LocationTag,
   LootCard,
@@ -89,6 +92,8 @@ import {
   type DamageNumberProps,
   type DialogueBoxProps,
   type FloatingToastProps,
+  type GameUiLayerHostProps,
+  type GameUiRuntimeProviderProps,
   type HealthBarProps,
   type LocationTagProps,
   type LootCardProps,
@@ -108,6 +113,16 @@ import '@tiny-playworks/game-ui/styles.css';
 
 Do not import from internal package paths such as `packages/primitives/src/*`.
 The `@tiny-playworks/game-ui` JavaScript entry does not inject styles. Always import `@tiny-playworks/game-ui/styles.css` once in the app entry.
+
+Use the headless runtime directly when a game loop or non-React renderer needs to dispatch UI events:
+
+```ts
+import { createGameUiRuntime } from '@tiny-playworks/game-ui-runtime';
+
+const runtime = createGameUiRuntime();
+runtime.emitDamage({ value: 128, variant: 'critical', anchor: { x: 50, y: 34 } });
+runtime.notify({ title: 'Loot', message: 'Cache unlocked.', variant: 'loot' });
+```
 
 ## Commands
 
@@ -131,6 +146,7 @@ Public site routes:
 - `/guide/getting-started` - installation and usage
 - `/primitives` - Primitive overview
 - `/tokens` - Token overview
+- `/runtime/encounter-demo` - Runtime-driven vertical slice
 - `/lab` - Docs-native feedback lab
 
 Build all packages and docs:
@@ -162,10 +178,10 @@ pnpm typecheck
 Prepare a release bundle locally:
 
 ```bash
-pnpm release 0.2.1
+pnpm release 0.3.0
 ```
 
-This updates both package versions, runs `test` / `typecheck` / `build`, and writes publishable tarballs to `.release/v0.2.1/`.
+This updates package versions, runs `test` / `typecheck` / `build`, and writes publishable tarballs to `.release/v0.3.0/`.
 
 Manual publish remains available:
 
@@ -173,11 +189,14 @@ Manual publish remains available:
 cd packages/tokens
 npm publish --access public
 
+cd ../runtime
+npm publish --access public
+
 cd ../primitives
 npm publish --access public
 ```
 
-If GitHub Actions has a valid `NPM_TOKEN` secret, pushing a tag such as `v0.2.1` can publish automatically. The workflow checks that both package versions already equal the tag version before publishing.
+If GitHub Actions has a valid `NPM_TOKEN` secret, pushing a tag such as `v0.3.0` can publish automatically. The workflow checks that package versions already equal the tag version before publishing.
 
 If your npm account enforces 2FA for publish, the token itself must be a granular token with write permission and `Bypass 2FA` enabled. If that option is not enabled, the workflow will fail during `npm publish`.
 

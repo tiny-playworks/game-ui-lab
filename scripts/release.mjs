@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 
 const repoRoot = resolve(import.meta.dirname, '..');
 const tokensDir = resolve(repoRoot, 'packages/tokens');
+const runtimeDir = resolve(repoRoot, 'packages/runtime');
 const primitivesDir = resolve(repoRoot, 'packages/primitives');
 const version = process.argv[2];
 
@@ -24,6 +25,7 @@ if (worktreeStatus) {
 }
 
 updatePackageVersion(tokensDir, version);
+updatePackageVersion(runtimeDir, version);
 updatePackageVersion(primitivesDir, version);
 
 run('pnpm', ['test'], { allowFailure: false });
@@ -34,12 +36,13 @@ rmSync(releaseDir, { force: true, recursive: true });
 mkdirSync(releaseDir, { recursive: true });
 
 run('pnpm', ['--filter', '@tiny-playworks/tokens', 'pack', '--pack-destination', releaseDir], { allowFailure: false });
+run('pnpm', ['--filter', '@tiny-playworks/game-ui-runtime', 'pack', '--pack-destination', releaseDir], { allowFailure: false });
 run('pnpm', ['--filter', '@tiny-playworks/game-ui', 'pack', '--pack-destination', releaseDir], { allowFailure: false });
 
 const tarballs = findTarballs(releaseDir);
 
-if (tarballs.length !== 2) {
-  fail(`Expected 2 tarballs in ${releaseDir}, got ${tarballs.length}.`);
+if (tarballs.length !== 3) {
+  fail(`Expected 3 tarballs in ${releaseDir}, got ${tarballs.length}.`);
 }
 
 const nextSteps = [
@@ -47,6 +50,7 @@ const nextSteps = [
   '',
   'Version files updated:',
   `- packages/tokens/package.json -> ${version}`,
+  `- packages/runtime/package.json -> ${version}`,
   `- packages/primitives/package.json -> ${version}`,
   '',
   'Tarballs:',
@@ -54,10 +58,11 @@ const nextSteps = [
   '',
   'Manual publish commands:',
   `- cd ${tokensDir} && npm publish --access public`,
+  `- cd ${runtimeDir} && npm publish --access public`,
   `- cd ${primitivesDir} && npm publish --access public`,
   '',
   'After npm publish succeeds:',
-  `- git add packages/tokens/package.json packages/primitives/package.json pnpm-lock.yaml`,
+  `- git add packages/tokens/package.json packages/runtime/package.json packages/primitives/package.json pnpm-lock.yaml`,
   `- git commit -m "chore: release ${releaseTag}"`,
   `- git tag ${releaseTag}`,
   `- git push origin HEAD`,

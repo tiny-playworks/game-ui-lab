@@ -22,6 +22,6 @@ export default defineConfig({
     },
   },
   output: {
-    externals: ['react', 'react-dom', 'react/jsx-runtime', 'motion/react', '@tiny-playworks/tokens'],
+    externals: ['react', 'react-dom', 'react/jsx-runtime', 'motion/react', '@tiny-playworks/tokens', '@tiny-playworks/game-ui-runtime'],
   },
 });

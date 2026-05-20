@@ -133,6 +133,32 @@ export const floatingToastIconRecipe = cva({
 export const floatingToastContentClass = css({ display: 'grid', gap: '2px' });
 export const floatingToastTitleClass = css({ fontSize: '13px', fontWeight: '800', textTransform: 'uppercase' });
 export const floatingToastMessageClass = css({ color: muted, fontSize: '13px' });
+export const floatingToastActionClass = css({
+  minHeight: '28px',
+  padding: '0 9px',
+  border: `1px solid ${line}`,
+  borderRadius: radiusSm,
+  background: 'rgba(255, 255, 255, 0.06)',
+  color: text,
+  cursor: 'pointer',
+  font: 'inherit',
+  fontSize: '12px',
+  fontWeight: '800',
+});
+export const floatingToastCloseClass = css({
+  display: 'grid',
+  width: '24px',
+  height: '24px',
+  placeItems: 'center',
+  border: `1px solid ${line}`,
+  borderRadius: '999px',
+  background: 'rgba(255, 255, 255, 0.04)',
+  color: muted,
+  cursor: 'pointer',
+  font: 'inherit',
+  fontSize: '12px',
+  fontWeight: '900',
+});
 
 export const comboCounterRecipe = cva({
   base: {
@@ -321,12 +347,18 @@ export const cooldownSlotRecipe = cva({
   base: {
     position: 'relative',
     display: 'grid',
+    appearance: 'none',
     width: '72px',
     minWidth: '72px',
     gap: '5px',
     placeItems: 'center',
+    padding: 0,
+    border: 0,
+    background: 'transparent',
     color: text,
+    cursor: 'default',
     fontFamily: 'var(--game-ui-font-sans)',
+    font: 'inherit',
   },
   variants: {
     ready: {
@@ -337,10 +369,18 @@ export const cooldownSlotRecipe = cva({
       true: { opacity: 0.48, '--game-ui-cooldown-slot-color': 'var(--game-ui-ability-locked)' },
       false: {},
     },
+    selected: {
+      true: {
+        '--game-ui-cooldown-slot-color': critical,
+        transform: 'translateY(-3px)',
+      },
+      false: {},
+    },
   },
   defaultVariants: {
     ready: false,
     disabled: false,
+    selected: false,
   },
 });
 export const cooldownSlotIconClass = css({
@@ -361,7 +401,9 @@ export const cooldownSlotIconClass = css({
 export const cooldownSlotMaskClass = css({
   position: 'absolute',
   top: 0,
-  width: '52px',
+  left: 0,
+  right: 0,
+  width: '100%',
   height: 'var(--game-ui-cooldown-progress)',
   borderRadius: `${radiusMd} ${radiusMd} 0 0`,
   background: 'var(--game-ui-cooldown-mask)',
@@ -625,10 +667,16 @@ export const mapMarkerRecipe = cva({
     top: 'var(--game-ui-marker-y)',
     left: 'var(--game-ui-marker-x)',
     display: 'inline-flex',
+    appearance: 'none',
     alignItems: 'center',
     gap: '5px',
+    padding: 0,
+    border: 0,
+    background: 'transparent',
     color: 'var(--game-ui-marker-color)',
+    cursor: 'default',
     fontFamily: 'var(--game-ui-font-sans)',
+    font: 'inherit',
     fontSize: '10px',
     fontWeight: '900',
     transform: 'translate(-50%, -50%)',
@@ -847,6 +895,21 @@ export const questLogClass = css({
 });
 export const questLogHeaderClass = css({ display: 'flex', justifyContent: 'space-between', ...upperLabel });
 export const questLogListClass = css({ display: 'grid', gap: space3 });
+export const questLogQuestClass = css({
+  display: 'block',
+  width: '100%',
+  padding: 0,
+  border: 0,
+  borderRadius: radiusLg,
+  background: 'transparent',
+  color: 'inherit',
+  cursor: 'pointer',
+  font: 'inherit',
+  textAlign: 'left',
+  '&[data-active="true"]': {
+    boxShadow: `0 0 0 2px ${accent}`,
+  },
+});
 export const questLogActiveClass = css({ color: 'var(--game-ui-choice)', fontSize: '11px', fontWeight: '900', textTransform: 'uppercase' });
 
 export const notificationStackClass = css({ display: 'grid', gap: space2, maxWidth: '420px' });
@@ -863,6 +926,7 @@ export const lootCardRecipe = cva({
   base: {
     '--game-ui-loot-rarity-color': 'var(--game-ui-rarity-common)',
     display: 'grid',
+    appearance: 'none',
     gridTemplateColumns: '38px minmax(0, 1fr) auto',
     alignItems: 'center',
     gap: space2,
@@ -873,7 +937,10 @@ export const lootCardRecipe = cva({
     background: `linear-gradient(135deg, color-mix(in srgb, var(--game-ui-loot-rarity-color), transparent 88%), transparent 48%), ${panelSurface}`,
     boxShadow: shadowSoft,
     color: text,
+    cursor: 'default',
     fontFamily: 'var(--game-ui-font-sans)',
+    font: 'inherit',
+    textAlign: 'left',
   },
   variants: {
     rarity: {
@@ -891,6 +958,46 @@ export const lootCardRecipe = cva({
     rarity: 'common',
     selected: false,
   },
+});
+
+export const gameUiLayerHostClass = css({
+  position: 'absolute',
+  inset: 0,
+  pointerEvents: 'none',
+  zIndex: 20,
+});
+export const gameUiLayerClass = css({
+  position: 'absolute',
+  inset: 0,
+  pointerEvents: 'none',
+});
+export const gameUiHudLayerClass = css({ zIndex: 10 });
+export const gameUiFeedbackLayerClass = css({ zIndex: 20 });
+export const gameUiNotificationLayerClass = css({
+  zIndex: 30,
+  display: 'grid',
+  alignContent: 'start',
+  justifyContent: 'end',
+  gap: space2,
+  padding: space3,
+});
+export const gameUiModalLayerClass = css({
+  zIndex: 40,
+  display: 'grid',
+  placeItems: 'center',
+  padding: space3,
+  pointerEvents: 'none',
+  '&[data-active="true"]': {
+    background: 'rgba(3, 7, 18, 0.32)',
+    pointerEvents: 'auto',
+  },
+});
+export const gameUiDebugLayerClass = css({ zIndex: 50 });
+export const gameUiFeedbackItemClass = css({
+  position: 'absolute',
+  left: 'var(--game-ui-feedback-x, 50%)',
+  top: 'var(--game-ui-feedback-y, 50%)',
+  transform: 'translate(-50%, -50%)',
 });
 export const lootCardIconClass = css({
   display: 'grid',
@@ -914,7 +1021,13 @@ export const lootStackClass = css({ display: 'grid', gap: space2, minWidth: '240
 export const lootStackToplineClass = css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: space2 });
 export const lootStackLabelClass = css(upperLabel);
 export const lootStackListClass = css({ display: 'grid', gap: space2, padding: 0, margin: 0, listStyle: 'none' });
-export const lootStackItemClass = css({ minWidth: 0 });
+export const lootStackItemClass = css({
+  minWidth: 0,
+  listStyle: 'none',
+  '&::marker': {
+    content: '""',
+  },
+});
 export const lootStackOverflowClass = css({
   display: 'grid',
   minHeight: '32px',

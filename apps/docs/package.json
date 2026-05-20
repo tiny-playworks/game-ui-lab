@@ -8,11 +8,12 @@
     "build": "pnpm --filter @tiny-playworks/game-ui codegen && pnpm --filter @tiny-playworks/game-ui build:styles && rspress build",
     "build:pages": "node ./scripts/build-pages.mjs",
     "preview": "rspress preview",
-    "typecheck": "pnpm --filter @tiny-playworks/game-ui build && tsc --noEmit",
+    "typecheck": "pnpm --filter @tiny-playworks/game-ui-runtime build && pnpm --filter @tiny-playworks/game-ui build && tsc --noEmit",
     "visual:smoke": "node ./scripts/smoke-pages.mjs"
   },
   "dependencies": {
     "@tiny-playworks/game-ui": "workspace:^",
+    "@tiny-playworks/game-ui-runtime": "workspace:^",
     "@tiny-playworks/tokens": "workspace:^",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"

@@ -7,6 +7,7 @@ import {
   questLogClass,
   questLogHeaderClass,
   questLogListClass,
+  questLogQuestClass,
 } from '../styles';
 
 export interface QuestLogQuest {
@@ -20,10 +21,17 @@ export interface QuestLogProps {
   title?: string;
   quests: QuestLogQuest[];
   activeId?: string;
+  onActiveChange?: (id: string) => void;
   className?: string;
 }
 
-export function QuestLog({ title = 'Quest log', quests, activeId, className }: QuestLogProps) {
+export function QuestLog({
+  title = 'Quest log',
+  quests,
+  activeId,
+  onActiveChange,
+  className,
+}: QuestLogProps) {
   return (
     <section className={mergeClass(questLogClass, className)} aria-label={title}>
       <header className={questLogHeaderClass}>
@@ -32,12 +40,19 @@ export function QuestLog({ title = 'Quest log', quests, activeId, className }: Q
       </header>
       <div className={questLogListClass}>
         {quests.map((quest) => (
-          <QuestTracker
+          <button
             key={quest.id}
-            title={quest.title}
-            subtitle={quest.subtitle}
-            objectives={quest.objectives}
-          />
+            className={questLogQuestClass}
+            type="button"
+            data-active={activeId === quest.id}
+            onClick={onActiveChange ? () => onActiveChange(quest.id) : undefined}
+          >
+            <QuestTracker
+              title={quest.title}
+              subtitle={quest.subtitle}
+              objectives={quest.objectives}
+            />
+          </button>
         ))}
       </div>
       {activeId ? <span className={questLogActiveClass}>Tracking {activeId}</span> : null}

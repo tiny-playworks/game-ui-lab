@@ -19,6 +19,7 @@ export interface CompassMarker {
 export interface CompassBarProps {
   heading: number;
   markers?: CompassMarker[];
+  range?: number;
   label?: string;
   className?: string;
 }
@@ -28,11 +29,17 @@ function headingLabel(heading: number) {
   return `${normalized}deg`;
 }
 
-function markerPosition(heading: number) {
-  return `${Math.min(100, Math.max(0, (heading / 360) * 100))}%`;
+function shortestHeadingDelta(target: number, current: number) {
+  return ((((target - current) % 360) + 540) % 360) - 180;
 }
 
-export function CompassBar({ heading, markers = [], label = 'Compass', className }: CompassBarProps) {
+function markerPosition(target: number, current: number, range: number) {
+  const safeRange = Math.max(1, range);
+  const delta = shortestHeadingDelta(target, current);
+  return `${Math.min(100, Math.max(0, 50 + (delta / safeRange) * 100))}%`;
+}
+
+export function CompassBar({ heading, markers = [], range = 120, label = 'Compass', className }: CompassBarProps) {
   return (
     <div className={mergeClass(compassBarClass, className)} role="status" aria-label={`${label} ${headingLabel(heading)}`}>
       <span className={compassBarHeadingClass}>{headingLabel(heading)}</span>
@@ -42,7 +49,7 @@ export function CompassBar({ heading, markers = [], label = 'Compass', className
             key={marker.id}
             className={compassBarMarkerRecipe({ tone: marker.tone ?? 'neutral' })}
             data-tone={marker.tone ?? 'neutral'}
-            style={{ '--game-ui-compass-position': markerPosition(marker.heading) } as CSSProperties}
+            style={{ '--game-ui-compass-position': markerPosition(marker.heading, heading, range) } as CSSProperties}
           >
             {marker.label}
           </span>

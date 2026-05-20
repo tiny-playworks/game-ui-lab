@@ -1,6 +1,7 @@
 import React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from '@rstest/core';
+import { createGameUiRuntime } from '@tiny-playworks/game-ui-runtime';
 import {
   AbilityBar,
   AbilityTooltip,
@@ -12,7 +13,9 @@ import {
   DamageNumber,
   DialogueBox,
   FloatingToast,
+  GameUiLayerHost,
   GameUiProvider,
+  GameUiRuntimeProvider,
   HealthBar,
   LocationTag,
   LootCard,
@@ -28,6 +31,7 @@ import {
   RewardReveal,
   StatusBadge,
   TargetFrame,
+  useGameUiRuntime,
 } from '../index';
 
 afterEach(() => {
@@ -65,6 +69,12 @@ describe('game ui primitives', () => {
 
     expect(screen.getByText('128').getAttribute('data-variant')).toBe('critical');
     expect(screen.getByText('CRIT').textContent).toBe('CRIT');
+  });
+
+  it('renders a static damage number without relying on remount animation', () => {
+    render(<DamageNumber value="128" variant="critical" motion="static" />);
+
+    expect(screen.getByText('128').getAttribute('data-motion')).toBe('static');
   });
 
   it('renders a floating toast message', () => {
@@ -116,6 +126,7 @@ describe('game ui primitives', () => {
 
     expect(screen.getByRole('status', { name: 'Blink cooldown 45%' }).getAttribute('data-ready')).toBe('false');
     expect(screen.getByText('B').textContent).toBe('B');
+    expect(screen.getByText('B').querySelector('[data-game-ui-slot="cooldown-mask"]')).toBeTruthy();
 
     rerender(<CooldownSlot progress={1} label="Blink" ready />);
 
@@ -193,6 +204,28 @@ describe('game ui primitives', () => {
     expect(screen.getByRole('status', { name: 'Nova disabled' }).getAttribute('data-disabled')).toBe('true');
   });
 
+  it('handles ability clicks and ignores locked abilities', () => {
+    const selected: string[] = [];
+
+    render(
+      <AbilityBar
+        selectedId="blink"
+        onAbilityClick={(id) => selected.push(id)}
+        abilities={[
+          { id: 'blink', label: 'Blink', icon: 'B', ready: true },
+          { id: 'nova', label: 'Nova', icon: 'N', locked: true },
+        ]}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Blink ready' }));
+
+    expect(selected).toEqual(['blink']);
+    expect(screen.getByRole('button', { name: 'Blink ready' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.queryByRole('button', { name: 'Nova disabled' })).toBeNull();
+    expect(screen.getByRole('status', { name: 'Nova disabled' }).getAttribute('data-disabled')).toBe('true');
+  });
+
   it('renders ability tooltip metadata', () => {
     render(<AbilityTooltip name="Blink" description="Dash through danger." cost="20 MP" cooldown="8s" state="ready" />);
 
@@ -244,6 +277,39 @@ describe('game ui primitives', () => {
     expect(screen.getByLabelText('Sector map with 2 markers').textContent).toContain('Sector map');
   });
 
+  it('selects loot and map items through collection callbacks', () => {
+    const selectedLoot: string[] = [];
+    const selectedMarker: string[] = [];
+
+    render(
+      <>
+        <LootStack
+          selectedId="core"
+          onItemSelect={(id) => selectedLoot.push(id)}
+          items={[
+            { id: 'credits', name: 'Credits', rarity: 'common', quantity: 120 },
+            { id: 'core', name: 'Pulse Core', rarity: 'rare', quantity: 1 },
+          ]}
+        />
+        <MiniMap
+          selectedId="enemy"
+          onMarkerSelect={(id) => selectedMarker.push(id)}
+          markers={[
+            { id: 'ally', x: 18, y: 40, tone: 'ally', label: 'Ally' },
+            { id: 'enemy', x: 72, y: 52, tone: 'enemy', label: 'Enemy' },
+          ]}
+        />
+      </>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Pulse Core rare loot' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Enemy enemy marker' }));
+
+    expect(selectedLoot).toEqual(['core']);
+    expect(selectedMarker).toEqual(['enemy']);
+    expect(screen.getByRole('button', { name: 'Pulse Core rare loot' }).getAttribute('aria-pressed')).toBe('true');
+  });
+
   it('renders compass markers and location danger', () => {
     render(
       <>
@@ -253,6 +319,7 @@ describe('game ui primitives', () => {
     );
 
     expect(screen.getByRole('status', { name: 'Compass 90deg' }).textContent).toContain('Gate');
+    expect(screen.getByText('Gate').getAttribute('style')).toContain('--game-ui-compass-position: 75%');
     expect(screen.getByLabelText('Ash Gate hostile location').getAttribute('data-danger')).toBe('hostile');
   });
 
@@ -309,6 +376,29 @@ describe('game ui primitives', () => {
     expect(screen.getByLabelText('Notifications 4 items').textContent).toContain('+2 more');
   });
 
+  it('activates quests through quest log callbacks', () => {
+    const active: string[] = [];
+
+    render(
+      <QuestLog
+        activeId="signal"
+        onActiveChange={(id) => active.push(id)}
+        quests={[
+          {
+            id: 'signal',
+            title: 'Signal Hunt',
+            objectives: [{ id: 'beacon', label: 'Find beacon', state: 'complete' }],
+          },
+        ]}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button'));
+
+    expect(active).toEqual(['signal']);
+    expect(screen.getByRole('button').getAttribute('data-active')).toBe('true');
+  });
+
   it('renders a loot stack with capped visible items', () => {
     render(
       <LootStack
@@ -351,5 +441,36 @@ describe('game ui primitives', () => {
 
     expect(screen.getByRole('status', { name: 'Cache unlocked revealed reward with 1 item' }).getAttribute('data-state')).toBe('revealed');
     expect(screen.getByRole('button', { name: 'Claim' }).textContent).toBe('Claim');
+  });
+
+  it('renders runtime layers and dismisses runtime notifications', () => {
+    const runtime = createGameUiRuntime();
+
+    render(
+      <GameUiRuntimeProvider runtime={runtime}>
+        <GameUiLayerHost />
+      </GameUiRuntimeProvider>,
+    );
+
+    act(() => {
+      runtime.emitDamage({ value: 88, anchor: { x: 42, y: 36 } });
+      runtime.notify({ message: 'Skill ready', durationMs: 0, closable: true });
+    });
+
+    expect(screen.getByText('88').textContent).toBe('88');
+    expect(screen.getByText('Skill ready').textContent).toBe('Skill ready');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Close notification' }));
+
+    expect(screen.queryByText('Skill ready')).toBeNull();
+  });
+
+  it('throws when runtime hook is used outside the runtime provider', () => {
+    function NeedsRuntime() {
+      useGameUiRuntime();
+      return null;
+    }
+
+    expect(() => render(<NeedsRuntime />)).toThrow('useGameUiRuntime must be used inside GameUiRuntimeProvider');
   });
 });

@@ -37,8 +37,10 @@ jobs:
         run: |
           expected="${GITHUB_REF_NAME#v}"
           tokens_version="$(node -p "require('./packages/tokens/package.json').version")"
+          runtime_version="$(node -p "require('./packages/runtime/package.json').version")"
           game_ui_version="$(node -p "require('./packages/primitives/package.json').version")"
           test "$tokens_version" = "$expected"
+          test "$runtime_version" = "$expected"
           test "$game_ui_version" = "$expected"
 
       - name: Test
@@ -52,6 +54,11 @@ jobs:
 
       - name: Publish tokens
         run: pnpm --filter @tiny-playworks/tokens publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish runtime
+        run: pnpm --filter @tiny-playworks/game-ui-runtime publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

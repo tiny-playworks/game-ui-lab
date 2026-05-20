@@ -154,6 +154,8 @@ export function Demo() {
 }`,
     api: [
       row('abilities', '技能数组。', 'Ability item array.', 'AbilityBarItem[]', '-'),
+      row('selectedId', '当前选中的技能 id。', 'Selected ability id.', 'string', '-'),
+      row('onAbilityClick', '技能点击回调。', 'Ability click callback.', '(id, item) => void', '-'),
       row('label', '可访问标签。', 'Accessible label.', 'string', "'Ability bar'"),
       ...commonRows,
     ],
@@ -337,6 +339,7 @@ export function Demo() {
     api: [
       row('heading', '当前朝向角度。', 'Current heading in degrees.', 'number', '-'),
       row('markers', '方向标记数组。', 'Compass marker array.', 'CompassMarker[]', '[]'),
+      row('range', '方向条可视角度范围。', 'Visible heading range.', 'number', '120'),
       row('label', '可访问标签。', 'Accessible label.', 'string', "'Compass'"),
       ...commonRows,
     ],
@@ -462,6 +465,7 @@ export function Demo() {
       row('quests', '任务数组。', 'Quest array.', 'QuestLogQuest[]', '-'),
       row('title', '日志标题。', 'Log title.', 'string', "'Quest log'"),
       row('activeId', '当前追踪任务 id。', 'Currently tracked quest id.', 'string', '-'),
+      row('onActiveChange', '切换追踪任务回调。', 'Tracked quest change callback.', '(id) => void', '-'),
       ...commonRows,
     ],
     tokenZh: '复用 QuestTracker、choice 和 spacing token。',
@@ -513,9 +517,9 @@ export function Demo() {
 export function Demo() {
   return (
     <GameUiProvider>
-      <DamageNumber className="docs-static-motion" value="128" variant="critical" prefix="暴击" />
-      <DamageNumber className="docs-static-motion" value="42" variant="heal" prefix="治疗" />
-      <DamageNumber className="docs-static-motion" value="MISS" variant="miss" />
+      <DamageNumber motion="static" value="128" variant="critical" prefix="暴击" />
+      <DamageNumber motion="static" value="42" variant="heal" prefix="治疗" />
+      <DamageNumber motion="static" value="MISS" variant="miss" />
     </GameUiProvider>
   );
 }`,
@@ -524,6 +528,8 @@ export function Demo() {
       row('variant', '反馈类型。', 'Feedback variant.', "'damage' | 'heal' | 'critical' | 'miss'", "'damage'"),
       row('prefix', '数值前缀。', 'Prefix before the value.', 'string', '-'),
       row('size', '自定义字体尺寸，单位 px。', 'Custom font size in px.', 'number', '-'),
+      row('motion', '动效模式。', 'Motion mode.', "'live' | 'static' | 'none'", "'live'"),
+      row('onExitComplete', '飘字结束回调。', 'Called when live motion completes.', '() => void', '-'),
       ...commonRows,
     ],
     tokenZh: '使用伤害、治疗、暴击和动效 token。',
@@ -759,6 +765,8 @@ export function Demo() {
       row('message', '消息内容。', 'Message content.', 'ReactNode', '-'),
       row('variant', '提示类型。', 'Toast variant.', "'info' | 'success' | 'warning' | 'loot'", "'info'"),
       row('icon', '自定义图标。', 'Custom icon.', 'ReactNode', '按 variant 推导'),
+      row('durationMs', '运行时层自动关闭时长。', 'Auto-dismiss duration when used by runtime layer.', 'number', '-'),
+      row('closable', '是否显示关闭按钮。', 'Whether to show a close button.', 'boolean', 'false'),
       ...commonRows,
     ],
     tokenZh: '使用反馈色、浮层阴影和进入动效 token。',
@@ -851,6 +859,8 @@ export function Demo() {
 }`,
     api: [
       row('items', '掉落项数组。', 'Loot item array.', 'LootStackItem[]', '-'),
+      row('selectedId', '当前选中的掉落 id。', 'Selected loot item id.', 'string', '-'),
+      row('onItemSelect', '掉落选择回调。', 'Loot item select callback.', '(id, item) => void', '-'),
       row('label', '列表标签。', 'Stack label.', 'string', "'Loot stack'"),
       row('limit', '最多展示数量。', 'Maximum visible item count.', 'number', '4'),
       ...commonRows,
@@ -888,6 +898,8 @@ export function Demo() {
       row('state', '揭示状态。', 'Reveal state.', "'sealed' | 'revealed' | 'claimed'", "'sealed'"),
       row('actionLabel', '操作按钮文案。', 'Action button label.', 'string', '-'),
       row('onAction', '操作回调。', 'Action callback.', '() => void', '-'),
+      row('onReveal', '揭示奖励回调。', 'Reveal callback.', '() => void', '-'),
+      row('onClaim', '领取奖励回调。', 'Claim callback.', '() => void', '-'),
       ...commonRows,
     ],
     tokenZh: '复用奖励、稀有度、按钮和状态 token。',
@@ -1118,9 +1130,9 @@ function NotificationStackPreview() {
 function DamageNumberPreview() {
   return (
     <div className="docs-demo-row docs-demo-row--center">
-      <DamageNumber value="128" variant="critical" prefix="暴击" />
-      <DamageNumber value="42" variant="heal" prefix="治疗" />
-      <DamageNumber value="MISS" variant="miss" />
+      <DamageNumber motion="static" value="128" variant="critical" prefix="暴击" />
+      <DamageNumber motion="static" value="42" variant="heal" prefix="治疗" />
+      <DamageNumber motion="static" value="MISS" variant="miss" />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@tiny-playworks/tokens",
+  "name": "@tiny-playworks/game-ui-runtime",
   "version": "0.3.0",
   "license": "MIT",
   "type": "module",
@@ -11,8 +11,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./css": "./dist/index.css",
-    "./theme.css": "./dist/index.css",
     "./package.json": "./package.json"
   },
   "files": [
@@ -22,10 +20,12 @@
     "access": "public"
   },
   "scripts": {
-    "build": "node ./scripts/build.mjs",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "rstest run",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@rstest/core": "^0.10.0",
     "typescript": "^6.0.3"
   }
 }

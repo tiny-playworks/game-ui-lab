@@ -26,13 +26,13 @@ import { Localized } from '../../components/locale';
       zh="用法"
       en="Usage"
     />
-    <pre className="docs-demo-block__code"><code>{`import { DamageNumber, GameUiProvider } from '@tiny-playworks/game-ui';
+    <pre className="docs-demo-block__code"><code>{`import { GameUiProvider, HealthBar } from '@tiny-playworks/game-ui';
 import '@tiny-playworks/game-ui/styles.css';
 
-export function CombatPulse() {
+export function CombatHud() {
   return (
     <GameUiProvider theme="arcade" tokens={{ accent: '#ff7ad9' }}>
-      <DamageNumber value="512" variant="critical" prefix="CRIT" />
+      <HealthBar value={78} max={120} shield={24} label="Pilot HP" showValue />
     </GameUiProvider>
   );
 }`}</code></pre>
@@ -41,6 +41,12 @@ export function CombatPulse() {
       className="docs-section__text"
       zh="样式入口固定为 `@tiny-playworks/game-ui/styles.css`。组件 JS 不再隐式注入样式。"
       en="The fixed style entry is `@tiny-playworks/game-ui/styles.css`. The component JS entry no longer injects styles implicitly."
+    />
+    <Localized
+      as="p"
+      className="docs-section__text"
+      zh="入门示例使用常驻组件，方便直接确认样式是否生效。像 `DamageNumber` 这类战斗反馈组件会自动淡出，更适合接到真实事件流里。"
+      en="The getting-started sample uses a persistent primitive so you can confirm styles immediately. Transient feedback primitives such as `DamageNumber` fade out by design and fit better in a real event flow."
     />
   </section>
 

@@ -41,6 +41,9 @@ importers:
       '@tiny-playworks/game-ui':
         specifier: workspace:^
         version: link:../../packages/primitives
+      '@tiny-playworks/game-ui-runtime':
+        specifier: workspace:^
+        version: link:../../packages/runtime
       '@tiny-playworks/tokens':
         specifier: workspace:^
         version: link:../../packages/tokens
@@ -60,6 +63,9 @@ importers:
 
   packages/primitives:
     dependencies:
+      '@tiny-playworks/game-ui-runtime':
+        specifier: workspace:^
+        version: link:../runtime
       '@tiny-playworks/tokens':
         specifier: workspace:^
         version: link:../tokens
@@ -97,6 +103,15 @@ importers:
       react-dom:
         specifier: ^19.1.0
         version: 19.2.6(react@19.2.6)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
+  packages/runtime:
+    devDependencies:
+      '@rstest/core':
+        specifier: ^0.10.0
+        version: 0.10.0(happy-dom@20.9.0)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
