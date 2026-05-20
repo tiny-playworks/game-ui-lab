@@ -1,56 +1,13 @@
 import { DocShell } from '../../components/doc-shell';
-import { Localized } from '../../components/locale';
+import { RuntimeApiContent } from '../../components/runtime-api-docs';
 
 <DocShell
   eyebrowZh="运行时"
   eyebrowEn="Runtime"
   titleZh="Runtime API"
   titleEn="Runtime API"
-  summaryZh="Headless 事件运行时：游戏逻辑只 dispatch，React 通过 GameUiLayerHost 渲染分层 HUD、反馈、叙事与弹窗。"
-  summaryEn="Headless event runtime: game logic dispatches events; React renders layered HUD, feedback, narrative, and modal UI through GameUiLayerHost."
+  summaryZh="@tiny-playworks/game-ui-runtime 的分层状态与事件；React 侧用 GameUiLayerHost 渲染。"
+  summaryEn="Layered state and events from @tiny-playworks/game-ui-runtime; React apps render through GameUiLayerHost."
 >
-
-## 分层模型 / Layer model
-
-- **hud**：combo、target、quest、map、buffs、party、cooldowns（AbilityBar）
-- **feedback**：浮动伤害数字
-- **notification**：FloatingToast 栈
-- **narrative**：DialogueBox 队列、ChoicePrompt（z-index 35）
-- **modal**：RewardReveal、ShopPanel、QuestLog（互斥）
-
-<Localized
-  as="p"
-  zh="0.4.0 起 `layer:clear('hud')` 会重置为 `{ cooldowns: {} }` 的完整 HUD 结构，而不是遗留不完整对象。"
-  en="Since 0.4.0, `layer:clear('hud')` resets to a full HUD shell with `{ cooldowns: {} }` instead of leaving a partial shape."
-/>
-
-## 便捷方法 / Convenience methods
-
-```ts
-runtime.setCombo(4, 'Combo');
-runtime.trackQuest({ title: 'Beacon', objectives: [{ id: 'a', label: 'Find beacon' }] });
-runtime.setMapMarkers({ label: 'East gate', markers: [{ id: 'm1', tone: 'enemy', x: 40, y: 60 }] });
-runtime.upsertBuff({ id: 'haste', label: 'Haste', tone: 'buff', count: 2 });
-runtime.showDialogue({ speaker: 'Guide', text: 'Hold the line.' });
-runtime.enqueueDialogue({ speaker: 'Guide', text: 'Next line.' });
-runtime.advanceDialogue();
-runtime.setParty({ members: [{ id: 'pilot', name: 'Pilot', health: 80, maxHealth: 100 }], selectedId: 'pilot' });
-runtime.openQuestLog({ title: 'Log', quests: [{ id: 'a', title: 'Alpha', objectives: [] }] });
-runtime.showChoices({ title: 'Route', options: [{ id: 'left', label: 'Left' }] });
-```
-
-## 事件表 / Event table
-
-| 领域 | 事件 |
-| --- | --- |
-| Combo | `combo:set`, `combo:increment`, `combo:reset` |
-| Quest | `quest:track`, `quest:objective:update`, `quest:clear` |
-| Map | `map:set`, `map:marker:update`, `map:select`, `map:clear` |
-| Buff | `buff:upsert`, `buff:remove`, `buff:clear` |
-| Dialogue | `dialogue:show`, `dialogue:enqueue`, `dialogue:advance`, `dialogue:dismiss` |
-| Party | `party:set`, `party:member:update`, `party:select`, `party:clear` |
-| Choice | `choice:show`, `choice:select`, `choice:clear` |
-| Shop | `shop:open`, `shop:close`（与 reward / questLog 互斥） |
-| Quest log | `quest-log:open`, `quest-log:close`, `quest-log:activate` |
-
+  <RuntimeApiContent />
 </DocShell>

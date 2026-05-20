@@ -8,8 +8,8 @@ import { PrimitiveOverview } from '../components/primitive-docs';
   eyebrowEn="Tiny Playworks"
   titleZh="游戏 UI 组件库"
   titleEn="Game UI primitives"
-  summaryZh="面向网页游戏界面的 React 组件。文档默认中文，组件页提供演示、代码、API 和 token 说明。"
-  summaryEn="React components for game-like web interfaces. Component pages include demos, code, API, and token notes."
+  summaryZh="面向网页游戏界面的 React 组件。文档支持中/英切换；组件页含演示、代码、API 与 token。"
+  summaryEn="React components for game-like web interfaces. Docs support zh/en toggle; pages include demos, code, API, and tokens."
 >
   <section className="docs-section">
     <Localized
@@ -21,23 +21,38 @@ import { PrimitiveOverview } from '../components/primitive-docs';
     <div className="docs-card-grid">
       <a className="docs-component-link" href="/game-ui-lab/guide/getting-started">
         <span className="docs-component-link__meta">Guide</span>
-        <strong>安装和导入</strong>
-        <span>从安装到第一个组件渲染。</span>
+        <Localized as="strong" zh="安装和导入" en="Install and import" />
+        <Localized as="span" zh="从安装到第一个组件或 runtime 渲染。" en="From install to your first component or runtime wiring." />
       </a>
       <a className="docs-component-link" href="/game-ui-lab/primitives/">
         <span className="docs-component-link__meta">Primitives</span>
-        <strong>组件文档</strong>
-        <span>查看每个组件的演示、代码和 API。</span>
+        <Localized as="strong" zh="组件文档" en="Component docs" />
+        <Localized as="span" zh="查看每个组件的演示、代码和双语 API。" en="Demos, sample code, and bilingual API per component." />
       </a>
       <a className="docs-component-link" href="/game-ui-lab/tokens/">
         <span className="docs-component-link__meta">Tokens</span>
-        <strong>设计令牌</strong>
-        <span>颜色、状态、稀有度和动效变量。</span>
+        <Localized as="strong" zh="设计令牌" en="Design tokens" />
+        <Localized as="span" zh="颜色、状态、稀有度和动效变量。" en="Colors, states, rarity, and motion variables." />
       </a>
       <a className="docs-component-link" href="/game-ui-lab/lab/">
         <span className="docs-component-link__meta">Lab</span>
-        <strong>实验台</strong>
-        <span>把多个组件放在同一个 HUD 场景里看。</span>
+        <Localized as="strong" zh="实验台" en="Lab" />
+        <Localized as="span" zh="多个组件在同一 HUD 场景中的组合效果。" en="Combined HUD behavior in one sandbox scene." />
+      </a>
+      <a className="docs-component-link" href="/game-ui-lab/runtime/encounter-demo">
+        <span className="docs-component-link__meta">Runtime</span>
+        <Localized as="strong" zh="Encounter Demo" en="Encounter Demo" />
+        <Localized as="span" zh="Headless runtime 驱动的完整战斗切片。" en="Full combat slice driven by the headless runtime." />
+      </a>
+      <a className="docs-component-link" href="/game-ui-lab/runtime/runtime-api">
+        <span className="docs-component-link__meta">Runtime</span>
+        <Localized as="strong" zh="Runtime API" en="Runtime API" />
+        <Localized as="span" zh="分层模型、便捷方法与事件表。" en="Layers, convenience methods, and event reference." />
+      </a>
+      <a className="docs-component-link" href="/game-ui-lab/integrations/pixi">
+        <span className="docs-component-link__meta">Integrations</span>
+        <Localized as="strong" zh="Pixi 桥接" en="Pixi bridge" />
+        <Localized as="span" zh="Canvas 游戏订阅伤害与通知层。" en="Subscribe damage and toast layers in canvas games." />
       </a>
     </div>
   </section>

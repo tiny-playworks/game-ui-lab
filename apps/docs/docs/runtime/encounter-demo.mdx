@@ -3,20 +3,29 @@ import { Localized } from '../../components/locale';
 import { EncounterDemo } from '../../components/encounter-demo';
 
 <DocShell
-  eyebrowZh="Runtime"
+  eyebrowZh="运行时"
   eyebrowEn="Runtime"
   titleZh="Encounter Demo"
   titleEn="Encounter Demo"
-  summaryZh="用 headless runtime 驱动 HUD、反馈、通知和奖励层。"
-  summaryEn="Drive HUD, feedback, notifications, and rewards through the headless runtime."
+  summaryZh="单场景演示：战斗、HUD、叙事队列、商店、任务日志与奖励模态均由 runtime 驱动。"
+  summaryEn="A single-scene demo where combat, HUD, narrative queue, shop, quest log, and reward modal are runtime-driven."
 >
   <section className="docs-product-section">
+    <Localized as="h2" className="docs-product-heading" zh="操作说明" en="Controls" />
+    <ul className="docs-product-text">
+      <Localized as="li" zh="攻击 / 爆发：伤害飘字、连击、目标血量、任务进度" en="Attack / Burst: damage, combo, target HP, quest progress" />
+      <Localized as="li" zh="商店 / 任务日志 / 分支选项 / 下一句 / 重置" en="Shop / quest log / choices / next line / reset" />
+    </ul>
     <Localized
-      as="h2"
-      className="docs-product-heading"
-      zh="战斗切片"
-      en="Encounter Slice"
+      as="p"
+      className="docs-product-text"
+      zh="LayerHost 渲染 runtime 状态；场景内 AbilityBar 与 LootStack 为受控演示。"
+      en="LayerHost renders runtime state. In-scene AbilityBar and LootStack remain controlled demos."
     />
+  </section>
+
+  <section className="docs-product-section">
+    <Localized as="h2" className="docs-product-heading" zh="演示" en="Demo" />
     <EncounterDemo />
   </section>
 </DocShell>

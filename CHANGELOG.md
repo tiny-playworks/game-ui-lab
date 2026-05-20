@@ -14,3 +14,4 @@
 - `InventoryGrid`: `onSlotMove`, `draggingId`, HTML5 drag-and-drop between slots.
 - Encounter Demo: full runtime slice (quest, map, dialogue queue, shop, choices).
 - New package `@tiny-playworks/game-ui-pixi` (0.1.0 alpha) and `/integrations/pixi` docs.
+- Docs: expanded Getting Started, Runtime API reference, README 0.5.0, component API tables updated.

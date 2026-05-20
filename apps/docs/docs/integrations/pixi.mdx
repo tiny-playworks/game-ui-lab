@@ -9,17 +9,14 @@ import { Localized } from '../../components/locale';
   summaryZh="在 Canvas 游戏里订阅 headless runtime，把伤害数字与通知同步到 Pixi 容器（alpha）。"
   summaryEn="Subscribe to the headless runtime in canvas games and mirror damage and toast feedback into a Pixi container (alpha)."
 >
+  <section className="docs-section">
+    <Localized as="h2" className="docs-section__title" zh="安装" en="Install" />
+    <pre className="docs-card"><code>pnpm add @tiny-playworks/game-ui-pixi @tiny-playworks/game-ui-runtime pixi.js</code></pre>
+  </section>
 
-## 安装 / Install
-
-```bash
-pnpm add @tiny-playworks/game-ui-pixi @tiny-playworks/game-ui-runtime pixi.js
-```
-
-## 用法 / Usage
-
-```ts
-import { createGameUiRuntime } from '@tiny-playworks/game-ui-runtime';
+  <section className="docs-section">
+    <Localized as="h2" className="docs-section__title" zh="用法" en="Usage" />
+    <pre className="docs-demo-block__code"><code>{`import { createGameUiRuntime } from '@tiny-playworks/game-ui-runtime';
 import { createPixiFeedbackBridge } from '@tiny-playworks/game-ui-pixi';
 
 const runtime = createGameUiRuntime();
@@ -28,21 +25,31 @@ const detach = createPixiFeedbackBridge(runtime, {
   container: feedbackLayer,
   factory: {
     createLabel(text, options) {
-      const label = new PIXI.Text({ text, style: { fill: options?.variant === 'heal' ? '#5cff9d' : '#ff4d7d' } });
-      return label;
+      return new PIXI.Text({
+        text,
+        style: { fill: options?.variant === 'heal' ? '#5cff9d' : '#ff4d7d' },
+      });
     },
   },
   stageWidth: 1280,
   stageHeight: 720,
 });
 
-runtime.emitDamage({ value: 128, variant: 'critical', anchor: { x: 50, y: 40 } });
-```
+runtime.emitDamage({ value: 128, variant: 'critical', anchor: { x: 50, y: 40 } });`}</code></pre>
+    <Localized
+      as="p"
+      className="docs-section__text"
+      zh="React 项目仍推荐使用 GameUiLayerHost。当前 alpha 同步 feedback.damage 与 notification.toasts。"
+      en="React apps should still prefer GameUiLayerHost. The alpha bridge syncs feedback.damage and notification.toasts."
+    />
+  </section>
 
-<Localized
-  as="p"
-  zh="React 项目仍推荐使用 GameUiLayerHost；Pixi 桥接适合纯 Canvas 或混合渲染场景。"
-  en="React apps should still prefer GameUiLayerHost; the Pixi bridge targets canvas-only or hybrid render paths."
-/>
-
+  <section className="docs-section">
+    <Localized as="h2" className="docs-section__title" zh="相关文档" en="See also" />
+    <p className="docs-section__text">
+      <a href="/game-ui-lab/runtime/runtime-api">
+        <Localized as="span" zh="Runtime API" en="Runtime API" />
+      </a>
+    </p>
+  </section>
 </DocShell>

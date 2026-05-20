@@ -4,28 +4,52 @@ import { Localized } from '../../components/locale';
 <DocShell
   eyebrowZh="入门"
   eyebrowEn="Getting Started"
-  titleZh="Getting Started"
+  titleZh="快速开始"
   titleEn="Getting Started"
-  summaryZh="安装包，从公开入口导入组件和静态样式。"
-  summaryEn="Install the packages and import components and static styles from the public entry."
+  summaryZh="安装公开包、导入样式，并用常驻组件或 headless runtime 搭建游戏 HUD。"
+  summaryEn="Install the public packages, import styles, and build game HUD with primitives or the headless runtime."
 >
   <section className="docs-section">
+    <Localized as="h2" className="docs-section__title" zh="包与版本" en="Packages" />
     <Localized
-      as="h2"
-      className="docs-section__title"
-      zh="安装"
-      en="Install"
+      as="p"
+      className="docs-section__text"
+      zh="当前主线版本为 0.5.0。Pixi 桥接为独立 alpha 包。"
+      en="The current release line is 0.5.0. The Pixi bridge ships as a separate alpha package."
     />
-    <pre className="docs-card"><code>pnpm add @tiny-playworks/game-ui @tiny-playworks/tokens</code></pre>
+    <div className="docs-api-table">
+      <table>
+        <thead>
+          <tr>
+            <Localized as="th" zh="包" en="Package" />
+            <Localized as="th" zh="用途" en="Purpose" />
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>@tiny-playworks/game-ui</code></td>
+            <Localized as="td" zh="React 组件 + GameUiLayerHost" en="React primitives + GameUiLayerHost" />
+          </tr>
+          <tr>
+            <td><code>@tiny-playworks/game-ui-runtime</code></td>
+            <Localized as="td" zh="Headless 事件状态机" en="Headless event state machine" />
+          </tr>
+          <tr>
+            <td><code>@tiny-playworks/tokens</code></td>
+            <Localized as="td" zh="设计令牌与 Panda preset" en="Design tokens and Panda preset" />
+          </tr>
+          <tr>
+            <td><code>@tiny-playworks/game-ui-pixi</code></td>
+            <Localized as="td" zh="Canvas 订阅反馈层（alpha）" en="Canvas feedback bridge (alpha)" />
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <pre className="docs-card"><code>{`pnpm add @tiny-playworks/game-ui @tiny-playworks/game-ui-runtime @tiny-playworks/tokens`}</code></pre>
   </section>
 
   <section className="docs-section">
-    <Localized
-      as="h2"
-      className="docs-section__title"
-      zh="用法"
-      en="Usage"
-    />
+    <Localized as="h2" className="docs-section__title" zh="样式与 Provider" en="Styles and Provider" />
     <pre className="docs-demo-block__code"><code>{`import { GameUiProvider, HealthBar } from '@tiny-playworks/game-ui';
 import '@tiny-playworks/game-ui/styles.css';
 
@@ -39,29 +63,77 @@ export function CombatHud() {
     <Localized
       as="p"
       className="docs-section__text"
-      zh="样式入口固定为 `@tiny-playworks/game-ui/styles.css`。组件 JS 不再隐式注入样式。"
-      en="The fixed style entry is `@tiny-playworks/game-ui/styles.css`. The component JS entry no longer injects styles implicitly."
-    />
-    <Localized
-      as="p"
-      className="docs-section__text"
-      zh="入门示例使用常驻组件，方便直接确认样式是否生效。像 `DamageNumber` 这类战斗反馈组件会自动淡出，更适合接到真实事件流里。"
-      en="The getting-started sample uses a persistent primitive so you can confirm styles immediately. Transient feedback primitives such as `DamageNumber` fade out by design and fit better in a real event flow."
+      zh="样式入口固定为 `@tiny-playworks/game-ui/styles.css`。不要从内部路径导入。"
+      en="Always import `@tiny-playworks/game-ui/styles.css` once. Do not import from internal paths."
     />
   </section>
 
   <section className="docs-section">
-    <Localized
-      as="h2"
-      className="docs-section__title"
-      zh="公开入口"
-      en="Public Entry"
-    />
+    <Localized as="h2" className="docs-section__title" zh="Headless Runtime" en="Headless Runtime" />
     <Localized
       as="p"
       className="docs-section__text"
-      zh="不要从 `packages/primitives/src/*` 这种内部路径去拿组件。公开入口只有 `@tiny-playworks/game-ui`。"
-      en="Do not import from internal paths such as `packages/primitives/src/*`. The public entry is `@tiny-playworks/game-ui`."
+      zh="推荐用于战斗流：游戏逻辑只 dispatch，UI 由 LayerHost 渲染。"
+      en="Recommended for combat flows: game logic dispatches events; LayerHost renders UI."
     />
+    <pre className="docs-demo-block__code"><code>{`import { createGameUiRuntime } from '@tiny-playworks/game-ui-runtime';
+import {
+  GameUiProvider,
+  GameUiRuntimeProvider,
+  GameUiLayerHost,
+} from '@tiny-playworks/game-ui';
+
+const runtime = createGameUiRuntime();
+
+export function GameShell() {
+  return (
+    <GameUiProvider theme="arcade">
+      <GameUiRuntimeProvider runtime={runtime}>
+        <GameUiLayerHost />
+      </GameUiRuntimeProvider>
+    </GameUiProvider>
+  );
+}
+
+runtime.emitDamage({ value: 128, variant: 'critical', anchor: { x: 50, y: 34 } });
+runtime.setCombo(3, 'Combo');
+runtime.trackQuest({ title: 'Beacon', objectives: [{ id: 'a', label: 'Find beacon' }] });
+runtime.setParty({ members: [{ id: 'pilot', name: 'Pilot', health: 80, maxHealth: 100 }] });
+runtime.openQuestLog({ title: 'Log', quests: [{ id: 'q1', title: 'Hunt', objectives: [] }] });`}</code></pre>
+    <Localized
+      as="p"
+      className="docs-section__text"
+      zh={
+        <>
+          完整事件表见 <a href="/game-ui-lab/runtime/runtime-api">Runtime API</a>。交互示例见{' '}
+          <a href="/game-ui-lab/runtime/encounter-demo">Encounter Demo</a>。
+        </>
+      }
+      en={
+        <>
+          See the full event table on <a href="/game-ui-lab/runtime/runtime-api">Runtime API</a>. Try{' '}
+          <a href="/game-ui-lab/runtime/encounter-demo">Encounter Demo</a>.
+        </>
+      }
+    />
+  </section>
+
+  <section className="docs-section">
+    <Localized as="h2" className="docs-section__title" zh="组件文档" en="Component docs" />
+    <Localized
+      as="p"
+      className="docs-section__text"
+      zh="共 35 个公开 primitive。每页含演示、示例代码、双语 Props API 与 token 说明。右上角可切换中/英。"
+      en="There are 35 public primitives. Each page has a demo, sample code, bilingual props API, and token notes. Use the locale toggle."
+    />
+    <p className="docs-section__text">
+      <a href="/game-ui-lab/primitives/">
+        <Localized as="span" zh="浏览全部组件" en="Browse all primitives" />
+      </a>
+      {' · '}
+      <a href="/game-ui-lab/lab/">
+        <Localized as="span" zh="打开实验台" en="Open the Lab" />
+      </a>
+    </p>
   </section>
 </DocShell>
