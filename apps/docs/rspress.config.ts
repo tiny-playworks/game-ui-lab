@@ -66,6 +66,16 @@ export default defineConfig({
             { text: 'LootCard', link: '/primitives/loot-card' },
             { text: 'LootStack', link: '/primitives/loot-stack' },
             { text: 'RewardReveal', link: '/primitives/reward-reveal' },
+            { text: 'BuffBar', link: '/primitives/buff-bar' },
+            { text: 'InventoryGrid', link: '/primitives/inventory-grid' },
+            { text: 'CurrencyBar', link: '/primitives/currency-bar' },
+            { text: 'PartyFrame', link: '/primitives/party-frame' },
+            { text: 'PauseMenu', link: '/primitives/pause-menu' },
+            { text: 'GameTimer', link: '/primitives/game-timer' },
+            { text: 'LoadingOverlay', link: '/primitives/loading-overlay' },
+            { text: 'DeathScreen', link: '/primitives/death-screen' },
+            { text: 'ShopPanel', link: '/primitives/shop-panel' },
+            { text: 'ChatFeed', link: '/primitives/chat-feed' },
           ],
         },
       ],
@@ -78,7 +88,10 @@ export default defineConfig({
       '/runtime/': [
         {
           text: 'Runtime',
-          items: [{ text: 'Encounter Demo', link: '/runtime/encounter-demo' }],
+          items: [
+            { text: 'Encounter Demo', link: '/runtime/encounter-demo' },
+            { text: 'Runtime API', link: '/runtime/runtime-api' },
+          ],
         },
       ],
     },

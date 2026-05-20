@@ -1,17 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import type { CSSProperties } from 'react';
 import type { ToastEventRecord } from '@tiny-playworks/game-ui-runtime';
+import { AbilityBar } from '../ability-bar';
+import type { AbilityBarItem } from '../ability-bar';
+import { BuffBar } from '../buff-bar';
+import type { BuffBarBuff } from '../buff-bar';
+import { ChoicePrompt } from '../choice-prompt';
+import { ComboCounter } from '../combo-counter';
 import { DamageNumber } from '../damage-number';
+import { DialogueBox } from '../dialogue-box';
 import { FloatingToast } from '../floating-toast';
+import { MiniMap } from '../mini-map';
+import { QuestTracker } from '../quest-tracker';
 import { RewardReveal } from '../reward-reveal';
+import { ShopPanel } from '../shop-panel';
+import { TargetFrame } from '../target-frame';
 import {
   gameUiDebugLayerClass,
   gameUiFeedbackItemClass,
   gameUiFeedbackLayerClass,
   gameUiHudLayerClass,
+  gameUiHudClusterClass,
   gameUiLayerClass,
   gameUiLayerHostClass,
   gameUiModalLayerClass,
+  gameUiNarrativeLayerClass,
   gameUiNotificationLayerClass,
   mergeClass,
 } from '../styles';
@@ -21,15 +34,71 @@ export interface GameUiLayerHostProps {
   className?: string;
 }
 
+function cooldownsToAbilities(cooldowns: Record<string, { id: string; label: string; progress: number; ready?: boolean; disabled?: boolean }>): AbilityBarItem[] {
+  return Object.values(cooldowns).map((record) => ({
+    id: record.id,
+    label: record.label,
+    icon: record.label.slice(0, 1),
+    progress: record.progress,
+    ready: record.ready,
+    locked: record.disabled,
+  }));
+}
+
 export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
   const runtime = useGameUiRuntime();
+  const hud = useGameUiLayer('hud');
   const feedback = useGameUiLayer('feedback');
   const notification = useGameUiLayer('notification');
+  const narrative = useGameUiLayer('narrative');
   const modal = useGameUiLayer('modal');
+
+  const abilityItems = useMemo(() => cooldownsToAbilities(hud.cooldowns), [hud.cooldowns]);
+  const buffItems: BuffBarBuff[] = useMemo(
+    () => (hud.buffs ?? []).map((buff) => ({ id: buff.id, label: buff.label, tone: buff.tone, count: buff.count, duration: buff.duration })),
+    [hud.buffs],
+  );
+
+  const hasHudContent = Boolean(
+    hud.combo ||
+      hud.target ||
+      hud.quest ||
+      hud.map ||
+      buffItems.length ||
+      abilityItems.length,
+  );
 
   return (
     <div className={mergeClass(gameUiLayerHostClass, className)} data-game-ui-layer-host="">
-      <div className={mergeClass(gameUiLayerClass, gameUiHudLayerClass)} data-game-ui-layer="hud" />
+      <div className={mergeClass(gameUiLayerClass, gameUiHudLayerClass)} data-game-ui-layer="hud" data-active={hasHudContent}>
+        {hasHudContent ? (
+          <div className={gameUiHudClusterClass}>
+            {hud.combo ? <ComboCounter count={hud.combo.count} label={hud.combo.label} /> : null}
+            {hud.target ? (
+              <TargetFrame
+                name={hud.target.name}
+                health={hud.target.health}
+                maxHealth={hud.target.maxHealth}
+                shield={hud.target.shield}
+                faction="enemy"
+              />
+            ) : null}
+            {hud.quest ? (
+              <QuestTracker title={hud.quest.title} subtitle={hud.quest.subtitle} objectives={hud.quest.objectives} />
+            ) : null}
+            {hud.map ? (
+              <MiniMap
+                label={hud.map.label}
+                markers={hud.map.markers}
+                selectedId={hud.map.selectedId}
+                onMarkerSelect={(id) => runtime.dispatch({ type: 'map:select', id })}
+              />
+            ) : null}
+            {buffItems.length ? <BuffBar buffs={buffItems} limit={8} /> : null}
+            {abilityItems.length ? <AbilityBar abilities={abilityItems} label="Abilities" /> : null}
+          </div>
+        ) : null}
+      </div>
       <div className={mergeClass(gameUiLayerClass, gameUiFeedbackLayerClass)} data-game-ui-layer="feedback">
         {feedback.damage.map((damage) => (
           <span
@@ -55,7 +124,33 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
           <RuntimeToast key={toast.id} toast={toast} />
         ))}
       </div>
-      <div className={mergeClass(gameUiLayerClass, gameUiModalLayerClass)} data-game-ui-layer="modal" data-active={Boolean(modal.reward)}>
+      <div
+        className={mergeClass(gameUiLayerClass, gameUiNarrativeLayerClass)}
+        data-game-ui-layer="narrative"
+        data-active={Boolean(narrative?.dialogue || narrative?.choices)}
+      >
+        {narrative?.dialogue ? (
+          <DialogueBox
+            speaker={narrative.dialogue.speaker}
+            text={narrative.dialogue.text}
+            tone={narrative.dialogue.tone}
+            portrait={narrative.dialogue.portrait}
+          />
+        ) : null}
+        {narrative?.choices ? (
+          <ChoicePrompt
+            title={narrative.choices.title ?? 'Choose'}
+            choices={narrative.choices.options}
+            selectedId={narrative.choices.selectedId}
+            onChoice={(id) => runtime.dispatch({ type: 'choice:select', id })}
+          />
+        ) : null}
+      </div>
+      <div
+        className={mergeClass(gameUiLayerClass, gameUiModalLayerClass)}
+        data-game-ui-layer="modal"
+        data-active={Boolean(modal.reward || modal.shop)}
+      >
         {modal.reward ? (
           <RewardReveal
             title={modal.reward.title}
@@ -67,6 +162,20 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
             onClaim={() => {
               runtime.dispatch({ type: 'reward-reveal:clear' });
               runtime.notify({ title: 'Loot claimed', message: 'Reward moved to inventory.', variant: 'loot' });
+            }}
+          />
+        ) : null}
+        {modal.shop ? (
+          <ShopPanel
+            title={modal.shop.title}
+            items={modal.shop.items.map((item) => ({
+              ...item,
+              price: item.price ?? item.value ?? '0',
+            }))}
+            currencies={modal.shop.currencies}
+            onPurchase={(id) => {
+              runtime.notify({ title: 'Purchased', message: `Bought ${id}`, variant: 'success' });
+              runtime.dispatch({ type: 'shop:close' });
             }}
           />
         ) : null}

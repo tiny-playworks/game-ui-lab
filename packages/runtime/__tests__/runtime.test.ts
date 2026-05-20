@@ -10,6 +10,7 @@ describe('game ui runtime', () => {
     expect(state.layers.notification.toasts).toHaveLength(0);
     expect(state.layers.hud.cooldowns).toEqual({});
     expect(state.layers.modal.reward).toBeUndefined();
+    expect(state.layers.narrative).toEqual({});
   });
 
   it('emits damage and returns a stable id', () => {
@@ -55,6 +56,101 @@ describe('game ui runtime', () => {
 
     expect(runtime.getState().layers.feedback.damage).toHaveLength(0);
     expect(runtime.getState().layers.notification.toasts).toHaveLength(1);
+  });
+
+  it('clears hud to default structure', () => {
+    const runtime = createGameUiRuntime();
+    runtime.setCombo(5);
+    runtime.upsertBuff({ id: 'haste', label: 'Haste', tone: 'buff' });
+
+    runtime.clearLayer('hud');
+
+    expect(runtime.getState().layers.hud).toEqual({ cooldowns: {} });
+  });
+
+  it('increments and resets combo', () => {
+    const runtime = createGameUiRuntime();
+
+    runtime.setCombo(2, 'Chain');
+    runtime.incrementCombo(3);
+
+    expect(runtime.getState().layers.hud.combo).toEqual({ count: 5, label: 'Chain' });
+
+    runtime.resetCombo();
+
+    expect(runtime.getState().layers.hud.combo).toBeUndefined();
+  });
+
+  it('tracks quest objectives', () => {
+    const runtime = createGameUiRuntime();
+
+    runtime.trackQuest({
+      title: 'Signal hunt',
+      objectives: [{ id: 'beacon', label: 'Find beacon', state: 'active' }],
+    });
+    runtime.dispatch({
+      type: 'quest:objective:update',
+      payload: { id: 'beacon', patch: { state: 'complete' } },
+    });
+
+    expect(runtime.getState().layers.hud.quest?.objectives[0].state).toBe('complete');
+  });
+
+  it('updates map markers and selection', () => {
+    const runtime = createGameUiRuntime();
+
+    runtime.setMapMarkers({
+      label: 'Sector',
+      markers: [{ id: 'enemy', x: 40, y: 50, tone: 'enemy' }],
+    });
+    runtime.dispatch({ type: 'map:select', id: 'enemy' });
+
+    expect(runtime.getState().layers.hud.map?.selectedId).toBe('enemy');
+  });
+
+  it('upserts and removes buffs', () => {
+    const runtime = createGameUiRuntime();
+
+    runtime.upsertBuff({ id: 'haste', label: 'Haste', tone: 'buff', count: 2 });
+    runtime.upsertBuff({ id: 'haste', label: 'Haste', tone: 'buff', count: 3 });
+    runtime.dispatch({ type: 'buff:remove', id: 'haste' });
+
+    expect(runtime.getState().layers.hud.buffs).toEqual([]);
+  });
+
+  it('shows dialogue and choices in narrative layer', () => {
+    const runtime = createGameUiRuntime();
+
+    runtime.showDialogue({ speaker: 'Guide', text: 'Hold position.' });
+    runtime.showChoices({
+      title: 'Route',
+      options: [{ id: 'left', label: 'Left path' }],
+    });
+    runtime.dispatch({ type: 'choice:select', id: 'left' });
+
+    expect(runtime.getState().layers.narrative?.dialogue?.speaker).toBe('Guide');
+    expect(runtime.getState().layers.narrative?.choices?.selectedId).toBe('left');
+  });
+
+  it('opens shop and clears reward modal', () => {
+    const runtime = createGameUiRuntime();
+
+    runtime.dispatch({
+      type: 'reward-reveal:show',
+      payload: { id: 'cache', title: 'Cache', items: [], state: 'sealed' },
+    });
+    runtime.dispatch({
+      type: 'shop:open',
+      payload: {
+        id: 'vendor',
+        title: 'Vendor',
+        items: [{ id: 'potion', name: 'Potion', price: 50 }],
+        currencies: [{ id: 'gold', label: 'Gold', amount: 200, tone: 'gold' }],
+      },
+    });
+
+    expect(runtime.getState().layers.modal.reward).toBeUndefined();
+    expect(runtime.getState().layers.modal.shop?.title).toBe('Vendor');
   });
 
   it('notifies subscribers until unsubscribe', () => {

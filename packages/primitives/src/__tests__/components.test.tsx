@@ -1,22 +1,29 @@
 import React from 'react';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from '@rstest/core';
+import { afterEach, describe, expect, it, vi } from '@rstest/core';
 import { createGameUiRuntime } from '@tiny-playworks/game-ui-runtime';
 import {
   AbilityBar,
   AbilityTooltip,
+  BuffBar,
   CastBar,
+  ChatFeed,
   ChoicePrompt,
   ComboCounter,
   CompassBar,
   CooldownSlot,
+  CurrencyBar,
   DamageNumber,
+  DeathScreen,
   DialogueBox,
   FloatingToast,
+  GameTimer,
   GameUiLayerHost,
   GameUiProvider,
   GameUiRuntimeProvider,
   HealthBar,
+  InventoryGrid,
+  LoadingOverlay,
   LocationTag,
   LootCard,
   LootStack,
@@ -24,11 +31,14 @@ import {
   MiniMap,
   NotificationStack,
   ObjectiveChip,
+  PartyFrame,
+  PauseMenu,
   QuestLog,
   QuestTracker,
   RarityBorder,
   ResourceMeter,
   RewardReveal,
+  ShopPanel,
   StatusBadge,
   TargetFrame,
   useGameUiRuntime,
@@ -588,6 +598,125 @@ describe('game ui primitives', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Close notification' }));
 
     expect(screen.queryByText('Skill ready')).toBeNull();
+  });
+
+  it('renders buff bar with overflow and selection', () => {
+    const selected: string[] = [];
+    render(
+      <BuffBar
+        limit={2}
+        selectedId="haste"
+        onBuffSelect={(id) => selected.push(id)}
+        buffs={[
+          { id: 'haste', label: 'Haste', tone: 'buff', count: 2 },
+          { id: 'slow', label: 'Slow', tone: 'debuff' },
+          { id: 'warn', label: 'Warn', tone: 'warning' },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('list').parentElement?.getAttribute('data-overflow')).toBe('1');
+    fireEvent.click(screen.getByRole('button', { name: 'Haste buff' }));
+    expect(selected).toEqual(['haste']);
+  });
+
+  it('renders inventory grid slot states', () => {
+    render(
+      <InventoryGrid
+        columns={2}
+        slots={[
+          { id: 'a', item: { id: 'a', name: 'Core', rarity: 'rare' } },
+          { id: 'b', locked: true },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText('Core').textContent).toBe('Core');
+    expect(screen.getAllByRole('listitem')[1].getAttribute('data-locked')).toBe('true');
+  });
+
+  it('renders currency bar entries', () => {
+    render(
+      <CurrencyBar
+        currencies={[
+          { id: 'gold', label: 'Gold', amount: 1200, tone: 'gold' },
+          { id: 'gem', label: 'Gem', amount: 12, tone: 'gem' },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText('1,200').textContent).toBe('1,200');
+    expect(screen.getByText('Gem').textContent).toBe('Gem');
+  });
+
+  it('renders party frame member selection', () => {
+    const selected: string[] = [];
+    render(
+      <PartyFrame
+        selectedId="pilot"
+        onMemberSelect={(id) => selected.push(id)}
+        members={[
+          { id: 'pilot', name: 'Pilot', health: 80, maxHealth: 100 },
+          { id: 'scout', name: 'Scout', health: 0, maxHealth: 100, offline: true },
+        ]}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Pilot party member' }));
+    expect(selected).toEqual(['pilot']);
+  });
+
+  it('renders system ui overlays when open', () => {
+    render(
+      <>
+        <PauseMenu open title="Paused" items={[{ id: 'quit', label: 'Quit', danger: true }]} />
+        <LoadingOverlay open title="Loading" message="Please wait" progress={0.4} />
+        <DeathScreen open title="Defeated" actionLabel="Retry" onAction={() => undefined} />
+        <GameTimer remainingMs={65_000} totalMs={120_000} label="Boss" variant="bar" />
+        <ChatFeed messages={[{ id: '1', author: 'System', text: 'Wave started', tone: 'system' }]} />
+      </>,
+    );
+
+    expect(screen.getByRole('dialog', { name: 'Paused' })).toBeTruthy();
+    expect(screen.getByText('Please wait').textContent).toBe('Please wait');
+    expect(screen.getByText('Wave started').textContent).toBe('Wave started');
+    expect(screen.getByRole('timer', { name: 'Boss 1:05' })).toBeTruthy();
+  });
+
+  it('renders shop panel with price', () => {
+    render(
+      <ShopPanel
+        title="Vendor"
+        currencies={[{ id: 'gold', label: 'Gold', amount: 90, tone: 'gold' }]}
+        items={[{ id: 'potion', name: 'Potion', rarity: 'common', price: 50 }]}
+      />,
+    );
+
+    expect(screen.getByText('50').textContent).toBe('50');
+    expect(screen.getByText('Vendor').textContent).toBe('Vendor');
+  });
+
+  it('renders runtime hud layers from dispatch', () => {
+    const runtime = createGameUiRuntime();
+
+    render(
+      <GameUiRuntimeProvider runtime={runtime}>
+        <GameUiLayerHost />
+      </GameUiRuntimeProvider>,
+    );
+
+    act(() => {
+      runtime.setCombo(4, 'Combo');
+      runtime.dispatch({
+        type: 'target-health:update',
+        payload: { name: 'Warden', health: 200, maxHealth: 400 },
+      });
+      runtime.showDialogue({ speaker: 'Guide', text: 'Strike now.' });
+    });
+
+    expect(screen.getByLabelText('Combo 4').textContent).toContain('4');
+    expect(screen.getByText('Warden').textContent).toBe('Warden');
+    expect(screen.getByText('Strike now.').textContent).toBe('Strike now.');
   });
 
   it('throws when runtime hook is used outside the runtime provider', () => {

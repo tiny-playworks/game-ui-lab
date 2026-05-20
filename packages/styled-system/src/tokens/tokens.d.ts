@@ -1,11 +1,11 @@
 /* eslint-disable */
 export type Token = `fonts.${FontToken}` | `colors.${ColorToken}` | `spacing.${SpacingToken}` | `radii.${RadiusToken}` | `shadows.${ShadowToken}` | `durations.${DurationToken}` | `easings.${EasingToken}`
 
-export type ColorPalette = "background" | "surface" | "surfaceStrong" | "line" | "text" | "muted" | "accent" | "accentStrong" | "danger" | "heal" | "critical" | "miss" | "loot" | "rarityCommon" | "rarityRare" | "rarityEpic" | "rarityLegendary" | "health" | "shield" | "mana" | "energy" | "stamina" | "debuff" | "cooldownMask" | "abilityReady" | "abilityLocked" | "cast" | "target" | "mapLine" | "markerAlly" | "markerEnemy" | "markerObjective" | "dialogue" | "choice" | "speaker" | "notification"
+export type ColorPalette = "background" | "surface" | "surfaceStrong" | "line" | "text" | "muted" | "accent" | "accentStrong" | "danger" | "heal" | "critical" | "miss" | "loot" | "rarityCommon" | "rarityRare" | "rarityEpic" | "rarityLegendary" | "health" | "shield" | "mana" | "energy" | "stamina" | "debuff" | "cooldownMask" | "abilityReady" | "abilityLocked" | "cast" | "target" | "mapLine" | "markerAlly" | "markerEnemy" | "markerObjective" | "dialogue" | "choice" | "speaker" | "notification" | "slotEmpty" | "slotEquipped" | "slotLocked" | "partyOffline" | "partySelected" | "currencyGold" | "currencyGem" | "currencyToken"
 
 export type FontToken = "sans" | "display"
 
-export type ColorToken = "background" | "surface" | "surfaceStrong" | "line" | "text" | "muted" | "accent" | "accentStrong" | "danger" | "heal" | "critical" | "miss" | "loot" | "rarityCommon" | "rarityRare" | "rarityEpic" | "rarityLegendary" | "health" | "shield" | "mana" | "energy" | "stamina" | "debuff" | "cooldownMask" | "abilityReady" | "abilityLocked" | "cast" | "target" | "mapLine" | "markerAlly" | "markerEnemy" | "markerObjective" | "dialogue" | "choice" | "speaker" | "notification" | "colorPalette"
+export type ColorToken = "background" | "surface" | "surfaceStrong" | "line" | "text" | "muted" | "accent" | "accentStrong" | "danger" | "heal" | "critical" | "miss" | "loot" | "rarityCommon" | "rarityRare" | "rarityEpic" | "rarityLegendary" | "health" | "shield" | "mana" | "energy" | "stamina" | "debuff" | "cooldownMask" | "abilityReady" | "abilityLocked" | "cast" | "target" | "mapLine" | "markerAlly" | "markerEnemy" | "markerObjective" | "dialogue" | "choice" | "speaker" | "notification" | "slotEmpty" | "slotEquipped" | "slotLocked" | "partyOffline" | "partySelected" | "currencyGold" | "currencyGem" | "currencyToken" | "colorPalette"
 
 export type SpacingToken = "1" | "2" | "3" | "4" | "5" | "-1" | "-2" | "-3" | "-4" | "-5"
 

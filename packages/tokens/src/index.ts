@@ -10,6 +10,9 @@ export type GameUiTokenGroupId =
   | 'ability'
   | 'map'
   | 'narrative'
+  | 'inventory'
+  | 'party'
+  | 'economy'
   | 'glow'
   | 'radius'
   | 'spacing';
@@ -80,6 +83,17 @@ const tokenDefinitions = [
   token('choice', 'Choice', '--game-ui-choice', '#b47cff', 'narrative', 'colors', 'choice', 'Choice and quest emphasis.', 'swatch'),
   token('speaker', 'Speaker', '--game-ui-speaker', '#ffd166', 'narrative', 'colors', 'speaker', 'Speaker label tone.', 'swatch'),
   token('notification', 'Notification', '--game-ui-notification', '#55f7d2', 'narrative', 'colors', 'notification', 'Notification count tone.', 'swatch'),
+
+  token('slotEmpty', 'Slot empty', '--game-ui-slot-empty', 'rgba(16, 23, 42, 0.42)', 'inventory', 'colors', 'slotEmpty', 'Empty inventory slot surface.', 'swatch'),
+  token('slotEquipped', 'Slot equipped', '--game-ui-slot-equipped', '#55f7d2', 'inventory', 'colors', 'slotEquipped', 'Equipped slot highlight.', 'swatch'),
+  token('slotLocked', 'Slot locked', '--game-ui-slot-locked', '#64748b', 'inventory', 'colors', 'slotLocked', 'Locked inventory slot tone.', 'swatch'),
+
+  token('partyOffline', 'Party offline', '--game-ui-party-offline', '#64748b', 'party', 'colors', 'partyOffline', 'Offline party member tone.', 'swatch'),
+  token('partySelected', 'Party selected', '--game-ui-party-selected', '#55f7d2', 'party', 'colors', 'partySelected', 'Selected party member accent.', 'swatch'),
+
+  token('currencyGold', 'Currency gold', '--game-ui-currency-gold', '#ffd166', 'economy', 'colors', 'currencyGold', 'Gold or coin currency tone.', 'swatch'),
+  token('currencyGem', 'Currency gem', '--game-ui-currency-gem', '#b47cff', 'economy', 'colors', 'currencyGem', 'Premium gem currency tone.', 'swatch'),
+  token('currencyToken', 'Currency token', '--game-ui-currency-token', '#55f7d2', 'economy', 'colors', 'currencyToken', 'Event token currency tone.', 'swatch'),
 
   token('shadowSoft', 'Soft shadow', '--game-ui-shadow-soft', '0 14px 36px rgba(0, 0, 0, 0.38)', 'glow', 'shadows', 'soft', 'Default elevated panel shadow.', 'shadow'),
   token('shadowGlow', 'Glow shadow', '--game-ui-shadow-glow', '0 0 28px rgba(85, 247, 210, 0.28)', 'glow', 'shadows', 'glow', 'Accent glow shadow.', 'shadow'),
@@ -170,6 +184,18 @@ const groupMeta: Record<GameUiTokenGroupId, { title: string; description: string
     title: 'Narrative tokens',
     description: 'Dialogue, choice, and notification tones.',
   },
+  inventory: {
+    title: 'Inventory tokens',
+    description: 'Grid slot surfaces for empty, equipped, and locked states.',
+  },
+  party: {
+    title: 'Party tokens',
+    description: 'Party frame offline and selection accents.',
+  },
+  economy: {
+    title: 'Economy tokens',
+    description: 'Currency bar tones for gold, gems, and tokens.',
+  },
   glow: {
     title: 'Glow tokens',
     description: 'Shadow and glow styles for elevated HUD layers.',
@@ -184,7 +210,21 @@ const groupMeta: Record<GameUiTokenGroupId, { title: string; description: string
   },
 };
 
-const groupOrder: GameUiTokenGroupId[] = ['color', 'rarity', 'hud', 'motion', 'ability', 'map', 'narrative', 'glow', 'radius', 'spacing'];
+const groupOrder: GameUiTokenGroupId[] = [
+  'color',
+  'rarity',
+  'hud',
+  'motion',
+  'ability',
+  'map',
+  'narrative',
+  'inventory',
+  'party',
+  'economy',
+  'glow',
+  'radius',
+  'spacing',
+];
 
 export const gameUiTokenVars = Object.fromEntries(
   tokenDefinitions.map((definition) => [definition.key, definition.cssVar]),

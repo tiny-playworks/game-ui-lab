@@ -2,16 +2,23 @@ import type { JSX, ReactNode } from 'react';
 import {
   AbilityBar,
   AbilityTooltip,
+  BuffBar,
   CastBar,
+  ChatFeed,
   ChoicePrompt,
   ComboCounter,
   CompassBar,
   CooldownSlot,
+  CurrencyBar,
   DamageNumber,
+  DeathScreen,
   DialogueBox,
   FloatingToast,
+  GameTimer,
   GameUiProvider,
   HealthBar,
+  InventoryGrid,
+  LoadingOverlay,
   LocationTag,
   LootCard,
   LootStack,
@@ -19,11 +26,14 @@ import {
   MiniMap,
   NotificationStack,
   ObjectiveChip,
+  PartyFrame,
+  PauseMenu,
   QuestLog,
   QuestTracker,
   RarityBorder,
   ResourceMeter,
   RewardReveal,
+  ShopPanel,
   StatusBadge,
   TargetFrame,
 } from '@tiny-playworks/game-ui';
@@ -55,7 +65,17 @@ type PrimitiveId =
   | 'rarity-border'
   | 'loot-card'
   | 'loot-stack'
-  | 'reward-reveal';
+  | 'reward-reveal'
+  | 'buff-bar'
+  | 'inventory-grid'
+  | 'currency-bar'
+  | 'party-frame'
+  | 'pause-menu'
+  | 'game-timer'
+  | 'loading-overlay'
+  | 'death-screen'
+  | 'shop-panel'
+  | 'chat-feed';
 
 interface ApiRow {
   prop: string;
@@ -906,6 +926,262 @@ export function Demo() {
     tokenEn: 'Reuses reward, rarity, button, and state tokens.',
     Preview: RewardRevealPreview,
   },
+  'buff-bar': {
+    id: 'buff-bar',
+    name: 'BuffBar',
+    categoryZh: '状态',
+    categoryEn: 'Status',
+    summaryZh: '持久 Buff/Debuff 横条，支持溢出与选择。',
+    summaryEn: 'A persistent buff/debuff strip with overflow and selection.',
+    snippet: `import { BuffBar, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <BuffBar buffs={[{ id: 'haste', label: 'Haste', tone: 'buff', count: 2 }]} limit={4} />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('buffs', '状态数组。', 'Buff array.', 'BuffBarItem[]', '-'),
+      row('limit', '最多展示数量。', 'Visible buff limit.', 'number', '6'),
+      row('selectedId', '选中 id。', 'Selected buff id.', 'string', '-'),
+      row('onBuffSelect', '选择回调。', 'Select callback.', '(id, buff) => void', '-'),
+      ...commonRows,
+    ],
+    tokenZh: '复用 StatusBadge 与 debuff token。',
+    tokenEn: 'Reuses StatusBadge and debuff tokens.',
+    Preview: BuffBarPreview,
+  },
+  'inventory-grid': {
+    id: 'inventory-grid',
+    name: 'InventoryGrid',
+    categoryZh: '背包',
+    categoryEn: 'Inventory',
+    summaryZh: '背包/装备格子网格。',
+    summaryEn: 'An inventory or equipment slot grid.',
+    snippet: `import { InventoryGrid, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <InventoryGrid slots={[{ id: 'a', item: { id: 'shard', name: 'Shard', rarity: 'epic' } }]} columns={4} />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('slots', '格子数组。', 'Slot array.', 'InventoryGridSlot[]', '-'),
+      row('columns', '列数。', 'Column count.', 'number', '4'),
+      row('onSlotSelect', '选择回调。', 'Select callback.', '(id, slot) => void', '-'),
+      ...commonRows,
+    ],
+    tokenZh: '使用 inventory slot empty/equipped token。',
+    tokenEn: 'Uses inventory slot empty and equipped tokens.',
+    Preview: InventoryGridPreview,
+  },
+  'currency-bar': {
+    id: 'currency-bar',
+    name: 'CurrencyBar',
+    categoryZh: '经济',
+    categoryEn: 'Economy',
+    summaryZh: '顶部货币条。',
+    summaryEn: 'A compact top-bar currency readout.',
+    snippet: `import { CurrencyBar, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <CurrencyBar currencies={[{ id: 'gold', label: 'Gold', amount: 240, tone: 'gold' }]} />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('currencies', '货币数组。', 'Currency array.', 'CurrencyBarEntry[]', '-'),
+      row('compact', '紧凑模式。', 'Compact layout.', 'boolean', 'false'),
+      ...commonRows,
+    ],
+    tokenZh: '使用 economy gold/gem/token token。',
+    tokenEn: 'Uses economy gold, gem, and token tones.',
+    Preview: CurrencyBarPreview,
+  },
+  'party-frame': {
+    id: 'party-frame',
+    name: 'PartyFrame',
+    categoryZh: '小队',
+    categoryEn: 'Party',
+    summaryZh: '小队成员状态列表。',
+    summaryEn: 'A party member status list.',
+    snippet: `import { PartyFrame, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <PartyFrame members={[{ id: 'pilot', name: 'Pilot', health: 80, maxHealth: 100 }]} />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('members', '队员数组。', 'Member array.', 'PartyFrameMember[]', '-'),
+      row('onMemberSelect', '选择回调。', 'Select callback.', '(id, member) => void', '-'),
+      ...commonRows,
+    ],
+    tokenZh: '使用 party offline/selected token。',
+    tokenEn: 'Uses party offline and selected tokens.',
+    Preview: PartyFramePreview,
+  },
+  'pause-menu': {
+    id: 'pause-menu',
+    name: 'PauseMenu',
+    categoryZh: '系统',
+    categoryEn: 'System',
+    summaryZh: '暂停菜单覆盖层。',
+    summaryEn: 'A pause menu overlay.',
+    snippet: `import { PauseMenu, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <PauseMenu open title="Paused" items={[{ id: 'resume', label: 'Resume' }]} onResume={() => {}} />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('open', '是否打开。', 'Whether open.', 'boolean', '-'),
+      row('items', '菜单项。', 'Menu items.', 'PauseMenuItem[]', '-'),
+      row('onResume', '继续回调。', 'Resume callback.', '() => void', '-'),
+      ...commonRows,
+    ],
+    tokenZh: '使用 surface 与 danger token。',
+    tokenEn: 'Uses surface and danger tokens.',
+    Preview: PauseMenuPreview,
+  },
+  'game-timer': {
+    id: 'game-timer',
+    name: 'GameTimer',
+    categoryZh: '系统',
+    categoryEn: 'System',
+    summaryZh: 'Boss/机制倒计时。',
+    summaryEn: 'A boss or mechanic countdown timer.',
+    snippet: `import { GameTimer, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <GameTimer remainingMs={12000} totalMs={30000} label="Boss" variant="bar" />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('remainingMs', '剩余毫秒。', 'Remaining milliseconds.', 'number', '-'),
+      row('totalMs', '总时长毫秒。', 'Total milliseconds.', 'number', '-'),
+      row('variant', '展示形态。', 'Display variant.', "'bar' | 'ring'", "'bar'"),
+      ...commonRows,
+    ],
+    tokenZh: '使用 danger 警告态与 accent 进度 token。',
+    tokenEn: 'Uses danger warning and accent progress tokens.',
+    Preview: GameTimerPreview,
+  },
+  'loading-overlay': {
+    id: 'loading-overlay',
+    name: 'LoadingOverlay',
+    categoryZh: '系统',
+    categoryEn: 'System',
+    summaryZh: '加载覆盖层。',
+    summaryEn: 'A loading overlay screen.',
+    snippet: `import { LoadingOverlay, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <LoadingOverlay open title="Loading" message="Syncing world" progress={0.42} />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('open', '是否打开。', 'Whether open.', 'boolean', '-'),
+      row('progress', '可选进度 0-1。', 'Optional progress 0-1.', 'number', '-'),
+      ...commonRows,
+    ],
+    tokenZh: '使用 accent 进度与 surface token。',
+    tokenEn: 'Uses accent progress and surface tokens.',
+    Preview: LoadingOverlayPreview,
+  },
+  'death-screen': {
+    id: 'death-screen',
+    name: 'DeathScreen',
+    categoryZh: '系统',
+    categoryEn: 'System',
+    summaryZh: '死亡/失败屏。',
+    summaryEn: 'A death or fail screen.',
+    snippet: `import { DeathScreen, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <DeathScreen open title="Defeated" message="Try again" actionLabel="Retry" />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('open', '是否打开。', 'Whether open.', 'boolean', '-'),
+      row('onAction', '主操作回调。', 'Primary action callback.', '() => void', '-'),
+      ...commonRows,
+    ],
+    tokenZh: '使用 danger 与 primary button token。',
+    tokenEn: 'Uses danger and primary button tokens.',
+    Preview: DeathScreenPreview,
+  },
+  'shop-panel': {
+    id: 'shop-panel',
+    name: 'ShopPanel',
+    categoryZh: '经济',
+    categoryEn: 'Economy',
+    summaryZh: '轻量商店面板。',
+    summaryEn: 'A lightweight shop panel.',
+    snippet: `import { ShopPanel, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <ShopPanel title="Vendor" items={[{ id: 'potion', name: 'Potion', price: '20g' }]} currencies={[{ id: 'gold', label: 'Gold', amount: 120, tone: 'gold' }]} />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('items', '商品数组。', 'Shop items.', 'ShopPanelItem[]', '-'),
+      row('currencies', '货币条。', 'Currency bar entries.', 'CurrencyBarEntry[]', '-'),
+      row('onPurchase', '购买回调。', 'Purchase callback.', '(id, item) => void', '-'),
+      ...commonRows,
+    ],
+    tokenZh: '复用 LootCard 与 CurrencyBar token。',
+    tokenEn: 'Reuses LootCard and CurrencyBar tokens.',
+    Preview: ShopPanelPreview,
+  },
+  'chat-feed': {
+    id: 'chat-feed',
+    name: 'ChatFeed',
+    categoryZh: '系统',
+    categoryEn: 'System',
+    summaryZh: '战斗日志/聊天 feed。',
+    summaryEn: 'A combat log or chat feed.',
+    snippet: `import { ChatFeed, GameUiProvider } from '@tiny-playworks/game-ui';
+
+export function Demo() {
+  return (
+    <GameUiProvider>
+      <ChatFeed messages={[{ id: '1', author: 'System', text: 'Boss engaged', tone: 'combat' }]} />
+    </GameUiProvider>
+  );
+}`,
+    api: [
+      row('messages', '消息数组。', 'Message array.', 'ChatFeedMessage[]', '-'),
+      row('limit', '可见条数。', 'Visible message limit.', 'number', '8'),
+      ...commonRows,
+    ],
+    tokenZh: '使用 combat/loot/system tone token。',
+    tokenEn: 'Uses combat, loot, and system tone tokens.',
+    Preview: ChatFeedPreview,
+  },
 };
 
 const overviewOrder: PrimitiveId[] = [
@@ -934,6 +1210,16 @@ const overviewOrder: PrimitiveId[] = [
   'loot-card',
   'loot-stack',
   'reward-reveal',
+  'buff-bar',
+  'inventory-grid',
+  'currency-bar',
+  'party-frame',
+  'pause-menu',
+  'game-timer',
+  'loading-overlay',
+  'death-screen',
+  'shop-panel',
+  'chat-feed',
 ];
 
 export function PrimitiveOverview() {
@@ -1231,4 +1517,89 @@ function LootStackPreview() {
 
 function RewardRevealPreview() {
   return <RewardReveal title="战斗结算" items={lootItems} state="revealed" actionLabel="领取" />;
+}
+
+function BuffBarPreview() {
+  return (
+    <BuffBar
+      buffs={[
+        { id: 'haste', label: '急速', tone: 'buff', count: 2 },
+        { id: 'burn', label: '灼烧', tone: 'debuff', duration: '8秒' },
+      ]}
+      limit={4}
+    />
+  );
+}
+
+function InventoryGridPreview() {
+  return (
+    <InventoryGrid
+      columns={3}
+      slots={[
+        { id: 'a', item: lootItems[0] },
+        { id: 'b', locked: true },
+        { id: 'c', equipped: true, item: lootItems[1] },
+      ]}
+    />
+  );
+}
+
+function CurrencyBarPreview() {
+  return (
+    <CurrencyBar
+      currencies={[
+        { id: 'gold', label: '金币', amount: 240, tone: 'gold', icon: 'G' },
+        { id: 'gem', label: '水晶', amount: 12, tone: 'gem', icon: '◆' },
+      ]}
+    />
+  );
+}
+
+function PartyFramePreview() {
+  return (
+    <PartyFrame
+      members={[
+        { id: 'pilot', name: '领航员', health: 320, maxHealth: 420, shield: 24 },
+        { id: 'support', name: '支援', health: 180, maxHealth: 360, status: { label: '护盾', tone: 'buff' } },
+      ]}
+      selectedId="pilot"
+    />
+  );
+}
+
+function PauseMenuPreview() {
+  return <PauseMenu open title="暂停" items={[{ id: 'settings', label: '设置' }, { id: 'quit', label: '退出', danger: true }]} onResume={() => undefined} />;
+}
+
+function GameTimerPreview() {
+  return <GameTimer remainingMs={12000} totalMs={30000} label="Boss" variant="ring" warningThreshold={0.25} />;
+}
+
+function LoadingOverlayPreview() {
+  return <LoadingOverlay open title="加载中" message="同步世界状态" progress={0.56} />;
+}
+
+function DeathScreenPreview() {
+  return <DeathScreen open title="战败" message="再试一次，调整技能节奏。" actionLabel="重试" secondaryLabel="返回营地" />;
+}
+
+function ShopPanelPreview() {
+  return (
+    <ShopPanel
+      title="补给站"
+      items={[{ id: 'potion', name: '治疗药剂', rarity: 'rare', price: '20g' }]}
+      currencies={[{ id: 'gold', label: '金币', amount: 120, tone: 'gold' }]}
+    />
+  );
+}
+
+function ChatFeedPreview() {
+  return (
+    <ChatFeed
+      messages={[
+        { id: '1', author: '系统', text: 'Boss 已进入战斗', tone: 'combat' },
+        { id: '2', author: '队友', text: '左侧通道更安全', tone: 'party' },
+      ]}
+    />
+  );
 }

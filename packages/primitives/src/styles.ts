@@ -26,6 +26,8 @@ const radiusLg = 'var(--game-ui-radius-lg)';
 const space1 = 'var(--game-ui-space-1)';
 const space2 = 'var(--game-ui-space-2)';
 const space3 = 'var(--game-ui-space-3)';
+const space4 = 'var(--game-ui-space-4)';
+const space5 = 'var(--game-ui-space-5)';
 const shadowSoft = 'var(--game-ui-shadow-soft)';
 const shadowGlow = 'var(--game-ui-shadow-glow)';
 
@@ -960,6 +962,205 @@ export const lootCardRecipe = cva({
   },
 });
 
+export const pauseMenuClass = css({
+  position: 'fixed',
+  inset: 0,
+  display: 'grid',
+  placeItems: 'center',
+  padding: space3,
+  background: 'rgba(3, 7, 18, 0.72)',
+  color: text,
+  fontFamily: 'var(--game-ui-font-sans)',
+  pointerEvents: 'auto',
+});
+export const pauseMenuTitleClass = css({ fontSize: '20px', fontWeight: '900' });
+export const pauseMenuActionsClass = css({ display: 'grid', gap: space2, minWidth: '220px' });
+export const pauseMenuItemRecipe = cva({
+  base: {
+    padding: '10px 14px',
+    border: `1px solid ${line}`,
+    borderRadius: radiusMd,
+    background: panelSurfaceStrong,
+    color: text,
+    fontWeight: '800',
+    cursor: 'pointer',
+    transition: 'border-color var(--game-ui-duration-fast)',
+  },
+  variants: {
+    danger: {
+      true: { borderColor: danger, color: danger },
+      false: {},
+    },
+  },
+  defaultVariants: { danger: false },
+});
+
+export const gameTimerRecipe = cva({
+  base: {
+    display: 'grid',
+    gap: space2,
+    minWidth: '180px',
+    padding: space2,
+    border: `1px solid ${line}`,
+    borderRadius: radiusMd,
+    background: panelSurface,
+    color: text,
+    fontFamily: 'var(--game-ui-font-sans)',
+  },
+  variants: {
+    variant: { bar: {}, ring: { justifyItems: 'center' } },
+    warning: {
+      true: { borderColor: danger, color: danger },
+      false: {},
+    },
+  },
+  defaultVariants: { variant: 'bar', warning: false },
+});
+export const gameTimerLabelClass = css(upperLabel);
+export const gameTimerValueClass = css({ fontSize: '18px', fontWeight: '900' });
+export const gameTimerBarClass = css({
+  display: 'block',
+  height: '6px',
+  borderRadius: '999px',
+  background: `linear-gradient(90deg, ${accent} var(--game-ui-timer-progress, 100%), color-mix(in srgb, ${line}, transparent 40%) var(--game-ui-timer-progress, 100%))`,
+});
+export const gameTimerRingClass = css({
+  display: 'grid',
+  width: '56px',
+  height: '56px',
+  placeItems: 'center',
+  borderRadius: '50%',
+  border: `3px solid color-mix(in srgb, ${accent}, transparent 60%)`,
+  background: `conic-gradient(${accent} var(--game-ui-timer-progress, 100%), transparent var(--game-ui-timer-progress, 100%))`,
+});
+
+export const loadingOverlayClass = css({
+  position: 'fixed',
+  inset: 0,
+  display: 'grid',
+  placeContent: 'center',
+  justifyItems: 'center',
+  gap: space3,
+  padding: space3,
+  background: 'rgba(3, 7, 18, 0.84)',
+  color: text,
+  fontFamily: 'var(--game-ui-font-sans)',
+  pointerEvents: 'auto',
+});
+export const loadingOverlayTitleClass = css({ fontSize: '22px', fontWeight: '900' });
+export const loadingOverlayMessageClass = css({ color: muted, fontSize: '14px', fontWeight: '700' });
+export const loadingOverlayProgressClass = css({
+  display: 'block',
+  width: 'min(320px, 80vw)',
+  height: '8px',
+  borderRadius: '999px',
+  background: `linear-gradient(90deg, ${accent} var(--game-ui-loading-progress, 0%), color-mix(in srgb, ${line}, transparent 40%) var(--game-ui-loading-progress, 0%))`,
+});
+
+export const deathScreenClass = css({
+  position: 'fixed',
+  inset: 0,
+  display: 'grid',
+  placeContent: 'center',
+  justifyItems: 'center',
+  gap: space3,
+  padding: space3,
+  background: 'rgba(3, 7, 18, 0.88)',
+  color: text,
+  fontFamily: 'var(--game-ui-font-sans)',
+  pointerEvents: 'auto',
+});
+export const deathScreenTitleClass = css({ fontSize: '28px', fontWeight: '900', color: danger });
+export const deathScreenMessageClass = css({ maxWidth: '420px', color: muted, textAlign: 'center' });
+export const deathScreenActionsClass = css({ display: 'flex', gap: space2, flexWrap: 'wrap', justifyContent: 'center' });
+export const deathScreenPrimaryClass = css({
+  padding: '10px 16px',
+  border: `1px solid ${accent}`,
+  borderRadius: radiusMd,
+  background: panelSurfaceStrong,
+  color: accent,
+  fontWeight: '900',
+  cursor: 'pointer',
+});
+export const deathScreenSecondaryClass = css({
+  padding: '10px 16px',
+  border: `1px solid ${line}`,
+  borderRadius: radiusMd,
+  background: panelSurface,
+  color: muted,
+  fontWeight: '800',
+  cursor: 'pointer',
+});
+
+export const shopPanelClass = css({
+  display: 'grid',
+  gap: space3,
+  minWidth: '300px',
+  padding: space3,
+  border: `1px solid ${line}`,
+  borderRadius: radiusLg,
+  background: panelSurfaceStrong,
+  boxShadow: shadowSoft,
+  color: text,
+  fontFamily: 'var(--game-ui-font-sans)',
+  pointerEvents: 'auto',
+});
+export const shopPanelHeaderClass = css({ display: 'grid', gap: space2 });
+export const shopPanelTitleClass = css({ fontSize: '18px', fontWeight: '900' });
+export const shopPanelGridClass = css({ display: 'grid', gap: space2 });
+export const shopPanelItemClass = css({
+  display: 'grid',
+  gap: space2,
+  padding: space2,
+  border: `1px solid ${line}`,
+  borderRadius: radiusMd,
+  background: panelSurface,
+});
+export const shopPanelPriceClass = css({ color: critical, fontSize: '12px', fontWeight: '900' });
+
+export const chatFeedClass = css({
+  display: 'grid',
+  gap: space2,
+  minWidth: '240px',
+  maxHeight: '220px',
+  padding: space2,
+  border: `1px solid ${line}`,
+  borderRadius: radiusMd,
+  background: panelSurface,
+  color: text,
+  fontFamily: 'var(--game-ui-font-sans)',
+  overflow: 'hidden',
+});
+export const chatFeedListClass = css({
+  display: 'grid',
+  gap: space1,
+  padding: 0,
+  margin: 0,
+  listStyle: 'none',
+  overflow: 'auto',
+});
+export const chatFeedItemRecipe = cva({
+  base: {
+    display: 'grid',
+    gap: '2px',
+    padding: '4px 6px',
+    borderRadius: radiusSm,
+    fontSize: '12px',
+    fontWeight: '700',
+  },
+  variants: {
+    tone: {
+      info: { color: text },
+      system: { color: muted },
+      party: { color: heal },
+      combat: { color: danger },
+      loot: { color: loot },
+    },
+  },
+  defaultVariants: { tone: 'info' },
+});
+export const chatFeedOverflowClass = css({ color: muted, fontSize: '11px', fontWeight: '700', listStyle: 'none' });
+
 export const gameUiLayerHostClass = css({
   position: 'absolute',
   inset: 0,
@@ -971,7 +1172,24 @@ export const gameUiLayerClass = css({
   inset: 0,
   pointerEvents: 'none',
 });
-export const gameUiHudLayerClass = css({ zIndex: 10 });
+export const gameUiHudLayerClass = css({
+  zIndex: 10,
+  display: 'grid',
+  alignContent: 'start',
+  gap: space3,
+  padding: space3,
+  pointerEvents: 'auto',
+});
+export const gameUiHudClusterClass = css({ display: 'grid', gap: space2, maxWidth: '360px' });
+export const gameUiNarrativeLayerClass = css({
+  zIndex: 35,
+  display: 'grid',
+  alignContent: 'end',
+  justifyContent: 'center',
+  gap: space3,
+  padding: space3,
+  pointerEvents: 'auto',
+});
 export const gameUiFeedbackLayerClass = css({ zIndex: 20 });
 export const gameUiNotificationLayerClass = css({
   zIndex: 30,
@@ -980,6 +1198,17 @@ export const gameUiNotificationLayerClass = css({
   justifyContent: 'end',
   gap: space2,
   padding: space3,
+});
+export const gameUiHudStackClass = css({
+  display: 'grid',
+  gap: space2,
+  alignContent: 'start',
+  justifyItems: 'start',
+  padding: space3,
+  pointerEvents: 'none',
+  '& > *': {
+    pointerEvents: 'auto',
+  },
 });
 export const gameUiModalLayerClass = css({
   zIndex: 40,
@@ -1038,6 +1267,180 @@ export const lootStackOverflowClass = css({
   fontSize: '12px',
   fontWeight: '800',
 });
+
+export const buffBarClass = css({
+  display: 'grid',
+  gap: space2,
+  minWidth: '200px',
+  color: text,
+  fontFamily: 'var(--game-ui-font-sans)',
+});
+export const buffBarListClass = css({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: space2,
+  padding: 0,
+  margin: 0,
+  listStyle: 'none',
+});
+export const buffBarItemClass = css({ display: 'inline-flex', listStyle: 'none' });
+export const buffBarItemButtonClass = css({
+  display: 'inline-flex',
+  padding: 0,
+  border: 'none',
+  background: 'transparent',
+  cursor: 'pointer',
+  '&[data-selected="true"]': {
+    boxShadow: `0 0 0 2px ${accent}`,
+    borderRadius: '999px',
+  },
+});
+export const buffBarOverflowClass = css({
+  display: 'grid',
+  minHeight: '28px',
+  minWidth: '40px',
+  placeItems: 'center',
+  border: `1px dashed ${line}`,
+  borderRadius: '999px',
+  color: muted,
+  fontSize: '11px',
+  fontWeight: '800',
+  listStyle: 'none',
+});
+
+export const inventoryGridClass = css({
+  display: 'grid',
+  gap: space2,
+  minWidth: '220px',
+  color: text,
+  fontFamily: 'var(--game-ui-font-sans)',
+});
+export const inventoryGridListClass = css({
+  display: 'grid',
+  gap: space2,
+  padding: 0,
+  margin: 0,
+  listStyle: 'none',
+});
+export const inventoryGridSlotClass = css({ color: muted, fontSize: '11px', fontWeight: '700' });
+export const inventoryGridSlotRecipe = cva({
+  base: {
+    display: 'grid',
+    minHeight: '72px',
+    padding: space2,
+    border: `1px solid ${line}`,
+    borderRadius: radiusMd,
+    background: 'var(--game-ui-slot-empty, color-mix(in srgb, var(--game-ui-surface), transparent 12%))',
+    transition: 'border-color var(--game-ui-duration-fast), box-shadow var(--game-ui-duration-fast)',
+    listStyle: 'none',
+  },
+  variants: {
+    state: {
+      empty: { borderStyle: 'dashed' },
+      filled: {},
+      selected: { boxShadow: `0 0 0 2px ${accent}` },
+      locked: { opacity: 0.55, cursor: 'not-allowed' },
+    },
+    equipped: {
+      true: {
+        borderColor: accent,
+        boxShadow: `0 0 16px color-mix(in srgb, ${accent}, transparent 78%)`,
+      },
+      false: {},
+    },
+  },
+  defaultVariants: {
+    state: 'empty',
+    equipped: false,
+  },
+});
+
+export const currencyBarClass = css({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: space2,
+  alignItems: 'center',
+  color: text,
+  fontFamily: 'var(--game-ui-font-sans)',
+});
+export const currencyBarListClass = css({ display: 'flex', flexWrap: 'wrap', gap: space2, padding: 0, margin: 0, listStyle: 'none' });
+export const currencyBarItemClass = css({ listStyle: 'none' });
+export const currencyBarItemRecipe = cva({
+  base: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: space2,
+    padding: '6px 10px',
+    border: `1px solid ${line}`,
+    borderRadius: radiusMd,
+    background: panelSurface,
+  },
+  variants: {
+    tone: {
+      gold: { color: 'var(--game-ui-currency-gold, var(--game-ui-critical))' },
+      silver: { color: 'var(--game-ui-muted)' },
+      gem: { color: 'var(--game-ui-currency-gem, var(--game-ui-loot))' },
+      token: { color: accent },
+      neutral: { color: text },
+    },
+    compact: {
+      true: { padding: '4px 8px' },
+      false: {},
+    },
+  },
+  defaultVariants: {
+    tone: 'neutral',
+    compact: false,
+  },
+});
+export const currencyBarEntryRecipe = currencyBarItemRecipe;
+export const currencyBarEntryClass = css({ display: 'inline-flex', alignItems: 'baseline', gap: space1 });
+export const currencyBarIconClass = css({ display: 'grid', placeItems: 'center', fontSize: '14px' });
+export const currencyBarLabelClass = css({ ...upperLabel, textTransform: 'none', fontSize: '10px' });
+export const currencyBarValueClass = css({ fontSize: '13px', fontWeight: '900' });
+
+export const partyFrameClass = css({
+  display: 'grid',
+  gap: space2,
+  minWidth: '220px',
+  color: text,
+  fontFamily: 'var(--game-ui-font-sans)',
+});
+export const partyFrameListClass = css({ display: 'grid', gap: space2, padding: 0, margin: 0, listStyle: 'none' });
+export const partyFrameMemberRecipe = cva({
+  base: {
+    display: 'grid',
+    gap: space2,
+    width: '100%',
+    padding: space2,
+    border: `1px solid ${line}`,
+    borderRadius: radiusMd,
+    background: panelSurface,
+    color: text,
+    textAlign: 'left',
+  },
+  variants: {
+    selected: {
+      true: { borderColor: accent, boxShadow: shadowGlow },
+      false: {},
+    },
+    offline: {
+      true: {
+        opacity: 0.5,
+        color: 'var(--game-ui-party-offline, var(--game-ui-muted))',
+      },
+      false: {},
+    },
+  },
+  defaultVariants: {
+    selected: false,
+    offline: false,
+  },
+});
+export const partyFrameItemRecipe = partyFrameMemberRecipe;
+export const partyFrameNameClass = css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: space2 });
+export const partyFrameMetaClass = css({ color: muted, fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' });
+export const partyFrameStatusesClass = css({ display: 'flex', flexWrap: 'wrap', gap: space1 });
 
 export const rewardRevealRecipe = cva({
   base: {

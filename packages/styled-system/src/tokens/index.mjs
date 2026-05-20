@@ -151,6 +151,38 @@ const tokens = {
     "value": "#55f7d2",
     "variable": "var(--game-ui-colors-notification)"
   },
+  "colors.slotEmpty": {
+    "value": "rgba(16, 23, 42, 0.42)",
+    "variable": "var(--game-ui-colors-slot-empty)"
+  },
+  "colors.slotEquipped": {
+    "value": "#55f7d2",
+    "variable": "var(--game-ui-colors-slot-equipped)"
+  },
+  "colors.slotLocked": {
+    "value": "#64748b",
+    "variable": "var(--game-ui-colors-slot-locked)"
+  },
+  "colors.partyOffline": {
+    "value": "#64748b",
+    "variable": "var(--game-ui-colors-party-offline)"
+  },
+  "colors.partySelected": {
+    "value": "#55f7d2",
+    "variable": "var(--game-ui-colors-party-selected)"
+  },
+  "colors.currencyGold": {
+    "value": "#ffd166",
+    "variable": "var(--game-ui-colors-currency-gold)"
+  },
+  "colors.currencyGem": {
+    "value": "#b47cff",
+    "variable": "var(--game-ui-colors-currency-gem)"
+  },
+  "colors.currencyToken": {
+    "value": "#55f7d2",
+    "variable": "var(--game-ui-colors-currency-token)"
+  },
   "spacing.1": {
     "value": "4px",
     "variable": "var(--game-ui-spacing-1)"

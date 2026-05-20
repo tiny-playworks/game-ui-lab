@@ -44,6 +44,18 @@ This is not another React business UI library. The project focuses on motion-fir
 - `ResourceMeter`: compact mana, energy, and stamina meter for ability costs and movement state.
 - `CooldownSlot`: ability slot with cooldown mask, ready state, disabled state, and compact label.
 - `StatusBadge`: small persistent status marker for buffs, debuffs, warnings, stacks, and durations.
+- `ObjectiveChip`: compact quest objective state chip.
+- `QuestTracker`: quest header with objective list and completion count.
+- `BuffBar`: persistent buff/debuff strip with overflow and selection.
+- `InventoryGrid`: inventory or equipment slot grid with empty, locked, and equipped states.
+- `CurrencyBar`: top-bar currency readout for gold, gems, and tokens.
+- `PartyFrame`: party member list with health, shield, status, and offline state.
+- `PauseMenu`: pause overlay with menu actions and resume.
+- `GameTimer`: boss or mechanic countdown as bar or ring.
+- `LoadingOverlay`: loading screen with optional progress.
+- `DeathScreen`: defeat overlay with primary and secondary actions.
+- `ShopPanel`: lightweight shop grid with loot cards and currency bar.
+- `ChatFeed`: capped combat log or chat feed.
 - `LootCard`: compact loot item surface for rarity, quantity, value, and item metadata.
 - `LootStack`: capped post-wave drop list with overflow handling.
 - `RewardReveal`: sealed, revealed, and claimed reward panel for loot flow moments.
@@ -59,27 +71,39 @@ Use the main package entry for components and props types:
 import {
   AbilityBar,
   AbilityTooltip,
+  BuffBar,
   CastBar,
+  ChatFeed,
   ChoicePrompt,
   ComboCounter,
   CompassBar,
   CooldownSlot,
+  CurrencyBar,
   DamageNumber,
+  DeathScreen,
   DialogueBox,
   FloatingToast,
+  GameTimer,
   GameUiLayerHost,
   GameUiProvider,
   GameUiRuntimeProvider,
   HealthBar,
+  InventoryGrid,
+  LoadingOverlay,
   LocationTag,
   LootCard,
   LootStack,
   MapMarker,
   MiniMap,
   NotificationStack,
+  ObjectiveChip,
+  PartyFrame,
+  PauseMenu,
+  QuestTracker,
   RarityBorder,
   ResourceMeter,
   RewardReveal,
+  ShopPanel,
   StatusBadge,
   TargetFrame,
   type AbilityBarProps,

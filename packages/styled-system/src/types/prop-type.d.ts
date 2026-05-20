@@ -174,7 +174,7 @@ export interface UtilityValues {
 	stroke: Tokens["colors"];
 	srOnly: boolean;
 	debug: boolean;
-	colorPalette: "background" | "surface" | "surfaceStrong" | "line" | "text" | "muted" | "accent" | "accentStrong" | "danger" | "heal" | "critical" | "miss" | "loot" | "rarityCommon" | "rarityRare" | "rarityEpic" | "rarityLegendary" | "health" | "shield" | "mana" | "energy" | "stamina" | "debuff" | "cooldownMask" | "abilityReady" | "abilityLocked" | "cast" | "target" | "mapLine" | "markerAlly" | "markerEnemy" | "markerObjective" | "dialogue" | "choice" | "speaker" | "notification";
+	colorPalette: "background" | "surface" | "surfaceStrong" | "line" | "text" | "muted" | "accent" | "accentStrong" | "danger" | "heal" | "critical" | "miss" | "loot" | "rarityCommon" | "rarityRare" | "rarityEpic" | "rarityLegendary" | "health" | "shield" | "mana" | "energy" | "stamina" | "debuff" | "cooldownMask" | "abilityReady" | "abilityLocked" | "cast" | "target" | "mapLine" | "markerAlly" | "markerEnemy" | "markerObjective" | "dialogue" | "choice" | "speaker" | "notification" | "slotEmpty" | "slotEquipped" | "slotLocked" | "partyOffline" | "partySelected" | "currencyGold" | "currencyGem" | "currencyToken";
 }
 
 

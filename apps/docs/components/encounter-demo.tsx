@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AbilityBar,
-  ComboCounter,
   GameUiLayerHost,
   GameUiProvider,
   GameUiRuntimeProvider,
-  HealthBar,
   LootStack,
-  TargetFrame,
+  PartyFrame,
   useGameUiRuntime,
 } from '@tiny-playworks/game-ui';
 import { useDocsLocale } from './locale';
@@ -17,6 +15,12 @@ const rewardItems = [
   { id: 'core', name: '共鸣核心', rarity: 'legendary' as const, quantity: 1, value: '999', subtitle: 'Boss drop' },
   { id: 'shard', name: '星辉碎片', rarity: 'epic' as const, quantity: 3, value: '240', subtitle: 'Crafting' },
   { id: 'dust', name: '余烬粉尘', rarity: 'common' as const, quantity: 12, value: '30', subtitle: 'Material' },
+];
+
+const partyMembers = [
+  { id: 'pilot', name: 'Pilot', health: 320, maxHealth: 320, shield: 24, status: { label: 'Haste', tone: 'buff' as const, duration: '6s' } },
+  { id: 'support', name: 'Support', health: 280, maxHealth: 300, offline: false },
+  { id: 'scout', name: 'Scout', health: 0, maxHealth: 260, offline: true },
 ];
 
 export function EncounterDemo() {
@@ -33,12 +37,20 @@ function EncounterRuntimeScene() {
   const runtime = useGameUiRuntime();
   const { locale } = useDocsLocale();
   const isZh = locale === 'zh';
-  const [health, setHealth] = useState(maxHealth);
-  const [combo, setCombo] = useState(0);
   const [selectedAbility, setSelectedAbility] = useState('strike');
   const [burstProgress, setBurstProgress] = useState(1);
   const [selectedLoot, setSelectedLoot] = useState('core');
+  const [selectedPartyId, setSelectedPartyId] = useState('pilot');
   const hasMountedRef = useRef(false);
+
+  useEffect(() => {
+    runtime.dispatch({
+      type: 'target-health:update',
+      payload: { name: isZh ? '遗迹守卫' : 'Warden', health: maxHealth, maxHealth },
+    });
+    runtime.upsertBuff({ id: 'armor-break', label: isZh ? '破甲' : 'Armor break', tone: 'debuff', duration: isZh ? '8秒' : '8s' });
+    runtime.setCombo(0, isZh ? '连击' : 'Combo');
+  }, [isZh, runtime]);
 
   useEffect(() => {
     if (burstProgress >= 1) {
@@ -51,6 +63,28 @@ function EncounterRuntimeScene() {
 
     return () => window.clearInterval(timer);
   }, [burstProgress]);
+
+  useEffect(() => {
+    runtime.dispatch({
+      type: 'cooldown:update',
+      payload: {
+        id: 'strike',
+        label: isZh ? '攻击' : 'Attack',
+        progress: 1,
+        ready: true,
+      },
+    });
+    runtime.dispatch({
+      type: 'cooldown:update',
+      payload: {
+        id: 'burst',
+        label: isZh ? '爆发' : 'Burst',
+        progress: burstProgress,
+        ready: burstProgress >= 1,
+        disabled: burstProgress < 1,
+      },
+    });
+  }, [burstProgress, isZh, runtime]);
 
   useEffect(() => {
     if (burstProgress === 1) {
@@ -84,35 +118,42 @@ function EncounterRuntimeScene() {
   );
 
   function emitHit(nextDamage: number, variant: 'damage' | 'critical') {
-    setHealth((current) => {
-      const nextHealth = Math.max(0, current - nextDamage);
-      runtime.emitDamage({
-        value: nextDamage,
-        variant,
-        prefix: variant === 'critical' ? (isZh ? '暴击' : 'CRIT') : undefined,
-        anchor: { x: 58, y: 38 },
-      });
-      setCombo((currentCombo) => currentCombo + 1);
+    const target = runtime.getState().layers.hud.target;
+    const currentHealth = target?.health ?? maxHealth;
+    const nextHealth = Math.max(0, currentHealth - nextDamage);
 
-      if (nextHealth === 0 && current > 0) {
-        runtime.notify({
-          title: isZh ? '目标击败' : 'Target defeated',
-          message: isZh ? '奖励揭示事件已进入 modal layer。' : 'Reward reveal moved into the modal layer.',
-          variant: 'loot',
-        });
-        runtime.dispatch({
-          type: 'reward-reveal:show',
-          payload: {
-            id: 'warden-cache',
-            title: isZh ? '遗迹守卫掉落' : 'Warden cache',
-            items: rewardItems,
-            state: 'sealed',
-          },
-        });
-      }
-
-      return nextHealth;
+    runtime.emitDamage({
+      value: nextDamage,
+      variant,
+      prefix: variant === 'critical' ? (isZh ? '暴击' : 'CRIT') : undefined,
+      anchor: { x: 58, y: 38 },
     });
+    runtime.incrementCombo(1, isZh ? '连击' : 'Combo');
+    runtime.dispatch({
+      type: 'target-health:update',
+      payload: {
+        name: target?.name ?? (isZh ? '遗迹守卫' : 'Warden'),
+        health: nextHealth,
+        maxHealth: target?.maxHealth ?? maxHealth,
+      },
+    });
+
+    if (nextHealth === 0 && currentHealth > 0) {
+      runtime.notify({
+        title: isZh ? '目标击败' : 'Target defeated',
+        message: isZh ? '奖励揭示事件已进入 modal layer。' : 'Reward reveal moved into the modal layer.',
+        variant: 'loot',
+      });
+      runtime.dispatch({
+        type: 'reward-reveal:show',
+        payload: {
+          id: 'warden-cache',
+          title: isZh ? '遗迹守卫掉落' : 'Warden cache',
+          items: rewardItems,
+          state: 'sealed',
+        },
+      });
+    }
   }
 
   function handleAbility(id: string) {
@@ -137,32 +178,38 @@ function EncounterRuntimeScene() {
   }
 
   function resetEncounter() {
-    setHealth(maxHealth);
-    setCombo(0);
     setBurstProgress(1);
     hasMountedRef.current = false;
     runtime.clearLayer('feedback');
     runtime.clearLayer('notification');
     runtime.clearLayer('modal');
+    runtime.clearLayer('hud');
+    runtime.dispatch({
+      type: 'target-health:update',
+      payload: { name: isZh ? '遗迹守卫' : 'Warden', health: maxHealth, maxHealth },
+    });
+    runtime.upsertBuff({ id: 'armor-break', label: isZh ? '破甲' : 'Armor break', tone: 'debuff', duration: isZh ? '8秒' : '8s' });
+    runtime.setCombo(0, isZh ? '连击' : 'Combo');
   }
 
   return (
     <section className="encounter-demo">
       <GameUiLayerHost />
       <div className="encounter-demo__scene">
-        <div className="encounter-demo__target">
-          <TargetFrame
-            name={isZh ? '遗迹守卫' : 'Warden'}
-            faction="boss"
-            level="Lv.18"
-            health={health}
-            maxHealth={maxHealth}
-            statuses={[{ label: isZh ? '破甲' : 'Armor break', tone: 'debuff', duration: isZh ? '8秒' : '8s' }]}
+        <div className="encounter-demo__party">
+          <PartyFrame
+            members={partyMembers}
+            selectedId={selectedPartyId}
+            onMemberSelect={(id) => setSelectedPartyId(id)}
+            label={isZh ? '小队' : 'Party'}
           />
+          <p className="encounter-demo__note">
+            {isZh
+              ? 'PartyFrame 为场景内受控组件，暂未接入 runtime。'
+              : 'PartyFrame is controlled in-scene and is not wired to runtime yet.'}
+          </p>
         </div>
         <div className="encounter-demo__hud">
-          <HealthBar value={health} max={maxHealth} tone="boss" label={isZh ? '目标生命' : 'Target HP'} showValue />
-          <ComboCounter count={combo} label={isZh ? '连击' : 'Combo'} />
           <AbilityBar
             abilities={abilities}
             selectedId={selectedAbility}

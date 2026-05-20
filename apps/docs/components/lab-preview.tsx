@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   AbilityBar,
+  BuffBar,
   CastBar,
   ComboCounter,
+  CurrencyBar,
   DamageNumber,
   DialogueBox,
   GameUiProvider,
@@ -10,6 +12,7 @@ import {
   LocationTag,
   MiniMap,
   NotificationStack,
+  PartyFrame,
   RarityBorder,
   ResourceMeter,
   StatusBadge,
@@ -247,7 +250,33 @@ export function LabPreview() {
               </div>
               <div className="lab-preview__hud-item">
                 <span className="lab-preview__hud-label">{isZh ? '状态' : 'Status'}</span>
-                <StatusBadge label={isZh ? '急速' : 'Haste'} tone="buff" count={3} duration={isZh ? '12秒' : '12s'} />
+                <BuffBar
+                  buffs={[
+                    { id: 'haste', label: isZh ? '急速' : 'Haste', tone: 'buff', count: 3, duration: isZh ? '12秒' : '12s' },
+                    { id: 'burn', label: isZh ? '灼烧' : 'Burn', tone: 'debuff', duration: isZh ? '8秒' : '8s' },
+                  ]}
+                  limit={4}
+                />
+              </div>
+              <div className="lab-preview__hud-item">
+                <span className="lab-preview__hud-label">{isZh ? '货币' : 'Currency'}</span>
+                <CurrencyBar
+                  compact
+                  currencies={[
+                    { id: 'gold', label: isZh ? '金币' : 'Gold', amount: 1280, tone: 'gold' },
+                    { id: 'gem', label: isZh ? '宝石' : 'Gem', amount: 12, tone: 'gem' },
+                  ]}
+                />
+              </div>
+              <div className="lab-preview__hud-item lab-preview__hud-item--wide">
+                <span className="lab-preview__hud-label">{isZh ? '小队' : 'Party'}</span>
+                <PartyFrame
+                  members={[
+                    { id: 'pilot', name: isZh ? '领航员' : 'Pilot', health: frame.health, maxHealth: 120, shield: frame.shield },
+                    { id: 'support', name: isZh ? '支援' : 'Support', health: 88, maxHealth: 100 },
+                  ]}
+                  selectedId="pilot"
+                />
               </div>
               <div className="lab-preview__hud-item">
                 <span className="lab-preview__hud-label">{isZh ? '地图' : 'Map'}</span>
