@@ -11,15 +11,26 @@ rmSync(docsBuild, { force: true, recursive: true });
 mkdirSync(docsBuild, { recursive: true });
 
 process.env.PUBLIC_BASE_PATH = '/game-ui-lab/';
-const tokensBuild = spawnSync('pnpm', ['--filter', '@tiny-playworks/tokens', 'build'], {
+const stylesBuild = spawnSync('pnpm', ['--filter', '@tiny-playworks/game-ui', 'codegen'], {
   cwd: repoRoot,
   env: process.env,
   shell: process.platform === 'win32',
   stdio: 'inherit',
 });
 
-if (tokensBuild.status !== 0) {
-  process.exit(tokensBuild.status ?? 1);
+if (stylesBuild.status !== 0) {
+  process.exit(stylesBuild.status ?? 1);
+}
+
+const gameUiStylesBuild = spawnSync('pnpm', ['--filter', '@tiny-playworks/game-ui', 'build:styles'], {
+  cwd: repoRoot,
+  env: process.env,
+  shell: process.platform === 'win32',
+  stdio: 'inherit',
+});
+
+if (gameUiStylesBuild.status !== 0) {
+  process.exit(gameUiStylesBuild.status ?? 1);
 }
 
 const result = spawnSync('pnpm', ['exec', 'rspress', 'build'], {
