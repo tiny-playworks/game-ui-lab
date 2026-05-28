@@ -427,6 +427,8 @@ export const abilityBarClass = css({
   display: 'inline-flex',
   alignItems: 'end',
   gap: space2,
+  minInlineSize: 0,
+  margin: 0,
   padding: space2,
   border: `1px solid ${line}`,
   borderRadius: radiusLg,
@@ -966,8 +968,12 @@ export const pauseMenuClass = css({
   position: 'fixed',
   inset: 0,
   display: 'grid',
+  maxWidth: 'none',
+  maxHeight: 'none',
+  margin: 0,
   placeItems: 'center',
   padding: space3,
+  border: 'none',
   background: 'rgba(3, 7, 18, 0.72)',
   color: text,
   fontFamily: 'var(--game-ui-font-sans)',
@@ -1053,18 +1059,36 @@ export const loadingOverlayProgressClass = css({
   display: 'block',
   width: 'min(320px, 80vw)',
   height: '8px',
+  border: 'none',
+  appearance: 'none',
   borderRadius: '999px',
   background: `linear-gradient(90deg, ${accent} var(--game-ui-loading-progress, 0%), color-mix(in srgb, ${line}, transparent 40%) var(--game-ui-loading-progress, 0%))`,
+  '&::-webkit-progress-bar': {
+    borderRadius: '999px',
+    background: `color-mix(in srgb, ${line}, transparent 40%)`,
+  },
+  '&::-webkit-progress-value': {
+    borderRadius: '999px',
+    background: accent,
+  },
+  '&::-moz-progress-bar': {
+    borderRadius: '999px',
+    background: accent,
+  },
 });
 
 export const deathScreenClass = css({
   position: 'fixed',
   inset: 0,
   display: 'grid',
+  maxWidth: 'none',
+  maxHeight: 'none',
+  margin: 0,
   placeContent: 'center',
   justifyItems: 'center',
   gap: space3,
   padding: space3,
+  border: 'none',
   background: 'rgba(3, 7, 18, 0.88)',
   color: text,
   fontFamily: 'var(--game-ui-font-sans)',
@@ -1199,17 +1223,6 @@ export const gameUiNotificationLayerClass = css({
   gap: space2,
   padding: space3,
 });
-export const gameUiHudStackClass = css({
-  display: 'grid',
-  gap: space2,
-  alignContent: 'start',
-  justifyItems: 'start',
-  padding: space3,
-  pointerEvents: 'none',
-  '& > *': {
-    pointerEvents: 'auto',
-  },
-});
 export const gameUiModalLayerClass = css({
   zIndex: 40,
   display: 'grid',
@@ -1322,7 +1335,6 @@ export const inventoryGridListClass = css({
   margin: 0,
   listStyle: 'none',
 });
-export const inventoryGridSlotClass = css({ color: muted, fontSize: '11px', fontWeight: '700' });
 export const inventoryGridSlotRecipe = cva({
   base: {
     display: 'grid',
@@ -1393,12 +1405,6 @@ export const currencyBarItemRecipe = cva({
     compact: false,
   },
 });
-export const currencyBarEntryRecipe = currencyBarItemRecipe;
-export const currencyBarEntryClass = css({ display: 'inline-flex', alignItems: 'baseline', gap: space1 });
-export const currencyBarIconClass = css({ display: 'grid', placeItems: 'center', fontSize: '14px' });
-export const currencyBarLabelClass = css({ ...upperLabel, textTransform: 'none', fontSize: '10px' });
-export const currencyBarValueClass = css({ fontSize: '13px', fontWeight: '900' });
-
 export const partyFrameClass = css({
   display: 'grid',
   gap: space2,
@@ -1437,7 +1443,6 @@ export const partyFrameMemberRecipe = cva({
     offline: false,
   },
 });
-export const partyFrameItemRecipe = partyFrameMemberRecipe;
 export const partyFrameNameClass = css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: space2 });
 export const partyFrameMetaClass = css({ color: muted, fontSize: '10px', fontWeight: '800', textTransform: 'uppercase' });
 export const partyFrameStatusesClass = css({ display: 'flex', flexWrap: 'wrap', gap: space1 });

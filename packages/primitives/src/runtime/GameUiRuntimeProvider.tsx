@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState, useSyncExternalStore } from 'react';
+import React, { createContext, use, useState, useSyncExternalStore } from 'react';
 import type { ReactNode } from 'react';
 import {
   createGameUiRuntime,
@@ -20,13 +20,7 @@ export function GameUiRuntimeProvider({
   runtime,
   ...options
 }: GameUiRuntimeProviderProps) {
-  const stableOptions = useMemo(() => options, [
-    options.damageLimit,
-    options.toastLimit,
-    options.now,
-    options.createId,
-  ]);
-  const [createdRuntime] = useState(() => runtime ?? createGameUiRuntime(stableOptions));
+  const [createdRuntime] = useState(() => runtime ?? createGameUiRuntime(options));
 
   return (
     <GameUiRuntimeContext.Provider value={runtime ?? createdRuntime}>
@@ -36,7 +30,7 @@ export function GameUiRuntimeProvider({
 }
 
 export function useGameUiRuntime() {
-  const runtime = useContext(GameUiRuntimeContext);
+  const runtime = use(GameUiRuntimeContext);
 
   if (!runtime) {
     throw new Error('useGameUiRuntime must be used inside GameUiRuntimeProvider');

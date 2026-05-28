@@ -1,7 +1,7 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { StatusBadge } from '../status-badge';
-import type { StatusBadgeProps } from '../status-badge';
+import { StatusBadge } from '../status-badge/StatusBadge';
+import type { StatusBadgeProps } from '../status-badge/StatusBadge';
 import {
   buffBarClass,
   buffBarItemButtonClass,
@@ -51,7 +51,7 @@ export function BuffBar({
 
   return (
     <div className={mergeClass(buffBarClass, className)} style={style} data-overflow={overflow}>
-      <ul className={buffBarListClass} aria-label={ariaLabel} role="list">
+      <ul className={buffBarListClass} aria-label={ariaLabel}>
         {visibleBuffs.map((buff, index) => {
           const selected = selectedId === buff.id;
           const { id, className: buffClassName, ...badgeProps } = buff;

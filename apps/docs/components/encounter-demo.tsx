@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   AbilityBar,
   GameUiLayerHost,
@@ -45,9 +45,8 @@ function EncounterRuntimeScene() {
   const [selectedAbility, setSelectedAbility] = useState('strike');
   const [burstProgress, setBurstProgress] = useState(1);
   const [selectedLoot, setSelectedLoot] = useState('core');
-  const hasMountedRef = useRef(false);
 
-  function seedEncounter() {
+  const seedEncounter = useCallback(() => {
     runtime.dispatch({
       type: 'target-health:update',
       payload: { name: isZh ? '遗迹守卫' : 'Warden', health: maxHealth, maxHealth },
@@ -73,11 +72,11 @@ function EncounterRuntimeScene() {
       text: isZh ? '目标已标记，保持连击。' : 'Target marked. Keep the combo alive.',
       tone: 'ally',
     });
-  }
+  }, [isZh, runtime]);
 
   useEffect(() => {
     seedEncounter();
-  }, [isZh, runtime]);
+  }, [seedEncounter]);
 
   useEffect(() => {
     if (burstProgress >= 1) {
@@ -85,11 +84,23 @@ function EncounterRuntimeScene() {
     }
 
     const timer = window.setInterval(() => {
-      setBurstProgress((current) => Math.min(1, current + 0.08));
+      setBurstProgress((current) => {
+        const next = Math.min(1, current + 0.08);
+
+        if (next >= 1 && current < 1) {
+          runtime.notify({
+            title: isZh ? '技能就绪' : 'Ability ready',
+            message: isZh ? '脉冲爆发可以再次释放。' : 'Pulse Burst can be used again.',
+            variant: 'success',
+          });
+        }
+
+        return next;
+      });
     }, 180);
 
     return () => window.clearInterval(timer);
-  }, [burstProgress]);
+  }, [burstProgress, isZh, runtime]);
 
   useEffect(() => {
     runtime.dispatch({
@@ -111,21 +122,6 @@ function EncounterRuntimeScene() {
         disabled: burstProgress < 1,
       },
     });
-  }, [burstProgress, isZh, runtime]);
-
-  useEffect(() => {
-    if (burstProgress === 1) {
-      if (!hasMountedRef.current) {
-        hasMountedRef.current = true;
-        return;
-      }
-
-      runtime.notify({
-        title: isZh ? '技能就绪' : 'Ability ready',
-        message: isZh ? '脉冲爆发可以再次释放。' : 'Pulse Burst can be used again.',
-        variant: 'success',
-      });
-    }
   }, [burstProgress, isZh, runtime]);
 
   const abilities = useMemo(
@@ -219,7 +215,6 @@ function EncounterRuntimeScene() {
 
   function resetEncounter() {
     setBurstProgress(1);
-    hasMountedRef.current = false;
     runtime.clearLayer('feedback');
     runtime.clearLayer('notification');
     runtime.clearLayer('modal');

@@ -1,8 +1,8 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { HealthBar } from '../health-bar';
-import { StatusBadge } from '../status-badge';
-import type { StatusBadgeProps } from '../status-badge';
+import { HealthBar } from '../health-bar/HealthBar';
+import { StatusBadge } from '../status-badge/StatusBadge';
+import type { StatusBadgeProps } from '../status-badge/StatusBadge';
 import {
   mergeClass,
   partyFrameClass,
@@ -47,8 +47,8 @@ export function PartyFrame({
   const ariaLabel = label;
 
   return (
-    <section className={mergeClass(partyFrameClass, className)} style={style}>
-      <ul className={partyFrameListClass} role="list" aria-label={ariaLabel}>
+    <section className={mergeClass(partyFrameClass, className)} style={style} aria-label={ariaLabel}>
+      <ul className={partyFrameListClass} aria-label={ariaLabel}>
         {members.map((member, index) => {
           const selected = selectedId === member.id;
           const disabled = Boolean(member.offline);

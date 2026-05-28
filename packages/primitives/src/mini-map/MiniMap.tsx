@@ -1,7 +1,7 @@
 import React from 'react';
 import type { CSSProperties } from 'react';
-import { MapMarker } from '../map-marker';
-import type { MapMarkerProps } from '../map-marker';
+import { MapMarker } from '../map-marker/MapMarker';
+import type { MapMarkerProps } from '../map-marker/MapMarker';
 import { mergeClass, miniMapClass, miniMapGridClass, miniMapLabelClass } from '../styles';
 import type { GameUiCollectionRenderer } from '../types';
 

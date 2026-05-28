@@ -1,6 +1,6 @@
 import React from 'react';
-import { LootStack } from '../loot-stack';
-import type { LootStackItem } from '../loot-stack';
+import { LootStack } from '../loot-stack/LootStack';
+import type { LootStackItem } from '../loot-stack/LootStack';
 import {
   mergeClass,
   rewardRevealActionClass,

@@ -1,8 +1,8 @@
 import React from 'react';
-import { HealthBar } from '../health-bar';
-import { StatusBadge } from '../status-badge';
-import type { HealthBarTone } from '../health-bar';
-import type { StatusBadgeProps } from '../status-badge';
+import { HealthBar } from '../health-bar/HealthBar';
+import type { HealthBarTone } from '../health-bar/HealthBar';
+import { StatusBadge } from '../status-badge/StatusBadge';
+import type { StatusBadgeProps } from '../status-badge/StatusBadge';
 import {
   mergeClass,
   targetFrameCopyClass,
@@ -32,6 +32,8 @@ const healthToneByFaction: Record<TargetFaction, HealthBarTone> = {
   boss: 'boss',
 };
 
+const emptyStatuses: StatusBadgeProps[] = [];
+
 export function TargetFrame({
   name,
   health,
@@ -39,7 +41,7 @@ export function TargetFrame({
   shield,
   faction = 'enemy',
   level,
-  statuses = [],
+  statuses = emptyStatuses,
   className,
 }: TargetFrameProps) {
   return (

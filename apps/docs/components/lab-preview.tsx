@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   AbilityBar,
   BuffBar,
@@ -141,17 +141,13 @@ export function LabPreview() {
     return () => window.clearInterval(timer);
   }, []);
 
-  const subtitle = useMemo(
-    () =>
-      isZh
-        ? frame.rarity === 'legendary'
-          ? '奖励、HUD、地图和叙事反馈可以在同一个场景里检查。'
-          : '用于检查战斗、探索、叙事组件组合后的间距、层级和节奏。'
-        : frame.rarity === 'legendary'
-          ? 'Inspect rewards, HUD, map, and narrative feedback in one scene.'
-          : 'Check spacing, hierarchy, and rhythm across combat, map, and narrative components.',
-    [frame.rarity, isZh],
-  );
+  const subtitle = isZh
+    ? frame.rarity === 'legendary'
+      ? '奖励、HUD、地图和叙事反馈可以在同一个场景里检查。'
+      : '用于检查战斗、探索、叙事组件组合后的间距、层级和节奏。'
+    : frame.rarity === 'legendary'
+      ? 'Inspect rewards, HUD, map, and narrative feedback in one scene.'
+      : 'Check spacing, hierarchy, and rhythm across combat, map, and narrative components.';
 
   return (
     <section className="lab-preview">

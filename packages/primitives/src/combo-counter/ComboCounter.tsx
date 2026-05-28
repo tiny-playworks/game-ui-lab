@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { domAnimation, LazyMotion, m } from 'motion/react';
 import React from 'react';
 import {
   comboCounterLabelClass,
@@ -32,21 +32,22 @@ export function ComboCounter({
   className,
 }: ComboCounterProps) {
   return (
-    <motion.div
-      className={mergeClass(comboCounterRecipe({ active }), className)}
-      data-active={active}
-      initial={false}
-      animate={{ scale: active ? [1, 1.06, 1] : 0.96, opacity: active ? 1 : 0.62 }}
-      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-      role="status"
-      aria-label={`${label} ${count}`}
-    >
-      <span className={comboCounterLabelClass}>{label}</span>
-      <span className={comboCounterValueClass}>
-        {count}
-        <span className={comboCounterSuffixClass}>x</span>
-      </span>
-      <span className={comboCounterTierClass}>{tier}</span>
-    </motion.div>
+    <LazyMotion features={domAnimation}>
+      <m.output
+        className={mergeClass(comboCounterRecipe({ active }), className)}
+        data-active={active}
+        initial={false}
+        animate={{ scale: active ? [1, 1.06, 1] : 0.96, opacity: active ? 1 : 0.62 }}
+        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+        aria-label={`${label} ${count}`}
+      >
+        <span className={comboCounterLabelClass}>{label}</span>
+        <span className={comboCounterValueClass}>
+          {count}
+          <span className={comboCounterSuffixClass}>x</span>
+        </span>
+        <span className={comboCounterTierClass}>{tier}</span>
+      </m.output>
+    </LazyMotion>
   );
 }

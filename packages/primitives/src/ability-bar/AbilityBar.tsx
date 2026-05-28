@@ -1,6 +1,6 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { CooldownSlot } from '../cooldown-slot';
+import { CooldownSlot } from '../cooldown-slot/CooldownSlot';
 import { abilityBarClass, abilityBarCostClass, abilityBarItemClass, mergeClass } from '../styles';
 import type { GameUiCollectionRenderer } from '../types';
 
@@ -38,7 +38,7 @@ export function AbilityBar({
   style,
 }: AbilityBarProps) {
   return (
-    <div className={mergeClass(abilityBarClass, className)} role="group" aria-label={label} style={style}>
+    <fieldset className={mergeClass(abilityBarClass, className)} aria-label={label} style={style}>
       {abilities.map((ability, index) => {
         const selected = selectedId === ability.id;
         const disabled = Boolean(ability.locked);
@@ -70,6 +70,6 @@ export function AbilityBar({
           </React.Fragment>
         );
       })}
-    </div>
+    </fieldset>
   );
 }

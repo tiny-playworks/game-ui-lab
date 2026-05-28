@@ -37,8 +37,8 @@ export function ChatFeed({
   const visibleMessages = messages.slice(-visibleLimit);
 
   return (
-    <section className={mergeClass(chatFeedClass, className)} style={style} aria-label={label} role="log" aria-live="polite" data-overflow={overflow}>
-      <ul className={chatFeedListClass} role="list">
+    <section className={mergeClass(chatFeedClass, className)} style={style} aria-label={label} aria-live="polite" data-overflow={overflow}>
+      <ul className={chatFeedListClass}>
         {overflow > 0 ? (
           <li className={chatFeedOverflowClass}>
             <span>{overflowLabel ? overflowLabel(overflow) : `+${overflow} earlier`}</span>

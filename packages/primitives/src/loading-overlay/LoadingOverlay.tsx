@@ -36,10 +36,9 @@ export function LoadingOverlay({
   } as CSSProperties;
 
   return (
-    <div
+    <output
       className={mergeClass(loadingOverlayClass, className)}
       style={overlayStyle}
-      role="status"
       aria-live="polite"
       aria-label={title}
       data-open={open}
@@ -48,8 +47,8 @@ export function LoadingOverlay({
       <strong className={loadingOverlayTitleClass}>{title}</strong>
       {message ? <p className={loadingOverlayMessageClass}>{message}</p> : null}
       {clampedProgress !== undefined ? (
-        <span className={loadingOverlayProgressClass} role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(clampedProgress * 100)} />
+        <progress className={loadingOverlayProgressClass} max={100} value={Math.round(clampedProgress * 100)} aria-label={`${title} progress`} />
       ) : null}
-    </div>
+    </output>
   );
 }

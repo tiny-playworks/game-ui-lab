@@ -1,6 +1,6 @@
 import React from 'react';
 import type { CSSProperties } from 'react';
-import type { MapMarkerTone } from '../map-marker';
+import type { MapMarkerTone } from '../map-marker/MapMarker';
 import {
   compassBarClass,
   compassBarHeadingClass,
@@ -24,6 +24,8 @@ export interface CompassBarProps {
   className?: string;
 }
 
+const emptyMarkers: CompassMarker[] = [];
+
 function headingLabel(heading: number) {
   const normalized = ((Math.round(heading) % 360) + 360) % 360;
   return `${normalized}deg`;
@@ -39,9 +41,9 @@ function markerPosition(target: number, current: number, range: number) {
   return `${Math.min(100, Math.max(0, 50 + (delta / safeRange) * 100))}%`;
 }
 
-export function CompassBar({ heading, markers = [], range = 120, label = 'Compass', className }: CompassBarProps) {
+export function CompassBar({ heading, markers = emptyMarkers, range = 120, label = 'Compass', className }: CompassBarProps) {
   return (
-    <div className={mergeClass(compassBarClass, className)} role="status" aria-label={`${label} ${headingLabel(heading)}`}>
+    <output className={mergeClass(compassBarClass, className)} aria-label={`${label} ${headingLabel(heading)}`}>
       <span className={compassBarHeadingClass}>{headingLabel(heading)}</span>
       <span className={compassBarTrackClass}>
         {markers.map((marker) => (
@@ -55,6 +57,6 @@ export function CompassBar({ heading, markers = [], range = 120, label = 'Compas
           </span>
         ))}
       </span>
-    </div>
+    </output>
   );
 }

@@ -27,10 +27,9 @@ export function CastBar({ label, progress, state = 'casting', meta, className }:
   const percent = Math.round(Math.min(1, Math.max(0, progress)) * 100);
 
   return (
-    <div
+    <output
       className={mergeClass(castBarRecipe({ state }), className)}
       data-state={state}
-      role="status"
       aria-label={`${label} ${state} ${percent}%`}
       style={{ '--game-ui-cast-progress': clampPercent(progress) } as CSSProperties}
     >
@@ -41,6 +40,6 @@ export function CastBar({ label, progress, state = 'casting', meta, className }:
       <span className={castBarTrackClass} aria-hidden="true">
         <span className={castBarFillClass} />
       </span>
-    </div>
+    </output>
   );
 }

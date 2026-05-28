@@ -22,15 +22,14 @@ export function StatusBadge({
   const durationLabel = duration ? ` ${duration}` : '';
 
   return (
-    <span
+    <output
       className={mergeClass(statusBadgeRecipe({ tone }), className)}
       data-tone={tone}
-      role="status"
       aria-label={`${label} ${tone}${stackLabel}${durationLabel}`}
     >
       <span>{label}</span>
       {count ? <span className={statusBadgeMetaClass}>x{count}</span> : null}
       {duration ? <span className={statusBadgeMetaClass}>{duration}</span> : null}
-    </span>
+    </output>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { LootCard } from '../loot-card';
-import type { LootRarity } from '../loot-card';
+import { LootCard } from '../loot-card/LootCard';
+import type { LootRarity } from '../loot-card/LootCard';
 import {
   lootStackClass,
   lootStackItemClass,

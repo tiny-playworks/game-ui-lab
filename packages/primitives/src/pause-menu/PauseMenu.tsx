@@ -33,7 +33,7 @@ export function PauseMenu({
   }
 
   return (
-    <div className={mergeClass(pauseMenuClass, className)} style={style} role="dialog" aria-modal="true" aria-label={title} data-open={open}>
+    <dialog className={mergeClass(pauseMenuClass, className)} style={style} open aria-label={title} data-open={open}>
       <header className={pauseMenuTitleClass}>{title}</header>
       <div className={pauseMenuActionsClass} role="menu">
         {items.map((item) => (
@@ -54,6 +54,6 @@ export function PauseMenu({
           </button>
         ) : null}
       </div>
-    </div>
+    </dialog>
   );
 }

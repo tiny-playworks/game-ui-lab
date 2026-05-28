@@ -1,7 +1,7 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { FloatingToast } from '../floating-toast';
-import type { FloatingToastProps } from '../floating-toast';
+import { FloatingToast } from '../floating-toast/FloatingToast';
+import type { FloatingToastProps } from '../floating-toast/FloatingToast';
 import {
   mergeClass,
   notificationStackClass,

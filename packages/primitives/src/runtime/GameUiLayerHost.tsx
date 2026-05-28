@@ -1,23 +1,23 @@
 import React, { useEffect, useMemo } from 'react';
 import type { CSSProperties } from 'react';
 import type { ToastEventRecord } from '@tiny-playworks/game-ui-runtime';
-import { AbilityBar } from '../ability-bar';
-import type { AbilityBarItem } from '../ability-bar';
-import { BuffBar } from '../buff-bar';
-import type { BuffBarBuff } from '../buff-bar';
-import { ChoicePrompt } from '../choice-prompt';
-import { ComboCounter } from '../combo-counter';
-import { DamageNumber } from '../damage-number';
-import { DialogueBox } from '../dialogue-box';
-import { FloatingToast } from '../floating-toast';
-import { MiniMap } from '../mini-map';
-import { PartyFrame } from '../party-frame';
-import type { PartyFrameMember } from '../party-frame';
-import { QuestLog } from '../quest-log';
-import { QuestTracker } from '../quest-tracker';
-import { RewardReveal } from '../reward-reveal';
-import { ShopPanel } from '../shop-panel';
-import { TargetFrame } from '../target-frame';
+import { AbilityBar } from '../ability-bar/AbilityBar';
+import type { AbilityBarItem } from '../ability-bar/AbilityBar';
+import { BuffBar } from '../buff-bar/BuffBar';
+import type { BuffBarBuff } from '../buff-bar/BuffBar';
+import { ChoicePrompt } from '../choice-prompt/ChoicePrompt';
+import { ComboCounter } from '../combo-counter/ComboCounter';
+import { DamageNumber } from '../damage-number/DamageNumber';
+import { DialogueBox } from '../dialogue-box/DialogueBox';
+import { FloatingToast } from '../floating-toast/FloatingToast';
+import { MiniMap } from '../mini-map/MiniMap';
+import { PartyFrame } from '../party-frame/PartyFrame';
+import type { PartyFrameMember } from '../party-frame/PartyFrame';
+import { QuestLog } from '../quest-log/QuestLog';
+import { QuestTracker } from '../quest-tracker/QuestTracker';
+import { RewardReveal } from '../reward-reveal/RewardReveal';
+import { ShopPanel } from '../shop-panel/ShopPanel';
+import { TargetFrame } from '../target-frame/TargetFrame';
 import {
   gameUiDebugLayerClass,
   gameUiFeedbackItemClass,
@@ -174,7 +174,7 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
             />
             {(narrative?.dialogueQueue?.length ?? 0) > 1 ? (
               <button type="button" onClick={() => runtime.advanceDialogue()}>
-                Continue
+                Continue dialogue
               </button>
             ) : null}
           </div>

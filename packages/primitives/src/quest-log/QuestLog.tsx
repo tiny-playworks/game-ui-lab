@@ -1,7 +1,7 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { QuestTracker } from '../quest-tracker';
-import type { QuestTrackerObjective } from '../quest-tracker';
+import { QuestTracker } from '../quest-tracker/QuestTracker';
+import type { QuestTrackerObjective } from '../quest-tracker/QuestTracker';
 import {
   mergeClass,
   questLogActiveClass,

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { LootCard } from '../loot-card';
-import type { LootStackItem } from '../loot-stack';
+import { LootCard } from '../loot-card/LootCard';
+import type { LootStackItem } from '../loot-stack/LootStack';
 import {
   inventoryGridClass,
   inventoryGridListClass,
@@ -51,8 +51,8 @@ export function InventoryGrid({
   const ariaLabel = `${label} ${slots.length} slots`;
 
   return (
-    <section className={mergeClass(inventoryGridClass, className)} data-columns={columnCount}>
-      <ul className={inventoryGridListClass} style={gridStyle} role="list" aria-label={ariaLabel}>
+    <section className={mergeClass(inventoryGridClass, className)} data-columns={columnCount} aria-label={ariaLabel}>
+      <ul className={inventoryGridListClass} style={gridStyle} aria-label={ariaLabel}>
         {slots.map((slot, index) => {
           const selected = selectedId === slot.id;
           const disabled = Boolean(slot.locked);

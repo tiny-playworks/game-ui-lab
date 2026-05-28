@@ -53,13 +53,12 @@ export function HealthBar({
   const ariaLabel = `${label} ${formatAmount(value)} of ${formatAmount(max)}${hasShield ? ` plus ${formatAmount(shield)} shield` : ''}`;
 
   return (
-    <div
+    <output
       className={mergeClass(healthBarRecipe({ tone, empty: isEmpty }), className)}
       data-tone={tone}
       data-empty={isEmpty}
       data-full={isFull}
       data-shielded={hasShield}
-      role="status"
       aria-label={ariaLabel}
       style={{
         '--game-ui-health-ratio': `${healthRatio * 100}%`,
@@ -79,6 +78,6 @@ export function HealthBar({
         {hasShield ? <span className={healthBarShieldClass} /> : null}
       </span>
       {hasShield ? <span className={healthBarShieldValueClass}>+{formatAmount(shield)}</span> : null}
-    </div>
+    </output>
   );
 }

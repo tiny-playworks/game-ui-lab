@@ -1,6 +1,6 @@
 import React from 'react';
-import { ObjectiveChip } from '../objective-chip';
-import type { ObjectiveChipProps } from '../objective-chip';
+import { ObjectiveChip } from '../objective-chip/ObjectiveChip';
+import type { ObjectiveChipProps } from '../objective-chip/ObjectiveChip';
 import {
   mergeClass,
   questTrackerClass,
@@ -34,7 +34,6 @@ export function QuestTracker({ title, subtitle, objectives, className }: QuestTr
   return (
     <section
       className={mergeClass(questTrackerClass, className)}
-      role="region"
       aria-label={`${title} ${completeCount} of ${objectives.length} complete`}
     >
       <header className={questTrackerHeaderClass}>

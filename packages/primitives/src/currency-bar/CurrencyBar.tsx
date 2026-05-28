@@ -37,16 +37,15 @@ export function CurrencyBar({
   style,
 }: CurrencyBarProps) {
   return (
-    <div
+    <section
       className={mergeClass(currencyBarClass, className)}
       style={style}
-      role="group"
       aria-label="Currency bar"
       data-compact={compact}
     >
-      <ul className={currencyBarListClass} role="list">
+      <ul className={currencyBarListClass}>
         {currencies.map((currency) => (
-          <li key={currency.id} className={mergeClass(currencyBarItemClass, currency.className)} role="status" aria-label={`${currency.label} ${formatAmount(currency.amount)}`} data-tone={currency.tone ?? 'neutral'}>
+          <li key={currency.id} className={mergeClass(currencyBarItemClass, currency.className)} aria-label={`${currency.label} ${formatAmount(currency.amount)}`} data-tone={currency.tone ?? 'neutral'}>
             <span className={currencyBarItemRecipe({ tone: currency.tone ?? 'neutral', compact })}>
               {currency.icon ? <span aria-hidden="true">{currency.icon}</span> : null}
               <span>{currency.label}</span>
@@ -55,6 +54,6 @@ export function CurrencyBar({
           </li>
         ))}
       </ul>
-    </div>
+    </section>
   );
 }

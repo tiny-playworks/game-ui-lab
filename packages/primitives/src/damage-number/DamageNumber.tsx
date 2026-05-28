@@ -1,4 +1,4 @@
-import { motion, type Transition } from 'motion/react';
+import { domAnimation, LazyMotion, m, type Transition } from 'motion/react';
 import React from 'react';
 import type { CSSProperties } from 'react';
 import { damageNumberPrefixClass, damageNumberRecipe, mergeClass } from '../styles';
@@ -24,8 +24,6 @@ const transitions: Record<DamageNumberVariant, Transition> = {
   miss: { duration: 0.56, ease: [0.16, 1, 0.3, 1] },
 };
 
-const MotionSpan = motion.span ?? 'span';
-
 export function DamageNumber({
   value,
   variant = 'damage',
@@ -47,33 +45,33 @@ export function DamageNumber({
 
   if (motion !== 'live') {
     return (
-      <span
+      <output
         className={mergeClass(damageNumberRecipe({ variant }), className)}
         data-variant={variant}
         data-motion={motion}
         style={damageStyle}
-        role="status"
         aria-label={`${variant} ${value}`}
       >
         {content}
-      </span>
+      </output>
     );
   }
 
   return (
-    <MotionSpan
-      className={mergeClass(damageNumberRecipe({ variant }), className)}
-      data-variant={variant}
-      data-motion={motion}
-      style={damageStyle}
-      initial={{ opacity: 0, y: 18, scale: isCritical ? 0.62 : 0.84, rotate: isCritical ? -5 : 0 }}
-      animate={{ opacity: [0, 1, 1, 0], y: [18, -8, -28, -44], scale: isCritical ? [0.62, 1.32, 1, 0.92] : [0.84, 1.05, 1, 0.92] }}
-      transition={transitions[variant]}
-      onAnimationComplete={onExitComplete}
-      role="status"
-      aria-label={`${variant} ${value}`}
-    >
-      {content}
-    </MotionSpan>
+    <LazyMotion features={domAnimation}>
+      <m.output
+        className={mergeClass(damageNumberRecipe({ variant }), className)}
+        data-variant={variant}
+        data-motion={motion}
+        style={damageStyle}
+        initial={{ opacity: 0, y: 18, scale: isCritical ? 0.62 : 0.84, rotate: isCritical ? -5 : 0 }}
+        animate={{ opacity: [0, 1, 1, 0], y: [18, -8, -28, -44], scale: isCritical ? [0.62, 1.32, 1, 0.92] : [0.84, 1.05, 1, 0.92] }}
+        transition={transitions[variant]}
+        onAnimationComplete={onExitComplete}
+        aria-label={`${variant} ${value}`}
+      >
+        {content}
+      </m.output>
+    </LazyMotion>
   );
 }

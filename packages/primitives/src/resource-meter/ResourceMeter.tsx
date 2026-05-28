@@ -47,10 +47,9 @@ export function ResourceMeter({
   const ratio = clampRatio(value, max);
 
   return (
-    <div
+    <output
       className={mergeClass(resourceMeterRecipe({ kind }), className)}
       data-kind={kind}
-      role="status"
       aria-label={`${label} ${formatAmount(value)} of ${formatAmount(max)}`}
       style={{ '--game-ui-resource-ratio': `${ratio * 100}%` } as CSSProperties}
     >
@@ -61,6 +60,6 @@ export function ResourceMeter({
       <span className={resourceMeterValueClass}>
         {formatAmount(value)} / {formatAmount(max)}
       </span>
-    </div>
+    </output>
   );
 }

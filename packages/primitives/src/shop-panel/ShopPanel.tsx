@@ -1,9 +1,9 @@
 import React from 'react';
 import type { CSSProperties } from 'react';
-import { CurrencyBar } from '../currency-bar';
-import type { CurrencyBarEntry } from '../currency-bar';
-import { LootCard } from '../loot-card';
-import type { LootCardProps, LootRarity } from '../loot-card';
+import { CurrencyBar } from '../currency-bar/CurrencyBar';
+import type { CurrencyBarEntry } from '../currency-bar/CurrencyBar';
+import { LootCard } from '../loot-card/LootCard';
+import type { LootCardProps, LootRarity } from '../loot-card/LootCard';
 import {
   mergeClass,
   shopPanelClass,
@@ -29,22 +29,24 @@ export interface ShopPanelProps {
   style?: CSSProperties;
 }
 
+const emptyCurrencies: CurrencyBarEntry[] = [];
+
 export function ShopPanel({
   title,
   items,
-  currencies = [],
+  currencies = emptyCurrencies,
   selectedId,
   onPurchase,
   className,
   style,
 }: ShopPanelProps) {
   return (
-    <section className={mergeClass(shopPanelClass, className)} style={style} aria-label={title} role="region">
+    <section className={mergeClass(shopPanelClass, className)} style={style} aria-label={title}>
       <header className={shopPanelHeaderClass}>
         <h2 className={shopPanelTitleClass}>{title}</h2>
         {currencies.length ? <CurrencyBar currencies={currencies} compact /> : null}
       </header>
-      <ul className={shopPanelGridClass} role="list">
+      <ul className={shopPanelGridClass}>
         {items.map((item) => {
           const { id, price, name, rarity = 'common' as LootRarity, ...cardProps } = item;
           const selected = selectedId === id;

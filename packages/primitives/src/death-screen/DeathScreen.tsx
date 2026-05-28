@@ -38,7 +38,7 @@ export function DeathScreen({
   }
 
   return (
-    <div className={mergeClass(deathScreenClass, className)} style={style} role="dialog" aria-modal="true" aria-label={title} data-open={open}>
+    <dialog className={mergeClass(deathScreenClass, className)} style={style} open aria-label={title} data-open={open}>
       <h2 className={deathScreenTitleClass}>{title}</h2>
       {message ? <p className={deathScreenMessageClass}>{message}</p> : null}
       <div className={deathScreenActionsClass}>
@@ -53,6 +53,6 @@ export function DeathScreen({
           </button>
         ) : null}
       </div>
-    </div>
+    </dialog>
   );
 }
