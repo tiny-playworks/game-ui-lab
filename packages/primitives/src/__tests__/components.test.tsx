@@ -357,6 +357,46 @@ describe("game ui primitives", () => {
     ).toBe("true");
   });
 
+  it("renders rich ability metadata and triggers abilities by key", () => {
+    const triggered: string[] = [];
+
+    render(
+      <AbilityBar
+        selectedId="burst"
+        onAbilityClick={(id) => triggered.push(id)}
+        abilities={[
+          {
+            id: "burst",
+            label: "Pulse Burst",
+            icon: "Q",
+            active: true,
+            progress: 0.42,
+            variant: "ultimate",
+            triggerKey: "2",
+            resourceCost: "35 MP",
+            comboHint: "Chain +2",
+            cooldownText: "4.2s",
+          },
+        ]}
+      />,
+    );
+
+    fireEvent.keyDown(screen.getByRole("group", { name: "Ability bar" }), {
+      key: "2",
+    });
+
+    expect(triggered).toEqual(["burst"]);
+    expect(screen.getByText("35 MP").textContent).toBe("35 MP");
+    expect(screen.getByText("Chain +2").textContent).toBe("Chain +2");
+    expect(screen.getByText("4.2s").textContent).toBe("4.2s");
+    expect(
+      screen.getByText("Pulse Burst").closest("[data-variant]")?.getAttribute("data-variant"),
+    ).toBe("ultimate");
+    expect(
+      screen.getByRole("button", { name: "Pulse Burst cooldown 42%" }).getAttribute("aria-pressed"),
+    ).toBe("true");
+  });
+
   it("allows ability bars to customize rendered ability items", () => {
     render(
       <AbilityBar
@@ -600,10 +640,79 @@ describe("game ui primitives", () => {
     ).toContain("Risky");
     expect(
       screen
+        .getByRole("button", { name: "Left path Safe" })
+        .getAttribute("data-cost"),
+    ).toBe(null);
+    expect(
+      screen
         .getByRole("button", { name: "Right path Fast Risky" })
         .getAttribute("data-selected"),
     ).toBe("true");
     expect(selected).toEqual(["left:Left path"]);
+  });
+
+  it("renders richer narrative, map, and chat metadata", () => {
+    const { container } = render(
+      <>
+        <MiniMap
+          label="Sector map"
+          scanRadius={36}
+          playerHeading={90}
+          zoomLabel="2x"
+          zones={[
+            { id: "danger", x: 60, y: 45, width: 24, height: 18, tone: "danger", label: "Patrol zone" },
+          ]}
+          paths={[
+            { id: "route", points: [{ x: 20, y: 30 }, { x: 50, y: 40 }], label: "Safe route" },
+          ]}
+          markers={[{ id: "beacon", x: 48, y: 28, tone: "objective", label: "Beacon" }]}
+        />
+        <DialogueBox
+          speaker="Guide"
+          source="Radio"
+          text="Hold position."
+          typing
+          onAdvance={() => undefined}
+        />
+        <ChoicePrompt
+          title="Choose route"
+          choices={[
+            {
+              id: "left",
+              label: "Left path",
+              cost: "1 key",
+              resultPreview: "Avoids patrol",
+            },
+          ]}
+        />
+        <ChatFeed
+          messages={[
+            {
+              id: "1",
+              author: "System",
+              text: "Boss engaged",
+              tone: "combat",
+              timestamp: "12:04",
+              channel: "Raid",
+              highlighted: true,
+            },
+          ]}
+        />
+      </>,
+    );
+
+    expect(screen.getByText("2x").textContent).toBe("2x");
+    expect(screen.getByText("Patrol zone").getAttribute("data-tone")).toBe("danger");
+    expect(screen.getByText("Safe route").getAttribute("data-point-count")).toBe("2");
+    expect(container.querySelector("[data-player-heading]")?.getAttribute("data-player-heading")).toBe("90");
+    expect(container.querySelector("[data-scan-radius]")?.getAttribute("data-scan-radius")).toBe("36");
+    expect(screen.getByText("Radio").textContent).toBe("Radio");
+    expect(screen.getByLabelText("Guide dialogue").getAttribute("data-typing")).toBe("true");
+    expect(screen.getByText("1 key").textContent).toBe("1 key");
+    expect(screen.getByText("Avoids patrol").textContent).toBe("Avoids patrol");
+    expect(screen.getByText("12:04").textContent).toBe("12:04");
+    expect(screen.getByText("Raid").textContent).toBe("Raid");
+    expect(screen.getByText("Boss engaged").closest("[data-highlighted]")?.getAttribute("data-highlighted")).toBe("true");
   });
 
   it("renders quest log and notification stack", () => {
@@ -1039,6 +1148,66 @@ describe("game ui primitives", () => {
 
     expect(screen.getByText("50").textContent).toBe("50");
     expect(screen.getByText("Vendor").textContent).toBe("Vendor");
+  });
+
+  it("renders richer inventory and shop item states", () => {
+    const selectedSlots: string[] = [];
+    const contextActions: string[] = [];
+    const selectedShopItems: string[] = [];
+
+    render(
+      <>
+        <InventoryGrid
+          label="Equipment"
+          selectedId="weapon"
+          onSlotSelect={(id) => selectedSlots.push(id)}
+          onContextAction={(id, action) => contextActions.push(`${id}:${action}`)}
+          slots={[
+            {
+              id: "weapon",
+              slotType: "weapon",
+              stackCount: 2,
+              rarity: "epic",
+              compareState: "upgrade",
+              quickAction: "Equip",
+              item: { id: "blade", name: "Arc Blade", rarity: "epic", quantity: 1 },
+            },
+          ]}
+        />
+        <ShopPanel
+          title="Vendor"
+          selectedId="potion"
+          onItemSelect={(id) => selectedShopItems.push(id)}
+          onPurchase={() => undefined}
+          items={[
+            {
+              id: "potion",
+              name: "Potion",
+              rarity: "rare",
+              price: 50,
+              stock: 0,
+              discount: "-20%",
+              unavailableReason: "Need more gold",
+              details: "Restores 80 HP",
+            },
+          ]}
+        />
+      </>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Arc Blade epic loot" }));
+    fireEvent.click(screen.getByRole("button", { name: "Equip" }));
+    fireEvent.click(screen.getByRole("button", { name: "Potion rare loot" }));
+
+    expect(selectedSlots).toEqual(["weapon"]);
+    expect(contextActions).toEqual(["weapon:quick"]);
+    expect(selectedShopItems).toEqual(["potion"]);
+    expect(screen.getByText("x2").textContent).toBe("x2");
+    expect(screen.getByText("upgrade").textContent).toBe("upgrade");
+    expect(screen.getByText("-20%").textContent).toBe("-20%");
+    expect(screen.getByText("Need more gold").textContent).toBe("Need more gold");
+    expect(screen.getByText("Restores 80 HP").textContent).toBe("Restores 80 HP");
+    expect(screen.getByRole("button", { name: "Buy Potion" }).getAttribute("disabled")).toBe("");
   });
 
   it("renders runtime hud layers from dispatch", () => {

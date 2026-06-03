@@ -1,20 +1,31 @@
 import React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import { LootCard } from '../loot-card/LootCard';
+import type { LootRarity } from '../loot-card/LootCard';
 import type { LootStackItem } from '../loot-stack/LootStack';
 import {
   inventoryGridClass,
+  inventoryGridActionClass,
   inventoryGridListClass,
+  inventoryGridMetaClass,
   inventoryGridSlotRecipe,
   mergeClass,
 } from '../styles';
 import type { GameUiCollectionRenderer } from '../types';
+
+export type InventoryGridCompareState = 'upgrade' | 'downgrade' | 'same';
+export type InventoryGridSlotType = 'bag' | 'weapon' | 'armor' | 'trinket' | 'quest' | 'material';
 
 export interface InventoryGridSlot {
   id: string;
   item?: LootStackItem;
   locked?: boolean;
   equipped?: boolean;
+  slotType?: InventoryGridSlotType;
+  stackCount?: number;
+  rarity?: LootRarity;
+  compareState?: InventoryGridCompareState;
+  quickAction?: ReactNode;
   className?: string;
 }
 
@@ -25,6 +36,7 @@ export interface InventoryGridProps {
   draggingId?: string;
   onSlotSelect?: (id: string, slot: InventoryGridSlot) => void;
   onSlotMove?: (fromId: string, toId: string, fromSlot: InventoryGridSlot, toSlot: InventoryGridSlot) => void;
+  onContextAction?: (id: string, action: 'quick', slot: InventoryGridSlot) => void;
   renderSlot?: GameUiCollectionRenderer<InventoryGridSlot>;
   label?: string;
   className?: string;
@@ -38,6 +50,7 @@ export function InventoryGrid({
   draggingId,
   onSlotSelect,
   onSlotMove,
+  onContextAction,
   renderSlot,
   label = 'Inventory',
   className,
@@ -87,6 +100,9 @@ export function InventoryGrid({
               data-locked={slot.locked ?? false}
               data-equipped={slot.equipped ?? false}
               data-empty={!slot.item}
+              data-rarity={slot.rarity ?? slot.item?.rarity}
+              data-slot-type={slot.slotType ?? 'bag'}
+              data-compare-state={slot.compareState}
               draggable={canDrag}
               onDragStart={
                 canDrag
@@ -127,12 +143,24 @@ export function InventoryGrid({
               }
             >
               {defaultCard}
+              {typeof slot.stackCount === 'number' ? <span className={inventoryGridMetaClass}>x{Math.round(slot.stackCount)}</span> : null}
+              {slot.compareState ? <span className={inventoryGridMetaClass}>{slot.compareState}</span> : null}
+              {slot.quickAction ? (
+                <button
+                  className={inventoryGridActionClass}
+                  type="button"
+                  aria-label={String(slot.quickAction)}
+                  onClick={() => onContextAction?.(slot.id, 'quick', slot)}
+                >
+                  {slot.quickAction}
+                </button>
+              ) : null}
             </li>
           );
 
           return (
             <React.Fragment key={slot.id}>
-              {renderSlot ? renderSlot(slot, { index, selected, disabled }, defaultCard) : defaultNode}
+              {renderSlot ? renderSlot(slot, { index, selected, disabled }, defaultNode) : defaultNode}
             </React.Fragment>
           );
         })}

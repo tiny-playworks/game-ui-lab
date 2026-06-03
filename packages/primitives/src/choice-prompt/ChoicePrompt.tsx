@@ -15,6 +15,8 @@ export interface ChoicePromptOption {
   description?: ReactNode;
   icon?: ReactNode;
   meta?: ReactNode;
+  cost?: ReactNode;
+  resultPreview?: ReactNode;
   disabled?: boolean;
   className?: string;
 }
@@ -40,6 +42,7 @@ export function ChoicePrompt({ title, choices, selectedId, onChoice, label, clas
             className={mergeClass(choicePromptChoiceClass, choice.className)}
             type="button"
             disabled={choice.disabled}
+            data-cost={typeof choice.cost === 'string' || typeof choice.cost === 'number' ? choice.cost : undefined}
             data-selected={selectedId === choice.id}
             onClick={() => onChoice?.(choice.id, choice)}
           >
@@ -49,6 +52,8 @@ export function ChoicePrompt({ title, choices, selectedId, onChoice, label, clas
             </span>
             {choice.description ? <small className={choicePromptChoiceDescriptionClass}>{choice.description}</small> : null}
             {choice.meta ? <small className={choicePromptChoiceDescriptionClass}>{choice.meta}</small> : null}
+            {choice.cost ? <small className={choicePromptChoiceDescriptionClass}>{choice.cost}</small> : null}
+            {choice.resultPreview ? <small className={choicePromptChoiceDescriptionClass}>{choice.resultPreview}</small> : null}
           </button>
         ))}
       </div>

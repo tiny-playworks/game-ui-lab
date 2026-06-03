@@ -21,6 +21,9 @@ export interface TargetFrameProps {
   shield?: number;
   faction?: TargetFaction;
   level?: string;
+  elite?: boolean;
+  threat?: string;
+  weakness?: string;
   statuses?: StatusBadgeProps[];
   className?: string;
 }
@@ -41,13 +44,18 @@ export function TargetFrame({
   shield,
   faction = 'enemy',
   level,
+  elite = false,
+  threat,
+  weakness,
   statuses = emptyStatuses,
   className,
 }: TargetFrameProps) {
   return (
     <section
       className={mergeClass(targetFrameRecipe({ faction }), className)}
+      data-elite={elite}
       data-faction={faction}
+      data-threat={threat}
       role="status"
       aria-label={`${name} ${faction} target`}
     >
@@ -55,10 +63,13 @@ export function TargetFrame({
         <span className={targetFrameCopyClass}>
           <strong>{name}</strong>
           {level ? <em className={targetFrameMetaClass}>{level}</em> : null}
+          {elite ? <em className={targetFrameMetaClass}>Elite</em> : null}
         </span>
         <span className={targetFrameMetaClass}>{faction}</span>
       </header>
       <HealthBar value={health} max={maxHealth} shield={shield} tone={healthToneByFaction[faction]} label="Target HP" showValue />
+      {threat ? <span className={targetFrameMetaClass}>{threat}</span> : null}
+      {weakness ? <span className={targetFrameMetaClass}>{weakness}</span> : null}
       {statuses.length ? (
         <div className={targetFrameStatusesClass}>
           {statuses.map((status) => (

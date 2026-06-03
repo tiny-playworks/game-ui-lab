@@ -108,6 +108,75 @@ describe('game ui runtime', () => {
     expect(runtime.getState().layers.hud.map?.selectedId).toBe('enemy');
   });
 
+  it('tracks richer ability, resource, inventory, and shop state', () => {
+    const runtime = createGameUiRuntime();
+
+    runtime.dispatch({
+      type: 'cooldown:update',
+      payload: {
+        id: 'burst',
+        label: 'Burst',
+        progress: 0.4,
+        active: true,
+        variant: 'ultimate',
+        resourceCost: '35 MP',
+        comboHint: 'Chain +2',
+        cooldownText: '4.2s',
+        triggerKey: '2',
+      },
+    });
+    runtime.dispatch({ type: 'ability:select', id: 'burst' });
+    runtime.dispatch({
+      type: 'resource:update',
+      payload: { id: 'mana', label: 'Mana', value: 42, max: 100, kind: 'mana' },
+    });
+    runtime.dispatch({
+      type: 'inventory:set',
+      payload: {
+        title: 'Bag',
+        selectedId: 'weapon',
+        slots: [
+          {
+            id: 'weapon',
+            item: { id: 'blade', name: 'Arc Blade', rarity: 'epic' },
+            slotType: 'weapon',
+            compareState: 'upgrade',
+            stackCount: 2,
+          },
+        ],
+      },
+    });
+    runtime.dispatch({
+      type: 'inventory:slot:update',
+      payload: { id: 'weapon', patch: { equipped: true } },
+    });
+    runtime.dispatch({
+      type: 'shop:open',
+      payload: {
+        id: 'vendor',
+        title: 'Vendor',
+        items: [{ id: 'potion', name: 'Potion', price: 50, stock: 0, unavailableReason: 'Need more gold' }],
+        currencies: [],
+        selectedId: 'potion',
+      },
+    });
+    runtime.dispatch({ type: 'shop:item:select', id: 'potion' });
+
+    const state = runtime.getState();
+
+    expect(state.layers.hud.cooldowns.burst.resourceCost).toBe('35 MP');
+    expect(state.layers.hud.selectedAbilityId).toBe('burst');
+    expect(state.layers.hud.resources?.mana.value).toBe(42);
+    expect(state.layers.modal.inventory?.slots[0]).toMatchObject({
+      id: 'weapon',
+      equipped: true,
+      compareState: 'upgrade',
+      stackCount: 2,
+    });
+    expect(state.layers.modal.shop?.selectedId).toBe('potion');
+    expect(state.layers.modal.shop?.items[0].unavailableReason).toBe('Need more gold');
+  });
+
   it('upserts and removes buffs', () => {
     const runtime = createGameUiRuntime();
 

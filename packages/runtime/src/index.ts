@@ -21,6 +21,12 @@ export interface RuntimeLootItem {
   value?: string;
   subtitle?: string;
   price?: string | number;
+  stock?: number;
+  discount?: ReactNode;
+  unavailableReason?: ReactNode;
+  details?: ReactNode;
+  state?: 'new' | 'claimed' | 'locked';
+  source?: string;
 }
 
 export interface DamageEventInput {
@@ -58,7 +64,13 @@ export interface CooldownRuntimeRecord {
   label: string;
   progress: number;
   ready?: boolean;
+  active?: boolean;
   disabled?: boolean;
+  resourceCost?: ReactNode;
+  comboHint?: ReactNode;
+  cooldownText?: ReactNode;
+  variant?: 'basic' | 'ultimate' | 'passive';
+  triggerKey?: string;
 }
 
 export interface TargetHealthRuntimeRecord {
@@ -66,6 +78,18 @@ export interface TargetHealthRuntimeRecord {
   health: number;
   maxHealth: number;
   shield?: number;
+  level?: string;
+  elite?: boolean;
+  threat?: string;
+  weakness?: string;
+}
+
+export interface ResourceRuntimeRecord {
+  id: string;
+  label: string;
+  value: number;
+  max: number;
+  kind?: 'mana' | 'energy' | 'stamina' | 'rage';
 }
 
 export interface StatusBadgeRuntimeRecord {
@@ -100,10 +124,31 @@ export interface MiniMapMarkerRuntimeRecord {
   active?: boolean;
 }
 
+export interface MiniMapPathRuntimeRecord {
+  id: string;
+  points: GameUiAnchor[];
+  label?: string;
+}
+
+export interface MiniMapZoneRuntimeRecord {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  tone?: 'safe' | 'danger' | 'objective';
+  label?: string;
+}
+
 export interface MapRuntimeRecord {
   label?: string;
   markers: MiniMapMarkerRuntimeRecord[];
   selectedId?: string;
+  paths?: MiniMapPathRuntimeRecord[];
+  zones?: MiniMapZoneRuntimeRecord[];
+  scanRadius?: number;
+  playerHeading?: number;
+  zoomLabel?: string;
 }
 
 export interface DialogueRuntimeRecord {
@@ -111,12 +156,16 @@ export interface DialogueRuntimeRecord {
   text: string;
   tone?: DialogueTone;
   portrait?: ReactNode;
+  source?: ReactNode;
+  typing?: boolean;
 }
 
 export interface ChoicePromptOptionRuntimeRecord {
   id: string;
   label: string;
   description?: ReactNode;
+  cost?: ReactNode;
+  resultPreview?: ReactNode;
   disabled?: boolean;
 }
 
@@ -159,6 +208,7 @@ export interface ShopRuntimeRecord {
   title: string;
   items: RuntimeLootItem[];
   currencies: Array<{ id: string; label: string; amount: number | string; tone?: 'gold' | 'silver' | 'gem' | 'token' | 'neutral' }>;
+  selectedId?: string;
 }
 
 export interface RewardRevealRuntimeRecord {
@@ -168,14 +218,33 @@ export interface RewardRevealRuntimeRecord {
   state: RewardRevealState;
 }
 
+export interface InventorySlotRuntimeRecord {
+  id: string;
+  item?: RuntimeLootItem;
+  locked?: boolean;
+  equipped?: boolean;
+  slotType?: 'bag' | 'weapon' | 'armor' | 'trinket' | 'quest' | 'material';
+  stackCount?: number;
+  rarity?: 'common' | 'rare' | 'epic' | 'legendary';
+  compareState?: 'upgrade' | 'downgrade' | 'same';
+}
+
+export interface InventoryRuntimeRecord {
+  title?: string;
+  slots: InventorySlotRuntimeRecord[];
+  selectedId?: string;
+}
+
 export interface GameUiRuntimeState {
   layers: {
     hud: {
       cooldowns: Record<string, CooldownRuntimeRecord>;
+      selectedAbilityId?: string;
       target?: TargetHealthRuntimeRecord;
       combo?: { count: number; label?: string };
       quest?: QuestRuntimeRecord;
       map?: MapRuntimeRecord;
+      resources?: Record<string, ResourceRuntimeRecord>;
       buffs?: StatusBadgeRuntimeRecord[];
       party?: PartyRuntimeRecord;
     };
@@ -193,6 +262,7 @@ export interface GameUiRuntimeState {
       reward?: RewardRevealRuntimeRecord;
       shop?: ShopRuntimeRecord;
       questLog?: QuestLogRuntimeRecord;
+      inventory?: InventoryRuntimeRecord;
     };
     debug: {
       events: string[];
@@ -206,6 +276,9 @@ export type GameUiEvent =
   | { type: 'toast:notify'; payload: ToastEventInput & { id?: string } }
   | { type: 'toast:dismiss'; id: string }
   | { type: 'cooldown:update'; payload: CooldownRuntimeRecord }
+  | { type: 'ability:select'; id: string }
+  | { type: 'resource:update'; payload: ResourceRuntimeRecord }
+  | { type: 'resource:remove'; id: string }
   | { type: 'target-health:update'; payload: TargetHealthRuntimeRecord }
   | { type: 'combo:set'; payload: { count: number; label?: string } }
   | { type: 'combo:increment'; payload?: { amount?: number; label?: string } }
@@ -231,6 +304,10 @@ export type GameUiEvent =
   | { type: 'quest-log:open'; payload: QuestLogRuntimeRecord }
   | { type: 'quest-log:close' }
   | { type: 'quest-log:activate'; id: string }
+  | { type: 'inventory:set'; payload: InventoryRuntimeRecord }
+  | { type: 'inventory:slot:update'; payload: { id: string; patch: Partial<InventorySlotRuntimeRecord> } }
+  | { type: 'inventory:select'; id: string }
+  | { type: 'inventory:clear' }
   | { type: 'choice:show'; payload: ChoiceRuntimeRecord }
   | { type: 'choice:select'; id: string }
   | { type: 'choice:clear' }
@@ -238,6 +315,7 @@ export type GameUiEvent =
   | { type: 'reward-reveal:update'; payload: Partial<RewardRevealRuntimeRecord> & { id: string } }
   | { type: 'reward-reveal:clear' }
   | { type: 'shop:open'; payload: ShopRuntimeRecord }
+  | { type: 'shop:item:select'; id: string }
   | { type: 'shop:close' }
   | { type: 'layer:clear'; layer: GameUiLayerName };
 
@@ -253,6 +331,8 @@ export interface GameUiRuntime {
   resetCombo(): void;
   trackQuest(quest: QuestRuntimeRecord): void;
   setMapMarkers(map: MapRuntimeRecord): void;
+  selectAbility(id: string): void;
+  updateResource(resource: ResourceRuntimeRecord): void;
   upsertBuff(buff: StatusBadgeRuntimeRecord): void;
   showDialogue(dialogue: DialogueRuntimeRecord): void;
   enqueueDialogue(dialogue: DialogueRuntimeRecord): void;
@@ -343,6 +423,12 @@ export function createGameUiRuntime(options: GameUiRuntimeOptions = {}): GameUiR
     },
     setMapMarkers(map) {
       dispatch({ type: 'map:set', payload: map });
+    },
+    selectAbility(id) {
+      dispatch({ type: 'ability:select', id });
+    },
+    updateResource(resource) {
+      dispatch({ type: 'resource:update', payload: resource });
     },
     upsertBuff(buff) {
       dispatch({ type: 'buff:upsert', payload: buff });
@@ -471,6 +557,45 @@ function reduceState(
           },
         },
       };
+    case 'ability:select':
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          hud: {
+            ...current.layers.hud,
+            selectedAbilityId: event.id,
+          },
+        },
+      };
+    case 'resource:update':
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          hud: {
+            ...current.layers.hud,
+            resources: {
+              ...current.layers.hud.resources,
+              [event.payload.id]: event.payload,
+            },
+          },
+        },
+      };
+    case 'resource:remove': {
+      const { [event.id]: _removed, ...resources } = current.layers.hud.resources ?? {};
+
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          hud: {
+            ...current.layers.hud,
+            resources,
+          },
+        },
+      };
+    }
     case 'target-health:update':
       return {
         ...current,
@@ -814,6 +939,70 @@ function reduceState(
         },
       };
     }
+    case 'inventory:set':
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          modal: {
+            ...current.layers.modal,
+            inventory: event.payload,
+            questLog: undefined,
+            reward: undefined,
+            shop: undefined,
+          },
+        },
+      };
+    case 'inventory:slot:update': {
+      const inventory = current.layers.modal.inventory;
+      if (!inventory) {
+        return current;
+      }
+
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          modal: {
+            ...current.layers.modal,
+            inventory: {
+              ...inventory,
+              slots: inventory.slots.map((slot) =>
+                slot.id === event.payload.id ? { ...slot, ...event.payload.patch } : slot,
+              ),
+            },
+          },
+        },
+      };
+    }
+    case 'inventory:select': {
+      const inventory = current.layers.modal.inventory;
+      if (!inventory) {
+        return current;
+      }
+
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          modal: {
+            ...current.layers.modal,
+            inventory: { ...inventory, selectedId: event.id },
+          },
+        },
+      };
+    }
+    case 'inventory:clear':
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          modal: {
+            ...current.layers.modal,
+            inventory: undefined,
+          },
+        },
+      };
     case 'choice:show':
       return {
         ...current,
@@ -859,6 +1048,7 @@ function reduceState(
         layers: {
           ...current.layers,
           modal: {
+            ...current.layers.modal,
             reward: event.payload,
             shop: undefined,
             questLog: undefined,
@@ -901,12 +1091,30 @@ function reduceState(
         layers: {
           ...current.layers,
           modal: {
+            ...current.layers.modal,
             shop: event.payload,
             reward: undefined,
             questLog: undefined,
           },
         },
       };
+    case 'shop:item:select': {
+      const shop = current.layers.modal.shop;
+      if (!shop) {
+        return current;
+      }
+
+      return {
+        ...current,
+        layers: {
+          ...current.layers,
+          modal: {
+            ...current.layers.modal,
+            shop: { ...shop, selectedId: event.id },
+          },
+        },
+      };
+    }
     case 'shop:close':
       return {
         ...current,

@@ -115,8 +115,8 @@ const questObjectives = [
 ];
 
 const abilityItems = [
-  { id: 'blink', label: '闪现', icon: 'B', ready: true, cost: '20' },
-  { id: 'burst', label: '爆发', icon: 'Q', progress: 0.58, cost: '35' },
+  { id: 'blink', label: '闪现', icon: 'B', ready: true, resourceCost: '20 MP', triggerKey: '1' },
+  { id: 'burst', label: '爆发', icon: 'Q', active: true, progress: 0.58, resourceCost: '35 MP', cooldownText: '4.2秒', comboHint: '连击 +2', variant: 'ultimate' as const, triggerKey: '2' },
   { id: 'nova', label: '新星', icon: 'R', progress: 0.12, locked: true },
 ];
 
@@ -132,8 +132,8 @@ const compassMarkers = [
 ];
 
 const choiceItems = [
-  { id: 'left', label: '走左侧通道', description: '安全但奖励少' },
-  { id: 'right', label: '强行突破', description: '危险但更快' },
+  { id: 'left', label: '走左侧通道', description: '安全但奖励少', cost: '1 把钥匙', resultPreview: '避开巡逻' },
+  { id: 'right', label: '强行突破', description: '危险但更快', cost: '20 体力', resultPreview: '触发增援' },
 ];
 
 const questLogItems = [
@@ -172,13 +172,16 @@ const docs: Record<PrimitiveId, PrimitiveDoc> = {
     name: 'AbilityBar',
     categoryZh: '战斗 HUD',
     categoryEn: 'Combat HUD',
-    summaryZh: '技能栏，组合技能冷却、就绪和锁定状态。',
-    summaryEn: 'An ability bar for cooldown, ready, and locked states.',
+    summaryZh: '技能栏，组合技能冷却、就绪、锁定、资源消耗与键盘触发状态。',
+    summaryEn: 'An ability bar for cooldown, ready, locked, resource cost, and key trigger states.',
     ...primitiveSnippets['ability-bar'],
     api: [
       row('abilities', '技能数组。', 'Ability item array.', 'AbilityBarItem[]', '-'),
       row('selectedId', '当前选中的技能 id。', 'Selected ability id.', 'string', '-'),
       row('onAbilityClick', '技能点击回调。', 'Ability click callback.', '(id, item) => void', '-'),
+      row('active / variant', '技能激活态与类型。', 'Active state and ability variant.', "boolean / 'basic' | 'ultimate' | 'passive'", '-'),
+      row('triggerKey', '键盘触发键。', 'Keyboard trigger key.', 'string', '-'),
+      row('resourceCost / comboHint / cooldownText', '消耗、连击提示与冷却文案。', 'Cost, combo hint, and cooldown text.', 'ReactNode', '-'),
       row('renderAbility', '自定义技能项渲染。', 'Custom ability renderer.', collectionRendererType.replace('<T>', '<AbilityBarItem>'), '-'),
       row('label', '可访问标签。', 'Accessible label.', 'string', "'Ability bar'"),
       ...classAndStyleRows,
@@ -242,6 +245,7 @@ const docs: Record<PrimitiveId, PrimitiveDoc> = {
       row('shield', '护盾值。', 'Shield value passed to HealthBar.', 'number', '0'),
       row('faction', '目标阵营。', 'Target faction.', "'ally' | 'enemy' | 'neutral' | 'boss'", "'enemy'"),
       row('level', '等级或副标题文案。', 'Level or subtitle text.', 'string', '-'),
+      row('elite / threat / weakness', '精英、威胁和弱点信息。', 'Elite, threat, and weakness metadata.', 'boolean / string', '-'),
       row('statuses', '状态徽章数组。', 'Status badge array.', 'StatusBadgeProps[]', '[]'),
       ...commonRows,
     ],
@@ -259,6 +263,8 @@ const docs: Record<PrimitiveId, PrimitiveDoc> = {
     ...primitiveSnippets['mini-map'],
     api: [
       row('markers', '地图点数组。', 'Map marker array.', 'MiniMapMarker[]', '-'),
+      row('paths / zones', '路线与区域叠层。', 'Route and zone overlays.', 'MiniMapPath[] / MiniMapZone[]', '[]'),
+      row('scanRadius / playerHeading / zoomLabel', '扫描圈、玩家朝向和缩放标签。', 'Scan radius, player heading, and zoom label.', 'number / string', '-'),
       row('selectedId', '当前选中的点位 id。', 'Selected marker id.', 'string', '-'),
       row('onMarkerSelect', '点位选择回调。', 'Marker select callback.', '(id, marker) => void', '-'),
       row(
@@ -346,6 +352,7 @@ const docs: Record<PrimitiveId, PrimitiveDoc> = {
       row('text', '对话文本。', 'Dialogue text.', 'ReactNode', '-'),
       row('portrait', '头像内容。', 'Portrait content.', 'ReactNode', 'speaker 首字'),
       row('tone', '对话语气。', 'Dialogue tone.', "'neutral' | 'ally' | 'warning'", "'neutral'"),
+      row('source / typing / onAdvance', '来源、打字中状态和继续回调。', 'Source, typing state, and advance callback.', 'ReactNode / boolean / () => void', '-'),
       ...commonRows,
     ],
     tokenZh: '使用 dialogue、speaker 和 surface token。',
@@ -363,6 +370,7 @@ const docs: Record<PrimitiveId, PrimitiveDoc> = {
     api: [
       row('title', '选择标题。', 'Choice prompt title.', 'string', '-'),
       row('choices', '选择项数组。', 'Choice option array.', 'ChoicePromptOption[]', '-'),
+      row('choice.cost / resultPreview', '选择消耗和结果预告。', 'Choice cost and result preview.', 'ReactNode', '-'),
       row('selectedId', '当前选中项 id。', 'Selected choice id.', 'string', '-'),
       row('onChoice', '点击回调。', 'Click callback.', '(id, choice) => void', '-'),
       row('label', '可访问标签。', 'Accessible label.', 'string', 'title'),
@@ -742,6 +750,8 @@ const docs: Record<PrimitiveId, PrimitiveDoc> = {
       row('columns', '列数。', 'Column count.', 'number', '4'),
       row('onSlotSelect', '选择回调。', 'Select callback.', '(id, slot) => void', '-'),
       row('selectedId', '当前选中格子 id。', 'Selected slot id.', 'string', '-'),
+      row('slotType / stackCount / compareState', '格子类型、堆叠数和装备对比状态。', 'Slot type, stack count, and comparison state.', 'string / number', '-'),
+      row('quickAction / onContextAction', '快捷动作和上下文回调。', 'Quick action and context callback.', 'ReactNode / (id, action, slot) => void', '-'),
       row('onSlotMove', '拖拽交换回调。', 'Drag move callback.', '(fromId, toId, from, to) => void', '-'),
       row('draggingId', '正在拖拽的格子 id。', 'Dragging slot id.', 'string', '-'),
       row(
@@ -895,6 +905,8 @@ const docs: Record<PrimitiveId, PrimitiveDoc> = {
       row('items', '商品数组。', 'Shop items.', 'ShopPanelItem[]', '-'),
       row('currencies', '货币条。', 'Currency bar entries.', 'CurrencyBarEntry[]', '[]'),
       row('selectedId', '当前选中商品 id。', 'Selected item id.', 'string', '-'),
+      row('onItemSelect', '商品选中回调。', 'Item select callback.', '(id, item) => void', '-'),
+      row('stock / discount / unavailableReason / details', '库存、折扣、不可购买原因和详情。', 'Stock, discount, unavailable reason, and item details.', 'ReactNode / number', '-'),
       row('onPurchase', '购买回调。', 'Purchase callback.', '(id, item) => void', '-'),
       ...classAndStyleRows,
     ],
@@ -912,6 +924,7 @@ const docs: Record<PrimitiveId, PrimitiveDoc> = {
     ...primitiveSnippets['chat-feed'],
     api: [
       row('messages', '消息数组。', 'Message array.', 'ChatFeedMessage[]', '-'),
+      row('timestamp / channel / highlighted', '时间、频道和高亮状态。', 'Timestamp, channel, and highlighted state.', 'ReactNode / boolean', '-'),
       row('limit', '可见条数。', 'Visible message limit.', 'number', '8'),
       row(
         'renderMessage',
@@ -1138,8 +1151,8 @@ function abilityItemsFor(isZh: boolean) {
   }
 
   return [
-    { id: 'blink', label: 'Blink', icon: 'B', ready: true, cost: '20' },
-    { id: 'burst', label: 'Burst', icon: 'Q', progress: 0.58, cost: '35' },
+    { id: 'blink', label: 'Blink', icon: 'B', ready: true, resourceCost: '20 MP', triggerKey: '1' },
+    { id: 'burst', label: 'Burst', icon: 'Q', active: true, progress: 0.58, resourceCost: '35 MP', cooldownText: '4.2s', comboHint: 'Chain +2', variant: 'ultimate' as const, triggerKey: '2' },
     { id: 'nova', label: 'Nova', icon: 'R', progress: 0.12, locked: true },
   ];
 }
@@ -1187,8 +1200,8 @@ function choiceItemsFor(isZh: boolean) {
   }
 
   return [
-    { id: 'left', label: 'Take the left path', description: 'Safer, fewer rewards' },
-    { id: 'right', label: 'Force the breach', description: 'Risky but faster' },
+    { id: 'left', label: 'Take the left path', description: 'Safer, fewer rewards', cost: '1 key', resultPreview: 'Avoids patrol' },
+    { id: 'right', label: 'Force the breach', description: 'Risky but faster', cost: '20 stamina', resultPreview: 'Calls reinforcements' },
   ];
 }
 
@@ -1207,7 +1220,7 @@ function notificationItemsFor(isZh: boolean) {
 
 function AbilityBarPreview() {
   const isZh = useDemoZh();
-  return <AbilityBar abilities={abilityItemsFor(isZh)} />;
+  return <AbilityBar abilities={abilityItemsFor(isZh)} selectedId="burst" onAbilityClick={() => undefined} />;
 }
 
 function AbilityTooltipPreview() {
@@ -1234,6 +1247,9 @@ function TargetFramePreview() {
       name={isZh ? '遗迹守卫' : 'Warden'}
       faction="boss"
       level="Lv.18"
+      elite
+      threat={isZh ? '高仇恨' : 'High threat'}
+      weakness={isZh ? '弱点：电弧' : 'Weakness: arc'}
       health={420}
       maxHealth={800}
       statuses={[{ label: isZh ? '灼烧' : 'Burn', tone: 'debuff', duration: isZh ? '8秒' : '8s' }]}
@@ -1243,7 +1259,17 @@ function TargetFramePreview() {
 
 function MiniMapPreview() {
   const isZh = useDemoZh();
-  return <MiniMap label={isZh ? '区域地图' : 'Sector map'} markers={mapMarkersFor(isZh)} />;
+  return (
+    <MiniMap
+      label={isZh ? '区域地图' : 'Sector map'}
+      markers={mapMarkersFor(isZh)}
+      zones={[{ id: 'patrol', x: 58, y: 42, width: 24, height: 18, tone: 'danger', label: isZh ? '巡逻区' : 'Patrol zone' }]}
+      paths={[{ id: 'route', points: [{ x: 20, y: 38 }, { x: 48, y: 28 }], label: isZh ? '安全路线' : 'Safe route' }]}
+      scanRadius={36}
+      playerHeading={90}
+      zoomLabel="2x"
+    />
+  );
 }
 
 function MapMarkerPreview() {
@@ -1285,6 +1311,8 @@ function DialogueBoxPreview() {
       speaker="Mira"
       text={isZh ? '守住这道门，信标马上就会点亮。' : 'Hold this gate—the beacon lights in a moment.'}
       tone="ally"
+      source={isZh ? '通讯' : 'Radio'}
+      typing
     />
   );
 }
@@ -1465,10 +1493,12 @@ function InventoryGridPreview() {
   return (
     <InventoryGrid
       columns={3}
+      selectedId="c"
+      onContextAction={() => undefined}
       slots={[
-        { id: 'a', item: items[0] },
+        { id: 'a', item: items[0], stackCount: 3, slotType: 'material', rarity: 'epic' },
         { id: 'b', locked: true },
-        { id: 'c', equipped: true, item: items[1] },
+        { id: 'c', equipped: true, item: items[1], slotType: 'weapon', compareState: 'upgrade', quickAction: 'Equip' },
       ]}
     />
   );
@@ -1554,7 +1584,19 @@ function ShopPanelPreview() {
   return (
     <ShopPanel
       title={isZh ? '补给站' : 'Supply post'}
-      items={[{ id: 'potion', name: isZh ? '治疗药剂' : 'Healing potion', rarity: 'rare', price: '20g' }]}
+      selectedId="potion"
+      onItemSelect={() => undefined}
+      onPurchase={() => undefined}
+      items={[{
+        id: 'potion',
+        name: isZh ? '治疗药剂' : 'Healing potion',
+        rarity: 'rare',
+        price: '20g',
+        stock: 0,
+        discount: '-20%',
+        unavailableReason: isZh ? '金币不足' : 'Need more gold',
+        details: isZh ? '恢复 80 点生命' : 'Restores 80 HP',
+      }]}
       currencies={[{ id: 'gold', label: isZh ? '金币' : 'Gold', amount: 120, tone: 'gold' }]}
     />
   );
@@ -1565,8 +1607,8 @@ function ChatFeedPreview() {
   return (
     <ChatFeed
       messages={[
-        { id: '1', author: isZh ? '系统' : 'System', text: isZh ? 'Boss 已进入战斗' : 'Boss engaged', tone: 'combat' },
-        { id: '2', author: isZh ? '队友' : 'Ally', text: isZh ? '左侧通道更安全' : 'Left path is safer', tone: 'party' },
+        { id: '1', author: isZh ? '系统' : 'System', text: isZh ? 'Boss 已进入战斗' : 'Boss engaged', tone: 'combat', timestamp: '12:04', channel: isZh ? '团队' : 'Raid', highlighted: true },
+        { id: '2', author: isZh ? '队友' : 'Ally', text: isZh ? '左侧通道更安全' : 'Left path is safer', tone: 'party', timestamp: '12:05', channel: isZh ? '队伍' : 'Party' },
       ]}
     />
   );

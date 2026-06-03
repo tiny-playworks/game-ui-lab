@@ -3,30 +3,30 @@ export const primitiveSnippets = {
     snippetZh: `import { AbilityBar, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const abilities = [
-  { id: 'blink', label: '闪现', icon: 'B', ready: true, cost: '20' },
-  { id: 'burst', label: '爆发', icon: 'Q', progress: 0.58, cost: '35' },
+  { id: 'blink', label: '闪现', icon: 'B', ready: true, resourceCost: '20 MP', triggerKey: '1' },
+  { id: 'burst', label: '爆发', icon: 'Q', active: true, progress: 0.58, resourceCost: '35 MP', cooldownText: '4.2秒', comboHint: '连击 +2', variant: 'ultimate' as const, triggerKey: '2' },
   { id: 'nova', label: '新星', icon: 'R', progress: 0.12, locked: true },
 ];
 
 export function Demo() {
   return (
     <GameUiProvider>
-      <AbilityBar abilities={abilities} />
+      <AbilityBar abilities={abilities} selectedId="burst" onAbilityClick={(id) => console.log(id)} />
     </GameUiProvider>
   );
 }`,
     snippetEn: `import { AbilityBar, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const abilities = [
-  { id: 'blink', label: 'Blink', icon: 'B', ready: true, cost: '20' },
-  { id: 'burst', label: 'Burst', icon: 'Q', progress: 0.58, cost: '35' },
+  { id: 'blink', label: 'Blink', icon: 'B', ready: true, resourceCost: '20 MP', triggerKey: '1' },
+  { id: 'burst', label: 'Burst', icon: 'Q', active: true, progress: 0.58, resourceCost: '35 MP', cooldownText: '4.2s', comboHint: 'Chain +2', variant: 'ultimate' as const, triggerKey: '2' },
   { id: 'nova', label: 'Nova', icon: 'R', progress: 0.12, locked: true },
 ];
 
 export function Demo() {
   return (
     <GameUiProvider>
-      <AbilityBar abilities={abilities} />
+      <AbilityBar abilities={abilities} selectedId="burst" onAbilityClick={(id) => console.log(id)} />
     </GameUiProvider>
   );
 }`,
@@ -117,7 +117,15 @@ const markers = [
 export function Demo() {
   return (
     <GameUiProvider>
-      <MiniMap label="区域地图" markers={markers} />
+      <MiniMap
+        label="区域地图"
+        markers={markers}
+        zones={[{ id: 'patrol', x: 58, y: 42, width: 24, height: 18, tone: 'danger', label: '巡逻区' }]}
+        paths={[{ id: 'route', points: [{ x: 20, y: 38 }, { x: 48, y: 28 }], label: '安全路线' }]}
+        scanRadius={36}
+        playerHeading={90}
+        zoomLabel="2x"
+      />
     </GameUiProvider>
   );
 }`,
@@ -132,7 +140,15 @@ const markers = [
 export function Demo() {
   return (
     <GameUiProvider>
-      <MiniMap label="Sector map" markers={markers} />
+      <MiniMap
+        label="Sector map"
+        markers={markers}
+        zones={[{ id: 'patrol', x: 58, y: 42, width: 24, height: 18, tone: 'danger', label: 'Patrol zone' }]}
+        paths={[{ id: 'route', points: [{ x: 20, y: 38 }, { x: 48, y: 28 }], label: 'Safe route' }]}
+        scanRadius={36}
+        playerHeading={90}
+        zoomLabel="2x"
+      />
     </GameUiProvider>
   );
 }`,
@@ -217,7 +233,7 @@ export function Demo() {
 export function Demo() {
   return (
     <GameUiProvider>
-      <DialogueBox speaker="Mira" text="守住这道门，信标马上就会点亮。" tone="ally" />
+      <DialogueBox speaker="Mira" source="通讯" text="守住这道门，信标马上就会点亮。" tone="ally" typing />
     </GameUiProvider>
   );
 }`,
@@ -226,7 +242,7 @@ export function Demo() {
 export function Demo() {
   return (
     <GameUiProvider>
-      <DialogueBox speaker="Mira" text="Hold this gate—the beacon lights in a moment." tone="ally" />
+      <DialogueBox speaker="Mira" source="Radio" text="Hold this gate—the beacon lights in a moment." tone="ally" typing />
     </GameUiProvider>
   );
 }`,
@@ -235,8 +251,8 @@ export function Demo() {
     snippetZh: `import { ChoicePrompt, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const choices = [
-  { id: 'left', label: '走左侧通道', description: '安全但奖励少' },
-  { id: 'right', label: '强行突破', description: '危险但更快' },
+  { id: 'left', label: '走左侧通道', description: '安全但奖励少', cost: '1 把钥匙', resultPreview: '避开巡逻' },
+  { id: 'right', label: '强行突破', description: '危险但更快', cost: '20 体力', resultPreview: '触发增援' },
 ];
 
 export function Demo() {
@@ -249,8 +265,8 @@ export function Demo() {
     snippetEn: `import { ChoicePrompt, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const choices = [
-  { id: 'left', label: 'Take the left path', description: 'Safer, fewer rewards' },
-  { id: 'right', label: 'Force the breach', description: 'Risky but faster' },
+  { id: 'left', label: 'Take the left path', description: 'Safer, fewer rewards', cost: '1 key', resultPreview: 'Avoids patrol' },
+  { id: 'right', label: 'Force the breach', description: 'Risky but faster', cost: '20 stamina', resultPreview: 'Calls reinforcements' },
 ];
 
 export function Demo() {
@@ -719,11 +735,13 @@ export function Demo() {
     <GameUiProvider>
       <InventoryGrid
         columns={4}
+        selectedId="c"
         slots={[
-          { id: 'a', item: { id: 'shard', name: '星辉碎片', rarity: 'epic' } },
+          { id: 'a', item: { id: 'shard', name: '星辉碎片', rarity: 'epic' }, stackCount: 3, slotType: 'material' },
           { id: 'b', locked: true },
-          { id: 'c', equipped: true, item: { id: 'core', name: '共鸣核心', rarity: 'legendary' } },
+          { id: 'c', equipped: true, item: { id: 'core', name: '共鸣核心', rarity: 'legendary' }, slotType: 'weapon', compareState: 'upgrade', quickAction: '装备' },
         ]}
+        onContextAction={(id, action) => console.log(id, action)}
         onSlotMove={(fromId, toId) => console.log(fromId, toId)}
       />
     </GameUiProvider>
@@ -736,11 +754,13 @@ export function Demo() {
     <GameUiProvider>
       <InventoryGrid
         columns={4}
+        selectedId="c"
         slots={[
-          { id: 'a', item: { id: 'shard', name: 'Astral Shard', rarity: 'epic' } },
+          { id: 'a', item: { id: 'shard', name: 'Astral Shard', rarity: 'epic' }, stackCount: 3, slotType: 'material' },
           { id: 'b', locked: true },
-          { id: 'c', equipped: true, item: { id: 'core', name: 'Resonance Core', rarity: 'legendary' } },
+          { id: 'c', equipped: true, item: { id: 'core', name: 'Resonance Core', rarity: 'legendary' }, slotType: 'weapon', compareState: 'upgrade', quickAction: 'Equip' },
         ]}
+        onContextAction={(id, action) => console.log(id, action)}
         onSlotMove={(fromId, toId) => console.log(fromId, toId)}
       />
     </GameUiProvider>
@@ -927,7 +947,19 @@ export function Demo() {
     <GameUiProvider>
       <ShopPanel
         title="补给站"
-        items={[{ id: 'potion', name: '治疗药剂', rarity: 'rare', price: '20g' }]}
+        selectedId="potion"
+        onItemSelect={(id) => console.log(id)}
+        onPurchase={(id) => console.log(id)}
+        items={[{
+          id: 'potion',
+          name: '治疗药剂',
+          rarity: 'rare',
+          price: '20g',
+          stock: 0,
+          discount: '-20%',
+          unavailableReason: '金币不足',
+          details: '恢复 80 点生命',
+        }]}
         currencies={[{ id: 'gold', label: '金币', amount: 120, tone: 'gold' }]}
       />
     </GameUiProvider>
@@ -940,7 +972,19 @@ export function Demo() {
     <GameUiProvider>
       <ShopPanel
         title="Supply post"
-        items={[{ id: 'potion', name: 'Healing potion', rarity: 'rare', price: '20g' }]}
+        selectedId="potion"
+        onItemSelect={(id) => console.log(id)}
+        onPurchase={(id) => console.log(id)}
+        items={[{
+          id: 'potion',
+          name: 'Healing potion',
+          rarity: 'rare',
+          price: '20g',
+          stock: 0,
+          discount: '-20%',
+          unavailableReason: 'Need more gold',
+          details: 'Restores 80 HP',
+        }]}
         currencies={[{ id: 'gold', label: 'Gold', amount: 120, tone: 'gold' }]}
       />
     </GameUiProvider>
@@ -955,8 +999,8 @@ export function Demo() {
     <GameUiProvider>
       <ChatFeed
         messages={[
-          { id: '1', author: '系统', text: 'Boss 已进入战斗', tone: 'combat' },
-          { id: '2', author: '队友', text: '左侧通道更安全', tone: 'party' },
+          { id: '1', author: '系统', text: 'Boss 已进入战斗', tone: 'combat', timestamp: '12:04', channel: '团队', highlighted: true },
+          { id: '2', author: '队友', text: '左侧通道更安全', tone: 'party', timestamp: '12:05', channel: '队伍' },
         ]}
       />
     </GameUiProvider>
@@ -969,8 +1013,8 @@ export function Demo() {
     <GameUiProvider>
       <ChatFeed
         messages={[
-          { id: '1', author: 'System', text: 'Boss engaged', tone: 'combat' },
-          { id: '2', author: 'Ally', text: 'Left path is safer', tone: 'party' },
+          { id: '1', author: 'System', text: 'Boss engaged', tone: 'combat', timestamp: '12:04', channel: 'Raid', highlighted: true },
+          { id: '2', author: 'Ally', text: 'Left path is safer', tone: 'party', timestamp: '12:05', channel: 'Party' },
         ]}
       />
     </GameUiProvider>

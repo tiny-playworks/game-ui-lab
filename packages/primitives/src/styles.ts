@@ -756,6 +756,63 @@ export const miniMapLabelClass = css({
   fontWeight: '900',
   textTransform: 'uppercase',
 });
+export const miniMapZoneClass = css({
+  position: 'absolute',
+  top: 'var(--game-ui-zone-y)',
+  left: 'var(--game-ui-zone-x)',
+  width: 'var(--game-ui-zone-width)',
+  height: 'var(--game-ui-zone-height)',
+  border: '1px solid color-mix(in srgb, var(--game-ui-danger), transparent 28%)',
+  borderRadius: radiusMd,
+  background: 'color-mix(in srgb, var(--game-ui-danger), transparent 88%)',
+  color: critical,
+  fontSize: '9px',
+  fontWeight: '900',
+  padding: '2px',
+  transform: 'translate(-50%, -50%)',
+});
+export const miniMapPathClass = css({
+  position: 'absolute',
+  left: '16px',
+  bottom: '28px',
+  padding: '2px 6px',
+  border: '1px solid color-mix(in srgb, var(--game-ui-accent), transparent 52%)',
+  borderRadius: '999px',
+  background: panelSurface,
+  color: accent,
+  fontSize: '10px',
+  fontWeight: '900',
+});
+export const miniMapScanClass = css({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  width: 'var(--game-ui-scan-radius)',
+  aspectRatio: '1',
+  border: '1px dashed color-mix(in srgb, var(--game-ui-accent), transparent 30%)',
+  borderRadius: '999px',
+  transform: 'translate(-50%, -50%)',
+});
+export const miniMapPlayerClass = css({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  width: '0',
+  height: '0',
+  borderLeft: '6px solid transparent',
+  borderRight: '6px solid transparent',
+  borderBottom: '14px solid var(--game-ui-accent)',
+  filter: 'drop-shadow(0 0 10px var(--game-ui-accent))',
+  transform: 'translate(-50%, -50%) rotate(var(--game-ui-player-heading))',
+});
+export const miniMapZoomClass = css({
+  position: 'absolute',
+  left: '10px',
+  top: '8px',
+  color: muted,
+  fontSize: '10px',
+  fontWeight: '900',
+});
 
 export const compassBarClass = css({
   display: 'grid',
@@ -1141,6 +1198,23 @@ export const shopPanelItemClass = css({
   background: panelSurface,
 });
 export const shopPanelPriceClass = css({ color: critical, fontSize: '12px', fontWeight: '900' });
+export const shopPanelMetaClass = css({ color: muted, fontSize: '11px', fontWeight: '800' });
+export const shopPanelActionClass = css({
+  minHeight: '30px',
+  padding: '0 10px',
+  border: `1px solid ${line}`,
+  borderRadius: radiusSm,
+  background: 'rgba(255, 255, 255, 0.06)',
+  color: text,
+  cursor: 'pointer',
+  font: 'inherit',
+  fontSize: '12px',
+  fontWeight: '900',
+  _disabled: {
+    cursor: 'not-allowed',
+    opacity: 0.5,
+  },
+});
 
 export const chatFeedClass = css({
   display: 'grid',
@@ -1365,6 +1439,19 @@ export const inventoryGridSlotRecipe = cva({
     state: 'empty',
     equipped: false,
   },
+});
+export const inventoryGridMetaClass = css({ color: muted, fontSize: '11px', fontWeight: '800' });
+export const inventoryGridActionClass = css({
+  minHeight: '26px',
+  padding: '0 8px',
+  border: `1px solid ${line}`,
+  borderRadius: radiusSm,
+  background: 'rgba(255, 255, 255, 0.06)',
+  color: text,
+  cursor: 'pointer',
+  font: 'inherit',
+  fontSize: '11px',
+  fontWeight: '900',
 });
 
 export const currencyBarClass = css({

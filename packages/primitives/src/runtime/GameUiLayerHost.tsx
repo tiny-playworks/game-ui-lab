@@ -10,6 +10,7 @@ import { ComboCounter } from '../combo-counter/ComboCounter';
 import { DamageNumber } from '../damage-number/DamageNumber';
 import { DialogueBox } from '../dialogue-box/DialogueBox';
 import { FloatingToast } from '../floating-toast/FloatingToast';
+import { InventoryGrid } from '../inventory-grid/InventoryGrid';
 import { MiniMap } from '../mini-map/MiniMap';
 import { PartyFrame } from '../party-frame/PartyFrame';
 import type { PartyFrameMember } from '../party-frame/PartyFrame';
@@ -37,14 +38,22 @@ export interface GameUiLayerHostProps {
   className?: string;
 }
 
-function cooldownsToAbilities(cooldowns: Record<string, { id: string; label: string; progress: number; ready?: boolean; disabled?: boolean }>): AbilityBarItem[] {
+function cooldownsToAbilities(
+  cooldowns: Record<string, { id: string; label: string; progress: number; ready?: boolean; active?: boolean; disabled?: boolean; resourceCost?: React.ReactNode; comboHint?: React.ReactNode; cooldownText?: React.ReactNode; variant?: AbilityBarItem['variant']; triggerKey?: string }>,
+): AbilityBarItem[] {
   return Object.values(cooldowns).map((record) => ({
     id: record.id,
     label: record.label,
     icon: record.label.slice(0, 1),
     progress: record.progress,
     ready: record.ready,
+    active: record.active,
     locked: record.disabled,
+    resourceCost: record.resourceCost,
+    comboHint: record.comboHint,
+    cooldownText: record.cooldownText,
+    variant: record.variant,
+    triggerKey: record.triggerKey,
   }));
 }
 
@@ -107,6 +116,10 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
                 health={hud.target.health}
                 maxHealth={hud.target.maxHealth}
                 shield={hud.target.shield}
+                level={hud.target.level}
+                elite={hud.target.elite}
+                threat={hud.target.threat}
+                weakness={hud.target.weakness}
                 faction="enemy"
               />
             ) : null}
@@ -117,12 +130,24 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
               <MiniMap
                 label={hud.map.label}
                 markers={hud.map.markers}
+                paths={hud.map.paths}
+                playerHeading={hud.map.playerHeading}
+                scanRadius={hud.map.scanRadius}
                 selectedId={hud.map.selectedId}
+                zones={hud.map.zones}
+                zoomLabel={hud.map.zoomLabel}
                 onMarkerSelect={(id) => runtime.dispatch({ type: 'map:select', id })}
               />
             ) : null}
             {buffItems.length ? <BuffBar buffs={buffItems} limit={8} /> : null}
-            {abilityItems.length ? <AbilityBar abilities={abilityItems} label="Abilities" /> : null}
+            {abilityItems.length ? (
+              <AbilityBar
+                abilities={abilityItems}
+                label="Abilities"
+                selectedId={hud.selectedAbilityId}
+                onAbilityClick={(id) => runtime.dispatch({ type: 'ability:select', id })}
+              />
+            ) : null}
             {partyMembers.length ? (
               <PartyFrame
                 members={partyMembers}
@@ -171,6 +196,8 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
               text={activeDialogue.text}
               tone={activeDialogue.tone}
               portrait={activeDialogue.portrait}
+              source={activeDialogue.source}
+              typing={activeDialogue.typing}
             />
             {(narrative?.dialogueQueue?.length ?? 0) > 1 ? (
               <button type="button" onClick={() => runtime.advanceDialogue()}>
@@ -218,10 +245,20 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
               price: item.price ?? item.value ?? '0',
             }))}
             currencies={modal.shop.currencies}
+            selectedId={modal.shop.selectedId}
+            onItemSelect={(id) => runtime.dispatch({ type: 'shop:item:select', id })}
             onPurchase={(id) => {
               runtime.notify({ title: 'Purchased', message: `Bought ${id}`, variant: 'success' });
               runtime.dispatch({ type: 'shop:close' });
             }}
+          />
+        ) : null}
+        {modal.inventory ? (
+          <InventoryGrid
+            label={modal.inventory.title ?? 'Inventory'}
+            slots={modal.inventory.slots}
+            selectedId={modal.inventory.selectedId}
+            onSlotSelect={(id) => runtime.dispatch({ type: 'inventory:select', id })}
           />
         ) : null}
         {modal.questLog ? (

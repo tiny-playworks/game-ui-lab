@@ -10,6 +10,9 @@ export interface ChatFeedMessage {
   author: string;
   text: string;
   tone?: ChatFeedTone;
+  timestamp?: ReactNode;
+  channel?: ReactNode;
+  highlighted?: boolean;
   className?: string;
 }
 
@@ -46,7 +49,13 @@ export function ChatFeed({
         ) : null}
         {visibleMessages.map((message, index) => {
           const defaultNode = (
-            <li className={chatFeedItemRecipe({ tone: message.tone ?? 'info' })} data-tone={message.tone ?? 'info'}>
+            <li
+              className={mergeClass(chatFeedItemRecipe({ tone: message.tone ?? 'info' }), message.className)}
+              data-highlighted={message.highlighted ?? false}
+              data-tone={message.tone ?? 'info'}
+            >
+              {message.timestamp ? <span>{message.timestamp}</span> : null}
+              {message.channel ? <span>{message.channel}</span> : null}
               <strong>{message.author}</strong>
               <span>{message.text}</span>
             </li>

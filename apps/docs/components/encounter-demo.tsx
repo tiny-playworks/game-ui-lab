@@ -28,6 +28,14 @@ const mapMarkers = [
   { id: 'beacon', x: 48, y: 28, tone: 'objective' as const, label: 'Beacon', active: true },
 ];
 
+const mapZones = [
+  { id: 'patrol', x: 58, y: 42, width: 24, height: 18, tone: 'danger' as const, label: 'Patrol zone' },
+];
+
+const mapPaths = [
+  { id: 'route', points: [{ x: 22, y: 42 }, { x: 48, y: 28 }], label: 'Safe route' },
+];
+
 export function EncounterDemo() {
   return (
     <GameUiProvider theme="arcade">
@@ -49,7 +57,15 @@ function EncounterRuntimeScene() {
   const seedEncounter = useCallback(() => {
     runtime.dispatch({
       type: 'target-health:update',
-      payload: { name: isZh ? '遗迹守卫' : 'Warden', health: maxHealth, maxHealth },
+      payload: {
+        name: isZh ? '遗迹守卫' : 'Warden',
+        health: maxHealth,
+        maxHealth,
+        level: 'Lv.18',
+        elite: true,
+        threat: isZh ? '高仇恨' : 'High threat',
+        weakness: isZh ? '弱点：电弧' : 'Weakness: arc',
+      },
     });
     runtime.upsertBuff({ id: 'armor-break', label: isZh ? '破甲' : 'Armor break', tone: 'debuff', duration: isZh ? '8秒' : '8s' });
     runtime.setCombo(0, isZh ? '连击' : 'Combo');
@@ -66,11 +82,18 @@ function EncounterRuntimeScene() {
       label: isZh ? '遗迹区' : 'Ruin sector',
       markers: mapMarkers,
       selectedId: 'enemy',
+      paths: mapPaths.map((path) => ({ ...path, label: isZh ? '安全路线' : path.label })),
+      playerHeading: 90,
+      scanRadius: 36,
+      zones: mapZones.map((zone) => ({ ...zone, label: isZh ? '巡逻区' : zone.label })),
+      zoomLabel: '2x',
     });
     runtime.enqueueDialogue({
       speaker: isZh ? '领航员' : 'Pilot',
       text: isZh ? '目标已标记，保持连击。' : 'Target marked. Keep the combo alive.',
       tone: 'ally',
+      source: isZh ? '通讯' : 'Radio',
+      typing: true,
     });
   }, [isZh, runtime]);
 
@@ -110,6 +133,8 @@ function EncounterRuntimeScene() {
         label: isZh ? '攻击' : 'Attack',
         progress: 1,
         ready: true,
+        resourceCost: isZh ? '0 能量' : '0 energy',
+        triggerKey: '1',
       },
     });
     runtime.dispatch({
@@ -118,26 +143,36 @@ function EncounterRuntimeScene() {
         id: 'burst',
         label: isZh ? '爆发' : 'Burst',
         progress: burstProgress,
+        active: selectedAbility === 'burst',
         ready: burstProgress >= 1,
         disabled: burstProgress < 1,
+        resourceCost: isZh ? '35 能量' : '35 energy',
+        comboHint: isZh ? '连击 +2' : 'Chain +2',
+        cooldownText: burstProgress >= 1 ? (isZh ? '就绪' : 'Ready') : `${Math.round(burstProgress * 100)}%`,
+        triggerKey: '2',
+        variant: 'ultimate',
       },
     });
-  }, [burstProgress, isZh, runtime]);
+  }, [burstProgress, isZh, runtime, selectedAbility]);
 
   const abilities = useMemo(
     () => [
-      { id: 'strike', label: isZh ? '攻击' : 'Attack', icon: 'A', ready: true, shortcut: '1' },
+      { id: 'strike', label: isZh ? '攻击' : 'Attack', icon: 'A', ready: true, resourceCost: isZh ? '0 能量' : '0 energy', triggerKey: '1' },
       {
         id: 'burst',
         label: isZh ? '爆发' : 'Burst',
         icon: 'Q',
+        active: selectedAbility === 'burst',
         progress: burstProgress,
         ready: burstProgress >= 1,
-        shortcut: '2',
-        cooldownLabel: burstProgress >= 1 ? (isZh ? '就绪' : 'Ready') : `${Math.round(burstProgress * 100)}%`,
+        triggerKey: '2',
+        resourceCost: isZh ? '35 能量' : '35 energy',
+        comboHint: isZh ? '连击 +2' : 'Chain +2',
+        cooldownText: burstProgress >= 1 ? (isZh ? '就绪' : 'Ready') : `${Math.round(burstProgress * 100)}%`,
+        variant: 'ultimate' as const,
       },
     ],
-    [burstProgress, isZh],
+    [burstProgress, isZh, selectedAbility],
   );
 
   function emitHit(nextDamage: number, variant: 'damage' | 'critical') {
@@ -155,11 +190,15 @@ function EncounterRuntimeScene() {
     runtime.dispatch({
       type: 'target-health:update',
       payload: {
-        name: target?.name ?? (isZh ? '遗迹守卫' : 'Warden'),
-        health: nextHealth,
-        maxHealth: target?.maxHealth ?? maxHealth,
-      },
-    });
+          name: target?.name ?? (isZh ? '遗迹守卫' : 'Warden'),
+          health: nextHealth,
+          maxHealth: target?.maxHealth ?? maxHealth,
+          level: target?.level,
+          elite: target?.elite,
+          threat: target?.threat,
+          weakness: target?.weakness,
+        },
+      });
     runtime.dispatch({
       type: 'quest:objective:update',
       payload: { id: 'hit', patch: { state: 'complete', progress: 1, max: 1 } },
@@ -179,6 +218,7 @@ function EncounterRuntimeScene() {
         speaker: isZh ? '遗迹守卫' : 'Warden',
         text: isZh ? '核心……留给你们了。' : 'The core… is yours.',
         tone: 'warning',
+        source: isZh ? '敌方频道' : 'Enemy channel',
       });
       runtime.dispatch({
         type: 'reward-reveal:show',
@@ -231,11 +271,36 @@ function EncounterRuntimeScene() {
         title: isZh ? '遗迹商人' : 'Ruin vendor',
         items: [
           { id: 'potion', name: isZh ? '修复药剂' : 'Repair potion', rarity: 'common', price: 50, value: '50' },
-          { id: 'core', name: isZh ? '共鸣核心' : 'Resonance core', rarity: 'legendary', price: 999, value: '999' },
+          {
+            id: 'core',
+            name: isZh ? '共鸣核心' : 'Resonance core',
+            rarity: 'legendary',
+            price: 999,
+            value: '999',
+            stock: 0,
+            discount: '-20%',
+            unavailableReason: isZh ? '宝石不足' : 'Need more gems',
+            details: isZh ? '提升爆发伤害' : 'Boosts burst damage',
+          },
         ],
         currencies: [
           { id: 'gold', label: isZh ? '金币' : 'Gold', amount: 420, tone: 'gold' },
           { id: 'gem', label: isZh ? '宝石' : 'Gems', amount: 12, tone: 'gem' },
+        ],
+      },
+    });
+  }
+
+  function openInventory() {
+    runtime.dispatch({
+      type: 'inventory:set',
+      payload: {
+        title: isZh ? '背包' : 'Inventory',
+        selectedId: 'core',
+        slots: [
+          { id: 'shard', item: rewardItems[1], stackCount: 3, slotType: 'material', rarity: 'epic' },
+          { id: 'locked', locked: true },
+          { id: 'core', item: rewardItems[0], equipped: true, slotType: 'weapon', compareState: 'upgrade', stackCount: 1 },
         ],
       },
     });
@@ -291,6 +356,7 @@ function EncounterRuntimeScene() {
       <div className="encounter-demo__controls">
         <button type="button" onClick={() => handleAbility('strike')}>{isZh ? '攻击' : 'Attack'}</button>
         <button type="button" onClick={() => handleAbility('burst')}>{isZh ? '爆发' : 'Burst'}</button>
+        <button type="button" onClick={openInventory}>{isZh ? '背包' : 'Inventory'}</button>
         <button type="button" onClick={openShop}>{isZh ? '商店' : 'Shop'}</button>
         <button type="button" onClick={openQuestLog}>{isZh ? '任务日志' : 'Quest log'}</button>
         <button type="button" onClick={showBranchChoices}>{isZh ? '分支选项' : 'Choices'}</button>
