@@ -1,5 +1,5 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   choicePromptChoiceClass,
   choicePromptChoiceDescriptionClass,
@@ -7,7 +7,7 @@ import {
   choicePromptClass,
   choicePromptTitleClass,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
 export interface ChoicePromptOption {
   id: string;
@@ -33,7 +33,12 @@ export interface ChoicePromptProps {
 
 export function ChoicePrompt({ title, choices, selectedId, onChoice, label, className, style }: ChoicePromptProps) {
   return (
-    <section className={mergeClass(choicePromptClass, className)} role="group" aria-label={label ?? title} style={style}>
+    <section
+      className={mergeClass(choicePromptClass, className)}
+      role="group"
+      aria-label={label ?? title}
+      style={style}
+    >
       <strong className={choicePromptTitleClass}>{title}</strong>
       <div className={choicePromptChoicesClass}>
         {choices.map((choice) => (
@@ -42,7 +47,7 @@ export function ChoicePrompt({ title, choices, selectedId, onChoice, label, clas
             className={mergeClass(choicePromptChoiceClass, choice.className)}
             type="button"
             disabled={choice.disabled}
-            data-cost={typeof choice.cost === 'string' || typeof choice.cost === 'number' ? choice.cost : undefined}
+            data-cost={typeof choice.cost === "string" || typeof choice.cost === "number" ? choice.cost : undefined}
             data-selected={selectedId === choice.id}
             onClick={() => onChoice?.(choice.id, choice)}
           >
@@ -50,10 +55,14 @@ export function ChoicePrompt({ title, choices, selectedId, onChoice, label, clas
               {choice.icon ? <span aria-hidden="true">{choice.icon}</span> : null}
               {choice.label}
             </span>
-            {choice.description ? <small className={choicePromptChoiceDescriptionClass}>{choice.description}</small> : null}
+            {choice.description ? (
+              <small className={choicePromptChoiceDescriptionClass}>{choice.description}</small>
+            ) : null}
             {choice.meta ? <small className={choicePromptChoiceDescriptionClass}>{choice.meta}</small> : null}
             {choice.cost ? <small className={choicePromptChoiceDescriptionClass}>{choice.cost}</small> : null}
-            {choice.resultPreview ? <small className={choicePromptChoiceDescriptionClass}>{choice.resultPreview}</small> : null}
+            {choice.resultPreview ? (
+              <small className={choicePromptChoiceDescriptionClass}>{choice.resultPreview}</small>
+            ) : null}
           </button>
         ))}
       </div>

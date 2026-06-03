@@ -1,6 +1,6 @@
-import React from 'react';
-import { ObjectiveChip } from '../objective-chip/ObjectiveChip';
-import type { ObjectiveChipProps } from '../objective-chip/ObjectiveChip';
+import React from "react";
+import { ObjectiveChip } from "../objective-chip/ObjectiveChip";
+import type { ObjectiveChipProps } from "../objective-chip/ObjectiveChip";
 import {
   mergeClass,
   questTrackerClass,
@@ -10,7 +10,7 @@ import {
   questTrackerListClass,
   questTrackerSubtitleClass,
   questTrackerTitleClass,
-} from '../styles';
+} from "../styles";
 
 export interface QuestTrackerObjective extends ObjectiveChipProps {
   id: string;
@@ -24,7 +24,7 @@ export interface QuestTrackerProps {
 }
 
 function getCompleteCount(objectives: QuestTrackerObjective[]) {
-  return objectives.filter((objective) => objective.state === 'complete').length;
+  return objectives.filter((objective) => objective.state === "complete").length;
 }
 
 export function QuestTracker({ title, subtitle, objectives, className }: QuestTrackerProps) {

@@ -1,2 +1,2 @@
-export { AbilityTooltip } from './AbilityTooltip';
-export type { AbilityTooltipProps, AbilityTooltipState } from './AbilityTooltip';
+export { AbilityTooltip } from "./AbilityTooltip";
+export type { AbilityTooltipProps, AbilityTooltipState } from "./AbilityTooltip";

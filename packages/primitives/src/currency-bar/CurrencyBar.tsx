@@ -1,14 +1,14 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   currencyBarClass,
   currencyBarItemClass,
   currencyBarItemRecipe,
   currencyBarListClass,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
-export type CurrencyTone = 'gold' | 'silver' | 'gem' | 'token' | 'neutral';
+export type CurrencyTone = "gold" | "silver" | "gem" | "token" | "neutral";
 
 export interface CurrencyBarEntry {
   id: string;
@@ -27,15 +27,10 @@ export interface CurrencyBarProps {
 }
 
 function formatAmount(amount: number | string) {
-  return typeof amount === 'number' ? amount.toLocaleString() : amount;
+  return typeof amount === "number" ? amount.toLocaleString() : amount;
 }
 
-export function CurrencyBar({
-  currencies,
-  compact = false,
-  className,
-  style,
-}: CurrencyBarProps) {
+export function CurrencyBar({ currencies, compact = false, className, style }: CurrencyBarProps) {
   return (
     <section
       className={mergeClass(currencyBarClass, className)}
@@ -45,8 +40,13 @@ export function CurrencyBar({
     >
       <ul className={currencyBarListClass}>
         {currencies.map((currency) => (
-          <li key={currency.id} className={mergeClass(currencyBarItemClass, currency.className)} aria-label={`${currency.label} ${formatAmount(currency.amount)}`} data-tone={currency.tone ?? 'neutral'}>
-            <span className={currencyBarItemRecipe({ tone: currency.tone ?? 'neutral', compact })}>
+          <li
+            key={currency.id}
+            className={mergeClass(currencyBarItemClass, currency.className)}
+            aria-label={`${currency.label} ${formatAmount(currency.amount)}`}
+            data-tone={currency.tone ?? "neutral"}
+          >
+            <span className={currencyBarItemRecipe({ tone: currency.tone ?? "neutral", compact })}>
               {currency.icon ? <span aria-hidden="true">{currency.icon}</span> : null}
               <span>{currency.label}</span>
               <strong>{formatAmount(currency.amount)}</strong>

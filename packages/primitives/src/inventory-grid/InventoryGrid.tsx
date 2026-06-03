@@ -1,8 +1,8 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import { LootCard } from '../loot-card/LootCard';
-import type { LootRarity } from '../loot-card/LootCard';
-import type { LootStackItem } from '../loot-stack/LootStack';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { LootCard } from "../loot-card/LootCard";
+import type { LootRarity } from "../loot-card/LootCard";
+import type { LootStackItem } from "../loot-stack/LootStack";
 import {
   inventoryGridClass,
   inventoryGridActionClass,
@@ -10,11 +10,11 @@ import {
   inventoryGridMetaClass,
   inventoryGridSlotRecipe,
   mergeClass,
-} from '../styles';
-import type { GameUiCollectionRenderer } from '../types';
+} from "../styles";
+import type { GameUiCollectionRenderer } from "../types";
 
-export type InventoryGridCompareState = 'upgrade' | 'downgrade' | 'same';
-export type InventoryGridSlotType = 'bag' | 'weapon' | 'armor' | 'trinket' | 'quest' | 'material';
+export type InventoryGridCompareState = "upgrade" | "downgrade" | "same";
+export type InventoryGridSlotType = "bag" | "weapon" | "armor" | "trinket" | "quest" | "material";
 
 export interface InventoryGridSlot {
   id: string;
@@ -36,7 +36,7 @@ export interface InventoryGridProps {
   draggingId?: string;
   onSlotSelect?: (id: string, slot: InventoryGridSlot) => void;
   onSlotMove?: (fromId: string, toId: string, fromSlot: InventoryGridSlot, toSlot: InventoryGridSlot) => void;
-  onContextAction?: (id: string, action: 'quick', slot: InventoryGridSlot) => void;
+  onContextAction?: (id: string, action: "quick", slot: InventoryGridSlot) => void;
   renderSlot?: GameUiCollectionRenderer<InventoryGridSlot>;
   label?: string;
   className?: string;
@@ -52,7 +52,7 @@ export function InventoryGrid({
   onSlotMove,
   onContextAction,
   renderSlot,
-  label = 'Inventory',
+  label = "Inventory",
   className,
   style,
 }: InventoryGridProps) {
@@ -69,13 +69,7 @@ export function InventoryGrid({
         {slots.map((slot, index) => {
           const selected = selectedId === slot.id;
           const disabled = Boolean(slot.locked);
-          const slotState = slot.locked
-            ? 'locked'
-            : !slot.item
-              ? 'empty'
-              : selected
-                ? 'selected'
-                : 'filled';
+          const slotState = slot.locked ? "locked" : !slot.item ? "empty" : selected ? "selected" : "filled";
           const defaultCard = slot.item ? (
             <LootCard
               name={slot.item.name}
@@ -101,7 +95,7 @@ export function InventoryGrid({
               data-equipped={slot.equipped ?? false}
               data-empty={!slot.item}
               data-rarity={slot.rarity ?? slot.item?.rarity}
-              data-slot-type={slot.slotType ?? 'bag'}
+              data-slot-type={slot.slotType ?? "bag"}
               data-compare-state={slot.compareState}
               draggable={canDrag}
               onDragStart={
@@ -110,8 +104,8 @@ export function InventoryGrid({
                       if (!event.dataTransfer) {
                         return;
                       }
-                      event.dataTransfer.setData('text/plain', slot.id);
-                      event.dataTransfer.effectAllowed = 'move';
+                      event.dataTransfer.setData("text/plain", slot.id);
+                      event.dataTransfer.effectAllowed = "move";
                     }
                   : undefined
               }
@@ -120,7 +114,7 @@ export function InventoryGrid({
                   ? (event) => {
                       event.preventDefault();
                       if (event.dataTransfer) {
-                        event.dataTransfer.dropEffect = 'move';
+                        event.dataTransfer.dropEffect = "move";
                       }
                     }
                   : undefined
@@ -132,7 +126,7 @@ export function InventoryGrid({
                       if (!event.dataTransfer) {
                         return;
                       }
-                      const fromId = event.dataTransfer.getData('text/plain');
+                      const fromId = event.dataTransfer.getData("text/plain");
                       const fromSlot = slots.find((entry) => entry.id === fromId);
                       if (!fromSlot || fromId === slot.id || slot.locked) {
                         return;
@@ -143,14 +137,16 @@ export function InventoryGrid({
               }
             >
               {defaultCard}
-              {typeof slot.stackCount === 'number' ? <span className={inventoryGridMetaClass}>x{Math.round(slot.stackCount)}</span> : null}
+              {typeof slot.stackCount === "number" ? (
+                <span className={inventoryGridMetaClass}>x{Math.round(slot.stackCount)}</span>
+              ) : null}
               {slot.compareState ? <span className={inventoryGridMetaClass}>{slot.compareState}</span> : null}
               {slot.quickAction ? (
                 <button
                   className={inventoryGridActionClass}
                   type="button"
                   aria-label={String(slot.quickAction)}
-                  onClick={() => onContextAction?.(slot.id, 'quick', slot)}
+                  onClick={() => onContextAction?.(slot.id, "quick", slot)}
                 >
                   {slot.quickAction}
                 </button>

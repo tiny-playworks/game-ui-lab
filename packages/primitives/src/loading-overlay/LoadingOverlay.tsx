@@ -1,12 +1,12 @@
-import React from 'react';
-import type { CSSProperties } from 'react';
+import React from "react";
+import type { CSSProperties } from "react";
 import {
   loadingOverlayClass,
   loadingOverlayMessageClass,
   loadingOverlayProgressClass,
   loadingOverlayTitleClass,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
 export interface LoadingOverlayProps {
   open: boolean;
@@ -17,14 +17,7 @@ export interface LoadingOverlayProps {
   style?: CSSProperties;
 }
 
-export function LoadingOverlay({
-  open,
-  title = 'Loading',
-  message,
-  progress,
-  className,
-  style,
-}: LoadingOverlayProps) {
+export function LoadingOverlay({ open, title = "Loading", message, progress, className, style }: LoadingOverlayProps) {
   if (!open) {
     return null;
   }
@@ -32,7 +25,7 @@ export function LoadingOverlay({
   const clampedProgress = progress === undefined ? undefined : Math.max(0, Math.min(1, progress));
   const overlayStyle = {
     ...style,
-    '--game-ui-loading-progress': clampedProgress === undefined ? undefined : `${clampedProgress * 100}%`,
+    "--game-ui-loading-progress": clampedProgress === undefined ? undefined : `${clampedProgress * 100}%`,
   } as CSSProperties;
 
   return (
@@ -47,7 +40,12 @@ export function LoadingOverlay({
       <strong className={loadingOverlayTitleClass}>{title}</strong>
       {message ? <p className={loadingOverlayMessageClass}>{message}</p> : null}
       {clampedProgress !== undefined ? (
-        <progress className={loadingOverlayProgressClass} max={100} value={Math.round(clampedProgress * 100)} aria-label={`${title} progress`} />
+        <progress
+          className={loadingOverlayProgressClass}
+          max={100}
+          value={Math.round(clampedProgress * 100)}
+          aria-label={`${title} progress`}
+        />
       ) : null}
     </output>
   );

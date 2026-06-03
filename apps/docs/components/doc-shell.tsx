@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
-import { DocsLocaleProvider, LocaleToggle, Localized } from './locale';
-import '@tiny-playworks/game-ui/styles.css';
-import './docs.css';
+import type { ReactNode } from "react";
+import { DocsLocaleProvider, LocaleToggle, Localized } from "./locale";
+import "@tiny-playworks/game-ui/styles.css";
+import "./docs.css";
 
 export function DocShell({
   eyebrowZh,

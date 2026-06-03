@@ -1,8 +1,8 @@
-import React from 'react';
-import type { ReactNode } from 'react';
-import { mergeClass, rarityBorderRecipe } from '../styles';
+import React from "react";
+import type { ReactNode } from "react";
+import { mergeClass, rarityBorderRecipe } from "../styles";
 
-export type RarityBorderTone = 'common' | 'rare' | 'epic' | 'legendary';
+export type RarityBorderTone = "common" | "rare" | "epic" | "legendary";
 
 export interface RarityBorderProps {
   children: ReactNode;
@@ -11,18 +11,9 @@ export interface RarityBorderProps {
   className?: string;
 }
 
-export function RarityBorder({
-  children,
-  tone = 'common',
-  active = true,
-  className,
-}: RarityBorderProps) {
+export function RarityBorder({ children, tone = "common", active = true, className }: RarityBorderProps) {
   return (
-    <div
-      className={mergeClass(rarityBorderRecipe({ tone, active }), className)}
-      data-tone={tone}
-      data-active={active}
-    >
+    <div className={mergeClass(rarityBorderRecipe({ tone, active }), className)} data-tone={tone} data-active={active}>
       {children}
     </div>
   );

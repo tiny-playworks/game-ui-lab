@@ -1,7 +1,7 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import { LootCard } from '../loot-card/LootCard';
-import type { LootRarity } from '../loot-card/LootCard';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { LootCard } from "../loot-card/LootCard";
+import type { LootRarity } from "../loot-card/LootCard";
 import {
   lootStackClass,
   lootStackItemClass,
@@ -10,8 +10,8 @@ import {
   lootStackOverflowClass,
   lootStackToplineClass,
   mergeClass,
-} from '../styles';
-import type { GameUiCollectionRenderer } from '../types';
+} from "../styles";
+import type { GameUiCollectionRenderer } from "../types";
 
 export interface LootStackItem {
   id: string;
@@ -37,7 +37,7 @@ export interface LootStackProps {
 }
 
 function pluralizeItems(count: number) {
-  return count === 1 ? '1 item' : `${count} items`;
+  return count === 1 ? "1 item" : `${count} items`;
 }
 
 export function LootStack({
@@ -46,7 +46,7 @@ export function LootStack({
   onItemSelect,
   renderItem,
   overflowLabel,
-  label = 'Loot stack',
+  label = "Loot stack",
   limit = 4,
   className,
   style,
@@ -77,11 +77,7 @@ export function LootStack({
               onClick={onItemSelect ? () => onItemSelect(item.id, item) : undefined}
             />
           );
-          const defaultNode = (
-            <li className={mergeClass(lootStackItemClass, item.className)}>
-              {defaultCard}
-            </li>
-          );
+          const defaultNode = <li className={mergeClass(lootStackItemClass, item.className)}>{defaultCard}</li>;
 
           return (
             <React.Fragment key={item.id}>

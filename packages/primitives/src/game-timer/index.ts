@@ -1,2 +1,2 @@
-export { GameTimer } from './GameTimer';
-export type { GameTimerProps } from './GameTimer';
+export { GameTimer } from "./GameTimer";
+export type { GameTimerProps } from "./GameTimer";

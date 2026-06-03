@@ -1,16 +1,9 @@
-import React, {
-  createContext,
-  use,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
+import React, { createContext, use, useEffect, useMemo, useState, type ReactNode } from "react";
 
-export { Localized } from './localized';
-export { LocaleToggle } from './locale-toggle';
+export { Localized } from "./localized";
+export { LocaleToggle } from "./locale-toggle";
 
-export type DocsLocale = 'zh' | 'en';
+export type DocsLocale = "zh" | "en";
 
 interface LocaleContextValue {
   locale: DocsLocale;
@@ -18,7 +11,7 @@ interface LocaleContextValue {
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
-const storageKey = 'tiny-playworks-docs-locale';
+const storageKey = "tiny-playworks-docs-locale";
 
 export function DocsLocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<DocsLocale>(() => readInitialLocale());
@@ -43,17 +36,17 @@ export function useDocsLocale() {
   const context = use(LocaleContext);
 
   if (!context) {
-    throw new Error('useDocsLocale must be used inside DocsLocaleProvider');
+    throw new Error("useDocsLocale must be used inside DocsLocaleProvider");
   }
 
   return context;
 }
 
 function readInitialLocale(): DocsLocale {
-  if (typeof window === 'undefined') {
-    return 'zh';
+  if (typeof window === "undefined") {
+    return "zh";
   }
 
   const saved = window.localStorage.getItem(storageKey);
-  return saved === 'en' ? 'en' : 'zh';
+  return saved === "en" ? "en" : "zh";
 }

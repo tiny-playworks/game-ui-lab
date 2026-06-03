@@ -1,12 +1,12 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   cooldownSlotIconClass,
   cooldownSlotLabelClass,
   cooldownSlotMaskClass,
   cooldownSlotRecipe,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
 export interface CooldownSlotProps {
   progress: number;
@@ -42,18 +42,18 @@ export function CooldownSlot({
   const clampedProgress = clampProgress(progress);
   const percent = Math.round(clampedProgress * 100);
   const ariaLabel = disabled ? `${label} disabled` : ready ? `${label} ready` : `${label} cooldown ${percent}%`;
-  const Component = onClick ? 'button' : 'div';
+  const Component = onClick ? "button" : "div";
   const componentProps = onClick
     ? {
-        type: 'button' as const,
+        type: "button" as const,
         disabled,
         onClick,
-        'aria-label': ariaLabel,
-        'aria-pressed': selected,
+        "aria-label": ariaLabel,
+        "aria-pressed": selected,
       }
     : {
-        role: 'status',
-        'aria-label': ariaLabel,
+        role: "status",
+        "aria-label": ariaLabel,
       };
 
   return (
@@ -62,7 +62,7 @@ export function CooldownSlot({
       data-ready={ready}
       data-disabled={disabled}
       data-selected={selected}
-      style={{ '--game-ui-cooldown-progress': `${100 - percent}%` } as CSSProperties}
+      style={{ "--game-ui-cooldown-progress": `${100 - percent}%` } as CSSProperties}
       {...componentProps}
     >
       <span className={cooldownSlotIconClass} aria-hidden="true">
@@ -71,7 +71,7 @@ export function CooldownSlot({
       </span>
       <span className={cooldownSlotLabelClass}>{label}</span>
       {shortcut ? <span className={cooldownSlotLabelClass}>{shortcut}</span> : null}
-      {typeof charges === 'number' ? <span className={cooldownSlotLabelClass}>x{charges}</span> : null}
+      {typeof charges === "number" ? <span className={cooldownSlotLabelClass}>x{charges}</span> : null}
       {cooldownLabel ? <span className={cooldownSlotLabelClass}>{cooldownLabel}</span> : null}
     </Component>
   );

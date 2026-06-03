@@ -1,8 +1,8 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import { HealthBar } from '../health-bar/HealthBar';
-import { StatusBadge } from '../status-badge/StatusBadge';
-import type { StatusBadgeProps } from '../status-badge/StatusBadge';
+import React from "react";
+import type { CSSProperties } from "react";
+import { HealthBar } from "../health-bar/HealthBar";
+import { StatusBadge } from "../status-badge/StatusBadge";
+import type { StatusBadgeProps } from "../status-badge/StatusBadge";
 import {
   mergeClass,
   partyFrameClass,
@@ -11,8 +11,8 @@ import {
   partyFrameMetaClass,
   partyFrameNameClass,
   partyFrameStatusesClass,
-} from '../styles';
-import type { GameUiCollectionRenderer } from '../types';
+} from "../styles";
+import type { GameUiCollectionRenderer } from "../types";
 
 export interface PartyFrameMember {
   id: string;
@@ -40,7 +40,7 @@ export function PartyFrame({
   selectedId,
   onMemberSelect,
   renderMember,
-  label = 'Party',
+  label = "Party",
   className,
   style,
 }: PartyFrameProps) {
@@ -54,7 +54,11 @@ export function PartyFrame({
           const disabled = Boolean(member.offline);
           const content = <PartyMemberContent member={member} />;
           const defaultNode = (
-            <li className={partyFrameMemberRecipe({ selected, offline: member.offline })} data-selected={selected} data-offline={member.offline ?? false}>
+            <li
+              className={partyFrameMemberRecipe({ selected, offline: member.offline })}
+              data-selected={selected}
+              data-offline={member.offline ?? false}
+            >
               {onMemberSelect ? (
                 <button
                   type="button"
@@ -90,7 +94,13 @@ function PartyMemberContent({ member }: { member: PartyFrameMember }) {
         <strong>{member.name}</strong>
         {member.offline ? <span className={partyFrameMetaClass}>offline</span> : null}
       </div>
-      <HealthBar value={member.health} max={member.maxHealth} shield={member.shield} label={`${member.name} HP`} showValue />
+      <HealthBar
+        value={member.health}
+        max={member.maxHealth}
+        shield={member.shield}
+        label={`${member.name} HP`}
+        showValue
+      />
       {member.status ? (
         <div className={partyFrameStatusesClass}>
           <StatusBadge {...member.status} />

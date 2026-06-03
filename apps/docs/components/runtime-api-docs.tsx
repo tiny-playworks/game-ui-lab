@@ -1,4 +1,4 @@
-import { Localized } from './locale';
+import { Localized } from "./locale";
 
 function EventTable({ rows }: { rows: Array<{ event: string; zh: string; en: string }> }) {
   return (
@@ -53,39 +53,39 @@ function MethodTable({ rows }: { rows: Array<{ method: string; zh: string; en: s
 function LayerTable() {
   const rows = [
     {
-      layer: 'hud',
-      zh: 'combo, target, quest, map, buffs, party, cooldowns',
-      en: 'combo, target, quest, map, buffs, party, cooldowns',
-      renderZh: 'ComboCounter, TargetFrame, QuestTracker, MiniMap, BuffBar, PartyFrame, AbilityBar',
-      renderEn: 'ComboCounter, TargetFrame, QuestTracker, MiniMap, BuffBar, PartyFrame, AbilityBar',
+      layer: "hud",
+      zh: "combo, target, quest, map, buffs, party, cooldowns",
+      en: "combo, target, quest, map, buffs, party, cooldowns",
+      renderZh: "ComboCounter, TargetFrame, QuestTracker, MiniMap, BuffBar, PartyFrame, AbilityBar",
+      renderEn: "ComboCounter, TargetFrame, QuestTracker, MiniMap, BuffBar, PartyFrame, AbilityBar",
     },
     {
-      layer: 'feedback',
-      zh: 'damage[]',
-      en: 'damage[]',
-      renderZh: 'DamageNumber（锚点 CSS 变量）',
-      renderEn: 'DamageNumber (anchor CSS variables)',
+      layer: "feedback",
+      zh: "damage[]",
+      en: "damage[]",
+      renderZh: "DamageNumber（锚点 CSS 变量）",
+      renderEn: "DamageNumber (anchor CSS variables)",
     },
     {
-      layer: 'notification',
-      zh: 'toasts[]',
-      en: 'toasts[]',
-      renderZh: 'FloatingToast',
-      renderEn: 'FloatingToast',
+      layer: "notification",
+      zh: "toasts[]",
+      en: "toasts[]",
+      renderZh: "FloatingToast",
+      renderEn: "FloatingToast",
     },
     {
-      layer: 'narrative',
-      zh: 'dialogueQueue[], choices?',
-      en: 'dialogueQueue[], choices?',
-      renderZh: 'DialogueBox + Continue；ChoicePrompt',
-      renderEn: 'DialogueBox + Continue; ChoicePrompt',
+      layer: "narrative",
+      zh: "dialogueQueue[], choices?",
+      en: "dialogueQueue[], choices?",
+      renderZh: "DialogueBox + Continue；ChoicePrompt",
+      renderEn: "DialogueBox + Continue; ChoicePrompt",
     },
     {
-      layer: 'modal',
-      zh: 'reward?, shop?, questLog?（互斥）',
-      en: 'reward?, shop?, questLog? (mutually exclusive)',
-      renderZh: 'RewardReveal, ShopPanel, QuestLog',
-      renderEn: 'RewardReveal, ShopPanel, QuestLog',
+      layer: "modal",
+      zh: "reward?, shop?, questLog?（互斥）",
+      en: "reward?, shop?, questLog? (mutually exclusive)",
+      renderZh: "RewardReveal, ShopPanel, QuestLog",
+      renderEn: "RewardReveal, ShopPanel, QuestLog",
     },
   ];
 
@@ -116,49 +116,49 @@ function LayerTable() {
 }
 
 const combatEvents = [
-  { event: 'damage:emit', zh: '追加飘字（FIFO，受 damageLimit 限制）', en: 'Append floating text (FIFO, damageLimit)' },
-  { event: 'damage:complete', zh: '动画结束后移除', en: 'Remove after animation completes' },
-  { event: 'toast:notify', zh: '追加通知', en: 'Append toast' },
-  { event: 'toast:dismiss', zh: '关闭一条通知', en: 'Dismiss one toast' },
+  { event: "damage:emit", zh: "追加飘字（FIFO，受 damageLimit 限制）", en: "Append floating text (FIFO, damageLimit)" },
+  { event: "damage:complete", zh: "动画结束后移除", en: "Remove after animation completes" },
+  { event: "toast:notify", zh: "追加通知", en: "Append toast" },
+  { event: "toast:dismiss", zh: "关闭一条通知", en: "Dismiss one toast" },
 ];
 
 const hudEvents = [
-  { event: 'cooldown:update', zh: '技能冷却槽（驱动 AbilityBar）', en: 'Ability cooldown slot (drives AbilityBar)' },
-  { event: 'target-health:update', zh: '目标生命条', en: 'Target health bar' },
-  { event: 'combo:set / combo:increment / combo:reset', zh: '连击计数', en: 'Combo counter' },
-  { event: 'quest:track / quest:objective:update / quest:clear', zh: '任务追踪', en: 'Quest tracking' },
-  { event: 'map:set / map:marker:update / map:select / map:clear', zh: '小地图', en: 'Mini map' },
-  { event: 'buff:upsert / buff:remove / buff:clear', zh: 'Buff 条', en: 'Buff bar' },
-  { event: 'party:set / party:member:update / party:select / party:clear', zh: '小队框', en: 'Party frame' },
+  { event: "cooldown:update", zh: "技能冷却槽（驱动 AbilityBar）", en: "Ability cooldown slot (drives AbilityBar)" },
+  { event: "target-health:update", zh: "目标生命条", en: "Target health bar" },
+  { event: "combo:set / combo:increment / combo:reset", zh: "连击计数", en: "Combo counter" },
+  { event: "quest:track / quest:objective:update / quest:clear", zh: "任务追踪", en: "Quest tracking" },
+  { event: "map:set / map:marker:update / map:select / map:clear", zh: "小地图", en: "Mini map" },
+  { event: "buff:upsert / buff:remove / buff:clear", zh: "Buff 条", en: "Buff bar" },
+  { event: "party:set / party:member:update / party:select / party:clear", zh: "小队框", en: "Party frame" },
 ];
 
 const narrativeEvents = [
-  { event: 'dialogue:show', zh: '清空队列并显示一条', en: 'Replace queue with one line' },
-  { event: 'dialogue:enqueue', zh: '对话入队', en: 'Enqueue dialogue' },
-  { event: 'dialogue:advance', zh: '出队当前句', en: 'Advance queue' },
-  { event: 'dialogue:dismiss', zh: '清空对话队列', en: 'Clear dialogue queue' },
-  { event: 'choice:show / choice:select / choice:clear', zh: '分支选项', en: 'Branching choices' },
+  { event: "dialogue:show", zh: "清空队列并显示一条", en: "Replace queue with one line" },
+  { event: "dialogue:enqueue", zh: "对话入队", en: "Enqueue dialogue" },
+  { event: "dialogue:advance", zh: "出队当前句", en: "Advance queue" },
+  { event: "dialogue:dismiss", zh: "清空对话队列", en: "Clear dialogue queue" },
+  { event: "choice:show / choice:select / choice:clear", zh: "分支选项", en: "Branching choices" },
 ];
 
 const modalEvents = [
-  { event: 'reward-reveal:show / update / clear', zh: '奖励揭示', en: 'Reward reveal' },
-  { event: 'shop:open / shop:close', zh: '商店', en: 'Shop' },
-  { event: 'quest-log:open / close / activate', zh: '任务日志模态', en: 'Quest log modal' },
+  { event: "reward-reveal:show / update / clear", zh: "奖励揭示", en: "Reward reveal" },
+  { event: "shop:open / shop:close", zh: "商店", en: "Shop" },
+  { event: "quest-log:open / close / activate", zh: "任务日志模态", en: "Quest log modal" },
 ];
 
 const methods = [
-  { method: 'emitDamage(input)', zh: '浮动伤害/治疗/暴击/未命中', en: 'Floating damage/heal/critical/miss' },
-  { method: 'notify(input) / dismiss(id)', zh: 'Toast 通知', en: 'Toast notifications' },
-  { method: 'setCombo / incrementCombo / resetCombo', zh: '连击', en: 'Combo' },
-  { method: 'trackQuest(quest)', zh: 'HUD 任务追踪', en: 'HUD quest tracker' },
-  { method: 'setMapMarkers(map)', zh: '小地图标记', en: 'Mini map markers' },
-  { method: 'upsertBuff(buff)', zh: 'Buff（按 id 合并）', en: 'Buff (merge by id)' },
-  { method: 'setParty(party)', zh: '小队', en: 'Party' },
-  { method: 'showDialogue / enqueueDialogue / advanceDialogue', zh: '对话队列', en: 'Dialogue queue' },
-  { method: 'showChoices(choices)', zh: '分支选项', en: 'Choices' },
-  { method: 'openQuestLog(questLog)', zh: '模态任务日志', en: 'Modal quest log' },
-  { method: 'clearLayer(layer)', zh: '清空指定层', en: 'Clear one layer' },
-  { method: 'dispatch(event)', zh: '底层事件', en: 'Low-level events' },
+  { method: "emitDamage(input)", zh: "浮动伤害/治疗/暴击/未命中", en: "Floating damage/heal/critical/miss" },
+  { method: "notify(input) / dismiss(id)", zh: "Toast 通知", en: "Toast notifications" },
+  { method: "setCombo / incrementCombo / resetCombo", zh: "连击", en: "Combo" },
+  { method: "trackQuest(quest)", zh: "HUD 任务追踪", en: "HUD quest tracker" },
+  { method: "setMapMarkers(map)", zh: "小地图标记", en: "Mini map markers" },
+  { method: "upsertBuff(buff)", zh: "Buff（按 id 合并）", en: "Buff (merge by id)" },
+  { method: "setParty(party)", zh: "小队", en: "Party" },
+  { method: "showDialogue / enqueueDialogue / advanceDialogue", zh: "对话队列", en: "Dialogue queue" },
+  { method: "showChoices(choices)", zh: "分支选项", en: "Choices" },
+  { method: "openQuestLog(questLog)", zh: "模态任务日志", en: "Modal quest log" },
+  { method: "clearLayer(layer)", zh: "清空指定层", en: "Clear one layer" },
+  { method: "dispatch(event)", zh: "底层事件", en: "Low-level events" },
 ];
 
 export function RuntimeApiContent() {
@@ -198,7 +198,11 @@ export function App() {
         <Localized as="p" className="docs-section__text" zh="Hooks：" en="Hooks:" />
         <ul className="docs-section__text">
           <Localized as="li" zh="`useGameUiRuntime()` — 须在 Provider 内" en="`useGameUiRuntime()` — inside Provider" />
-          <Localized as="li" zh="`useGameUiLayer(layer)` — 订阅单层状态" en="`useGameUiLayer(layer)` — subscribe to one layer" />
+          <Localized
+            as="li"
+            zh="`useGameUiLayer(layer)` — 订阅单层状态"
+            en="`useGameUiLayer(layer)` — subscribe to one layer"
+          />
         </ul>
         <Localized as="h3" className="docs-product-heading" zh="GameUiLayerHost" en="GameUiLayerHost" />
         <div className="docs-api-table">
@@ -213,10 +217,16 @@ export function App() {
             </thead>
             <tbody>
               <tr>
-                <td><code>className</code></td>
+                <td>
+                  <code>className</code>
+                </td>
                 <Localized as="td" zh="根容器类名。" en="Root container class name." />
-                <td><code>string</code></td>
-                <td><code>-</code></td>
+                <td>
+                  <code>string</code>
+                </td>
+                <td>
+                  <code>-</code>
+                </td>
               </tr>
             </tbody>
           </table>

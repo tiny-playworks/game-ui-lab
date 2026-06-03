@@ -1,5 +1,5 @@
-import React from 'react';
-import type { CSSProperties } from 'react';
+import React from "react";
+import type { CSSProperties } from "react";
 import {
   gameTimerBarClass,
   gameTimerLabelClass,
@@ -7,13 +7,13 @@ import {
   gameTimerRingClass,
   gameTimerValueClass,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
 export interface GameTimerProps {
   remainingMs: number;
   totalMs: number;
   label?: string;
-  variant?: 'bar' | 'ring';
+  variant?: "bar" | "ring";
   warningThreshold?: number;
   className?: string;
   style?: CSSProperties;
@@ -31,14 +31,14 @@ function formatTime(remainingMs: number) {
   const seconds = Math.max(0, Math.ceil(remainingMs / 1000));
   const minutes = Math.floor(seconds / 60);
   const rest = seconds % 60;
-  return `${minutes}:${String(rest).padStart(2, '0')}`;
+  return `${minutes}:${String(rest).padStart(2, "0")}`;
 }
 
 export function GameTimer({
   remainingMs,
   totalMs,
   label,
-  variant = 'bar',
+  variant = "bar",
   warningThreshold = 0.25,
   className,
   style,
@@ -48,7 +48,7 @@ export function GameTimer({
   const timeLabel = formatTime(remainingMs);
   const timerStyle = {
     ...style,
-    '--game-ui-timer-progress': `${progress * 100}%`,
+    "--game-ui-timer-progress": `${progress * 100}%`,
   } as CSSProperties;
 
   return (
@@ -62,7 +62,11 @@ export function GameTimer({
     >
       {label ? <span className={gameTimerLabelClass}>{label}</span> : null}
       <span className={gameTimerValueClass}>{timeLabel}</span>
-      {variant === 'ring' ? <span className={gameTimerRingClass} aria-hidden="true" /> : <span className={gameTimerBarClass} aria-hidden="true" />}
+      {variant === "ring" ? (
+        <span className={gameTimerRingClass} aria-hidden="true" />
+      ) : (
+        <span className={gameTimerBarClass} aria-hidden="true" />
+      )}
     </div>
   );
 }

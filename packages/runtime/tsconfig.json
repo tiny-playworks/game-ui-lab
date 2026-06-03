@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src", "__tests__", "rstest.config.ts"]
+  "include": ["src", "rstest.config.ts"]
 }

@@ -1,46 +1,46 @@
-import { createServer } from 'node:http';
-import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, extname, join, normalize, resolve } from 'node:path';
-import { spawn, spawnSync } from 'node:child_process';
-import { setTimeout as delay } from 'node:timers/promises';
-import { fileURLToPath } from 'node:url';
+import { createServer } from "node:http";
+import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { dirname, extname, join, normalize, resolve } from "node:path";
+import { spawn, spawnSync } from "node:child_process";
+import { setTimeout as delay } from "node:timers/promises";
+import { fileURLToPath } from "node:url";
 
 const port = Number(process.env.DOCS_SMOKE_PORT ?? 4320);
-const host = '127.0.0.1';
+const host = "127.0.0.1";
 const baseUrl = `http://${host}:${port}`;
-const docsDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const buildDir = resolve(docsDir, 'doc_build');
-const artifactDir = resolve(docsDir, 'smoke-artifacts');
+const docsDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const buildDir = resolve(docsDir, "doc_build");
+const artifactDir = resolve(docsDir, "smoke-artifacts");
 const chromePath = process.env.CHROME_BIN ?? findChrome();
 const debuggingPort = Number(process.env.DOCS_SMOKE_CHROME_PORT ?? 9222);
 const debuggerTimeoutMs = Number(process.env.DOCS_SMOKE_DEBUGGER_TIMEOUT_MS ?? (process.env.CI ? 30_000 : 10_000));
-const publicBase = '/game-ui-lab/';
+const publicBase = "/game-ui-lab/";
 
 const routes = [
-  { path: '/game-ui-lab/', name: 'docs-home', keyText: '游戏 UI 组件库' },
-  { path: '/game-ui-lab/primitives/', name: 'primitives-overview', keyText: '组件总览' },
-  { path: '/game-ui-lab/primitives/ability-bar', name: 'primitive-ability-bar', keyText: 'AbilityBar' },
-  { path: '/game-ui-lab/primitives/mini-map', name: 'primitive-mini-map', keyText: 'MiniMap' },
-  { path: '/game-ui-lab/primitives/dialogue-box', name: 'primitive-dialogue-box', keyText: 'DialogueBox' },
-  { path: '/game-ui-lab/primitives/damage-number', name: 'primitive-damage-number', keyText: 'DamageNumber' },
-  { path: '/game-ui-lab/primitives/quest-tracker', name: 'primitive-quest-tracker', keyText: 'QuestTracker' },
-  { path: '/game-ui-lab/primitives/loot-card', name: 'primitive-loot-card', keyText: 'LootCard' },
-  { path: '/game-ui-lab/primitives/buff-bar', name: 'primitive-buff-bar', keyText: 'BuffBar' },
-  { path: '/game-ui-lab/primitives/inventory-grid', name: 'primitive-inventory-grid', keyText: 'InventoryGrid' },
-  { path: '/game-ui-lab/primitives/shop-panel', name: 'primitive-shop-panel', keyText: 'ShopPanel' },
-  { path: '/game-ui-lab/runtime/runtime-api', name: 'runtime-api', keyText: 'Runtime API' },
-  { path: '/game-ui-lab/integrations/pixi', name: 'integration-pixi', keyText: 'Pixi.js 反馈桥接' },
-  { path: '/game-ui-lab/runtime/encounter-demo', name: 'runtime-encounter-demo', keyText: 'Encounter Demo' },
-  { path: '/game-ui-lab/lab/', name: 'lab-home', keyText: '同一个设计系统里的实验舞台' },
+  { path: "/game-ui-lab/", name: "docs-home", keyText: "游戏 UI 组件库" },
+  { path: "/game-ui-lab/primitives/", name: "primitives-overview", keyText: "组件总览" },
+  { path: "/game-ui-lab/primitives/ability-bar", name: "primitive-ability-bar", keyText: "AbilityBar" },
+  { path: "/game-ui-lab/primitives/mini-map", name: "primitive-mini-map", keyText: "MiniMap" },
+  { path: "/game-ui-lab/primitives/dialogue-box", name: "primitive-dialogue-box", keyText: "DialogueBox" },
+  { path: "/game-ui-lab/primitives/damage-number", name: "primitive-damage-number", keyText: "DamageNumber" },
+  { path: "/game-ui-lab/primitives/quest-tracker", name: "primitive-quest-tracker", keyText: "QuestTracker" },
+  { path: "/game-ui-lab/primitives/loot-card", name: "primitive-loot-card", keyText: "LootCard" },
+  { path: "/game-ui-lab/primitives/buff-bar", name: "primitive-buff-bar", keyText: "BuffBar" },
+  { path: "/game-ui-lab/primitives/inventory-grid", name: "primitive-inventory-grid", keyText: "InventoryGrid" },
+  { path: "/game-ui-lab/primitives/shop-panel", name: "primitive-shop-panel", keyText: "ShopPanel" },
+  { path: "/game-ui-lab/runtime/runtime-api", name: "runtime-api", keyText: "Runtime API" },
+  { path: "/game-ui-lab/integrations/pixi", name: "integration-pixi", keyText: "Pixi.js 反馈桥接" },
+  { path: "/game-ui-lab/runtime/encounter-demo", name: "runtime-encounter-demo", keyText: "Encounter Demo" },
+  { path: "/game-ui-lab/lab/", name: "lab-home", keyText: "同一个设计系统里的实验舞台" },
 ];
 
 const viewports = [
-  { name: 'desktop', width: 1440, height: 1000, mobile: false, minScreenshotBytes: 25_000 },
-  { name: 'mobile', width: 390, height: 900, mobile: true, minScreenshotBytes: 18_000 },
+  { name: "desktop", width: 1440, height: 1000, mobile: false, minScreenshotBytes: 25_000 },
+  { name: "mobile", width: 390, height: 900, mobile: true, minScreenshotBytes: 18_000 },
 ];
 
 if (!chromePath) {
-  throw new Error('Chrome was not found. Set CHROME_BIN to a Chrome executable to run docs visual smoke.');
+  throw new Error("Chrome was not found. Set CHROME_BIN to a Chrome executable to run docs visual smoke.");
 }
 
 if (!existsSync(buildDir)) {
@@ -51,16 +51,16 @@ rmSync(artifactDir, { force: true, recursive: true });
 mkdirSync(artifactDir, { recursive: true });
 
 const server = createServer((request, response) => {
-  const url = new URL(request.url ?? '/', baseUrl);
+  const url = new URL(request.url ?? "/", baseUrl);
   const filePath = resolveFilePath(url.pathname);
 
   if (!filePath) {
     response.writeHead(404);
-    response.end('Not found');
+    response.end("Not found");
     return;
   }
 
-  response.writeHead(200, { 'content-type': contentType(filePath) });
+  response.writeHead(200, { "content-type": contentType(filePath) });
   response.end(readFileSync(filePath));
 });
 
@@ -68,14 +68,14 @@ await new Promise((resolveListen) => {
   server.listen(port, host, resolveListen);
 });
 
-const userDataDir = join(artifactDir, '.chrome-profile');
+const userDataDir = join(artifactDir, ".chrome-profile");
 let chromeProcess;
 
 try {
   for (const route of routes) {
     for (const viewport of viewports) {
       const url = `${baseUrl}${route.path}`;
-      const response = await fetch(url, { headers: { accept: 'text/html' } });
+      const response = await fetch(url, { headers: { accept: "text/html" } });
       if (!response.ok) {
         throw new Error(`Route ${route.path} returned HTTP ${response.status}`);
       }
@@ -107,16 +107,16 @@ try {
 function resolveFilePath(pathname) {
   const strippedPath = pathname.startsWith(publicBase)
     ? pathname.slice(publicBase.length)
-    : pathname.replace(/^\/+/, '');
-  const safePath = normalize(strippedPath).replace(/^(\.\.(\/|\\|$))+/, '');
+    : pathname.replace(/^\/+/, "");
+  const safePath = normalize(strippedPath).replace(/^(\.\.(\/|\\|$))+/, "");
   const candidates = [];
 
-  if (!safePath || safePath.endsWith('/')) {
-    candidates.push(resolve(buildDir, safePath, 'index.html'));
+  if (!safePath || safePath.endsWith("/")) {
+    candidates.push(resolve(buildDir, safePath, "index.html"));
   } else if (extname(safePath)) {
     candidates.push(resolve(buildDir, safePath));
   } else {
-    candidates.push(resolve(buildDir, safePath, 'index.html'));
+    candidates.push(resolve(buildDir, safePath, "index.html"));
     candidates.push(resolve(buildDir, `${safePath}.html`));
   }
 
@@ -124,35 +124,35 @@ function resolveFilePath(pathname) {
 }
 
 function contentType(filePath) {
-  if (filePath.endsWith('.html')) return 'text/html; charset=utf-8';
-  if (filePath.endsWith('.js')) return 'text/javascript; charset=utf-8';
-  if (filePath.endsWith('.css')) return 'text/css; charset=utf-8';
-  if (filePath.endsWith('.png')) return 'image/png';
-  if (filePath.endsWith('.svg')) return 'image/svg+xml';
-  return 'application/octet-stream';
+  if (filePath.endsWith(".html")) return "text/html; charset=utf-8";
+  if (filePath.endsWith(".js")) return "text/javascript; charset=utf-8";
+  if (filePath.endsWith(".css")) return "text/css; charset=utf-8";
+  if (filePath.endsWith(".png")) return "image/png";
+  if (filePath.endsWith(".svg")) return "image/svg+xml";
+  return "application/octet-stream";
 }
 
 async function captureRoute({ route, screenshotPath, url, viewport }) {
   const cdp = await getCdpClient();
 
-  await cdp.send('Emulation.setDeviceMetricsOverride', {
+  await cdp.send("Emulation.setDeviceMetricsOverride", {
     width: viewport.width,
     height: viewport.height,
     deviceScaleFactor: 1,
     mobile: viewport.mobile,
   });
 
-  const loadPromise = cdp.waitFor('Page.loadEventFired');
-  await cdp.send('Page.navigate', { url });
+  const loadPromise = cdp.waitFor("Page.loadEventFired");
+  await cdp.send("Page.navigate", { url });
   await loadPromise;
   await waitForText(cdp, route.keyText);
 
-  const screenshot = await cdp.send('Page.captureScreenshot', {
+  const screenshot = await cdp.send("Page.captureScreenshot", {
     captureBeyondViewport: false,
-    format: 'png',
+    format: "png",
   });
 
-  writeFileSync(screenshotPath, Buffer.from(screenshot.data, 'base64'));
+  writeFileSync(screenshotPath, Buffer.from(screenshot.data, "base64"));
 }
 
 async function getCdpClient() {
@@ -164,8 +164,8 @@ async function getCdpClient() {
   const webSocketDebuggerUrl = await waitForDebugger(debuggingPort, chromeProcess);
   const cdp = await createCdpClient(webSocketDebuggerUrl);
 
-  await cdp.send('Page.enable');
-  await cdp.send('Runtime.enable');
+  await cdp.send("Page.enable");
+  await cdp.send("Runtime.enable");
 
   getCdpClient.client = cdp;
   return cdp;
@@ -175,36 +175,36 @@ function spawnChrome(portNumber, profileDir) {
   mkdirSync(profileDir, { recursive: true });
 
   const args = [
-    '--headless=new',
-    '--disable-gpu',
-    '--no-first-run',
-    '--no-default-browser-check',
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-dev-shm-usage',
-    '--disable-background-networking',
-    '--disable-extensions',
+    "--headless=new",
+    "--disable-gpu",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-background-networking",
+    "--disable-extensions",
     `--remote-debugging-port=${portNumber}`,
     `--user-data-dir=${profileDir}`,
-    'about:blank',
+    "about:blank",
   ];
 
   return spawn(chromePath, args, {
-    detached: process.platform !== 'win32',
-    stdio: ['ignore', 'pipe', 'pipe'],
+    detached: process.platform !== "win32",
+    stdio: ["ignore", "pipe", "pipe"],
   });
 }
 
 async function waitForDebugger(portNumber, chrome) {
   const endpoint = `http://127.0.0.1:${portNumber}/json/list`;
   const deadline = Date.now() + debuggerTimeoutMs;
-  let lastError = '';
+  let lastError = "";
 
   while (Date.now() < deadline) {
     if (chrome?.exitCode !== null) {
-      const stderr = chrome.stderr ? await readStream(chrome.stderr) : '';
+      const stderr = chrome.stderr ? await readStream(chrome.stderr) : "";
       throw new Error(
-        `Chrome exited before the debugger started (code ${chrome.exitCode}). stderr: ${stderr || '(empty)'}`,
+        `Chrome exited before the debugger started (code ${chrome.exitCode}). stderr: ${stderr || "(empty)"}`,
       );
     }
 
@@ -212,7 +212,7 @@ async function waitForDebugger(portNumber, chrome) {
       const response = await fetch(endpoint);
       if (response.ok) {
         const targets = await response.json();
-        const pageTarget = targets.find((target) => target.type === 'page' && target.webSocketDebuggerUrl);
+        const pageTarget = targets.find((target) => target.type === "page" && target.webSocketDebuggerUrl);
         if (pageTarget) {
           return pageTarget.webSocketDebuggerUrl;
         }
@@ -225,7 +225,7 @@ async function waitForDebugger(portNumber, chrome) {
   }
 
   throw new Error(
-    `Chrome debugging endpoint did not start on port ${portNumber} within ${debuggerTimeoutMs}ms. Last error: ${lastError || 'none'}`,
+    `Chrome debugging endpoint did not start on port ${portNumber} within ${debuggerTimeoutMs}ms. Last error: ${lastError || "none"}`,
   );
 }
 
@@ -235,19 +235,19 @@ async function readStream(stream) {
     chunks.push(chunk);
   }
 
-  return Buffer.concat(chunks).toString('utf8').trim();
+  return Buffer.concat(chunks).toString("utf8").trim();
 }
 
 async function waitForText(cdp, text) {
   const deadline = Date.now() + 10_000;
 
   while (Date.now() < deadline) {
-    const result = await cdp.send('Runtime.evaluate', {
-      expression: 'document.body.innerText',
+    const result = await cdp.send("Runtime.evaluate", {
+      expression: "document.body.innerText",
       returnByValue: true,
     });
 
-    if (String(result.result?.value ?? '').includes(text)) {
+    if (String(result.result?.value ?? "").includes(text)) {
       return;
     }
 
@@ -264,7 +264,7 @@ function createCdpClient(url) {
     const pending = new Map();
     const eventWaiters = new Map();
 
-    socket.addEventListener('open', () => {
+    socket.addEventListener("open", () => {
       resolveClient({
         close: () => socket.close(),
         send(method, params = {}) {
@@ -285,7 +285,7 @@ function createCdpClient(url) {
       });
     });
 
-    socket.addEventListener('message', (event) => {
+    socket.addEventListener("message", (event) => {
       const message = JSON.parse(event.data);
 
       if (message.id && pending.has(message.id)) {
@@ -304,8 +304,8 @@ function createCdpClient(url) {
       }
     });
 
-    socket.addEventListener('error', () => {
-      rejectClient(new Error('Chrome DevTools WebSocket failed'));
+    socket.addEventListener("error", () => {
+      rejectClient(new Error("Chrome DevTools WebSocket failed"));
     });
   });
 }
@@ -315,16 +315,16 @@ function stopProcessTree(pid) {
     return;
   }
 
-  if (process.platform === 'win32') {
-    spawnSync('taskkill', ['/pid', String(pid), '/T', '/F'], { stdio: 'ignore' });
+  if (process.platform === "win32") {
+    spawnSync("taskkill", ["/pid", String(pid), "/T", "/F"], { stdio: "ignore" });
     return;
   }
 
   try {
-    process.kill(-pid, 'SIGTERM');
+    process.kill(-pid, "SIGTERM");
   } catch {
     try {
-      process.kill(pid, 'SIGTERM');
+      process.kill(pid, "SIGTERM");
     } catch {
       // Process already exited.
     }
@@ -333,20 +333,20 @@ function stopProcessTree(pid) {
 
 function findChrome() {
   const candidates =
-    process.platform === 'win32'
+    process.platform === "win32"
       ? [
-          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-          'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-          join(process.env.LOCALAPPDATA ?? '', 'Google\\Chrome\\Application\\chrome.exe'),
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+          join(process.env.LOCALAPPDATA ?? "", "Google\\Chrome\\Application\\chrome.exe"),
         ]
-      : process.platform === 'darwin'
-        ? ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome']
+      : process.platform === "darwin"
+        ? ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"]
         : [
             process.env.CHROME_PATH,
-            '/usr/bin/google-chrome',
-            '/usr/bin/google-chrome-stable',
-            '/usr/bin/chromium',
-            '/usr/bin/chromium-browser',
+            "/usr/bin/google-chrome",
+            "/usr/bin/google-chrome-stable",
+            "/usr/bin/chromium",
+            "/usr/bin/chromium-browser",
           ];
 
   return candidates.find((candidate) => candidate && existsSync(candidate));

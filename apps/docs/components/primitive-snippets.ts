@@ -1,5 +1,5 @@
 export const primitiveSnippets = {
-  'ability-bar': {
+  "ability-bar": {
     snippetZh: `import { AbilityBar, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const abilities = [
@@ -31,7 +31,7 @@ export function Demo() {
   );
 }`,
   },
-  'ability-tooltip': {
+  "ability-tooltip": {
     snippetZh: `import { AbilityTooltip, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -51,7 +51,7 @@ export function Demo() {
   );
 }`,
   },
-  'cast-bar': {
+  "cast-bar": {
     snippetZh: `import { CastBar, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -71,7 +71,7 @@ export function Demo() {
   );
 }`,
   },
-  'target-frame': {
+  "target-frame": {
     snippetZh: `import { TargetFrame, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -105,7 +105,7 @@ export function Demo() {
   );
 }`,
   },
-  'mini-map': {
+  "mini-map": {
     snippetZh: `import { MiniMap, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const markers = [
@@ -153,7 +153,7 @@ export function Demo() {
   );
 }`,
   },
-  'map-marker': {
+  "map-marker": {
     snippetZh: `import { MapMarker, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -177,7 +177,7 @@ export function Demo() {
   );
 }`,
   },
-  'compass-bar': {
+  "compass-bar": {
     snippetZh: `import { CompassBar, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const markers = [
@@ -207,7 +207,7 @@ export function Demo() {
   );
 }`,
   },
-  'location-tag': {
+  "location-tag": {
     snippetZh: `import { LocationTag, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -227,7 +227,7 @@ export function Demo() {
   );
 }`,
   },
-  'dialogue-box': {
+  "dialogue-box": {
     snippetZh: `import { DialogueBox, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -247,7 +247,7 @@ export function Demo() {
   );
 }`,
   },
-  'choice-prompt': {
+  "choice-prompt": {
     snippetZh: `import { ChoicePrompt, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const choices = [
@@ -277,7 +277,7 @@ export function Demo() {
   );
 }`,
   },
-  'quest-log': {
+  "quest-log": {
     snippetZh: `import { QuestLog, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const quests = [
@@ -323,7 +323,7 @@ export function Demo() {
   );
 }`,
   },
-  'notification-stack': {
+  "notification-stack": {
     snippetZh: `import { NotificationStack, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const notifications = [
@@ -357,7 +357,7 @@ export function Demo() {
   );
 }`,
   },
-  'damage-number': {
+  "damage-number": {
     snippetZh: `import { DamageNumber, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -381,7 +381,7 @@ export function Demo() {
   );
 }`,
   },
-  'health-bar': {
+  "health-bar": {
     snippetZh: `import { HealthBar, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -403,7 +403,7 @@ export function Demo() {
   );
 }`,
   },
-  'resource-meter': {
+  "resource-meter": {
     snippetZh: `import { ResourceMeter, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -425,7 +425,7 @@ export function Demo() {
   );
 }`,
   },
-  'combo-counter': {
+  "combo-counter": {
     snippetZh: `import { ComboCounter, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -445,7 +445,7 @@ export function Demo() {
   );
 }`,
   },
-  'cooldown-slot': {
+  "cooldown-slot": {
     snippetZh: `import { CooldownSlot, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -469,7 +469,7 @@ export function Demo() {
   );
 }`,
   },
-  'status-badge': {
+  "status-badge": {
     snippetZh: `import { StatusBadge, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -493,7 +493,7 @@ export function Demo() {
   );
 }`,
   },
-  'objective-chip': {
+  "objective-chip": {
     snippetZh: `import { ObjectiveChip, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -517,7 +517,7 @@ export function Demo() {
   );
 }`,
   },
-  'quest-tracker': {
+  "quest-tracker": {
     snippetZh: `import { QuestTracker, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const objectives = [
@@ -549,7 +549,7 @@ export function Demo() {
   );
 }`,
   },
-  'floating-toast': {
+  "floating-toast": {
     snippetZh: `import { FloatingToast, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -571,7 +571,7 @@ export function Demo() {
   );
 }`,
   },
-  'rarity-border': {
+  "rarity-border": {
     snippetZh: `import { RarityBorder, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -601,7 +601,7 @@ export function Demo() {
   );
 }`,
   },
-  'loot-card': {
+  "loot-card": {
     snippetZh: `import { LootCard, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -621,7 +621,7 @@ export function Demo() {
   );
 }`,
   },
-  'loot-stack': {
+  "loot-stack": {
     snippetZh: `import { LootStack, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const items = [
@@ -665,7 +665,7 @@ export function Demo() {
   );
 }`,
   },
-  'reward-reveal': {
+  "reward-reveal": {
     snippetZh: `import { RewardReveal, GameUiProvider } from '@tiny-playworks/game-ui';
 
 const items = [
@@ -695,7 +695,7 @@ export function Demo() {
   );
 }`,
   },
-  'buff-bar': {
+  "buff-bar": {
     snippetZh: `import { BuffBar, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -727,7 +727,7 @@ export function Demo() {
   );
 }`,
   },
-  'inventory-grid': {
+  "inventory-grid": {
     snippetZh: `import { InventoryGrid, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -767,7 +767,7 @@ export function Demo() {
   );
 }`,
   },
-  'currency-bar': {
+  "currency-bar": {
     snippetZh: `import { CurrencyBar, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -797,7 +797,7 @@ export function Demo() {
   );
 }`,
   },
-  'party-frame': {
+  "party-frame": {
     snippetZh: `import { PartyFrame, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -829,7 +829,7 @@ export function Demo() {
   );
 }`,
   },
-  'pause-menu': {
+  "pause-menu": {
     snippetZh: `import { PauseMenu, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -867,7 +867,7 @@ export function Demo() {
   );
 }`,
   },
-  'game-timer': {
+  "game-timer": {
     snippetZh: `import { GameTimer, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -887,7 +887,7 @@ export function Demo() {
   );
 }`,
   },
-  'loading-overlay': {
+  "loading-overlay": {
     snippetZh: `import { LoadingOverlay, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -907,7 +907,7 @@ export function Demo() {
   );
 }`,
   },
-  'death-screen': {
+  "death-screen": {
     snippetZh: `import { DeathScreen, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -939,7 +939,7 @@ export function Demo() {
   );
 }`,
   },
-  'shop-panel': {
+  "shop-panel": {
     snippetZh: `import { ShopPanel, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {
@@ -991,7 +991,7 @@ export function Demo() {
   );
 }`,
   },
-  'chat-feed': {
+  "chat-feed": {
     snippetZh: `import { ChatFeed, GameUiProvider } from '@tiny-playworks/game-ui';
 
 export function Demo() {

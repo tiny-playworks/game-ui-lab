@@ -1,3 +1,2 @@
-export { DamageNumber } from './DamageNumber';
-export type { DamageNumberProps, DamageNumberVariant } from './DamageNumber';
-
+export { DamageNumber } from "./DamageNumber";
+export type { DamageNumberProps, DamageNumberVariant } from "./DamageNumber";

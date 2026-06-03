@@ -1,3 +1,2 @@
-export { GameUiProvider } from './GameUiProvider';
-export type { GameUiProviderProps } from './GameUiProvider';
-
+export { GameUiProvider } from "./GameUiProvider";
+export type { GameUiProviderProps } from "./GameUiProvider";

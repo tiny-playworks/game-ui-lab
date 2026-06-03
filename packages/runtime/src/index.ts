@@ -1,372 +1,51 @@
-import type { ReactNode } from 'react';
+import { createRuntimeIdFactory } from "./id-factory";
+import { createInitialState, reduceState } from "./reducer";
+import type { GameUiEvent, GameUiRuntime, GameUiRuntimeOptions, GameUiRuntimeState } from "./types";
 
-export type GameUiLayerName = 'hud' | 'feedback' | 'notification' | 'narrative' | 'modal' | 'debug';
-
-export type DamageEventVariant = 'damage' | 'heal' | 'critical' | 'miss';
-export type ToastEventVariant = 'info' | 'success' | 'warning' | 'loot';
-export type RewardRevealState = 'sealed' | 'revealed' | 'claimed';
-export type StatusBadgeTone = 'buff' | 'debuff' | 'neutral' | 'warning';
-export type DialogueTone = 'neutral' | 'ally' | 'warning';
-
-export interface GameUiAnchor {
-  x: number;
-  y: number;
-}
-
-export interface RuntimeLootItem {
-  id: string;
-  name: string;
-  rarity?: 'common' | 'rare' | 'epic' | 'legendary';
-  quantity?: number;
-  value?: string;
-  subtitle?: string;
-  price?: string | number;
-  stock?: number;
-  discount?: ReactNode;
-  unavailableReason?: ReactNode;
-  details?: ReactNode;
-  state?: 'new' | 'claimed' | 'locked';
-  source?: string;
-}
-
-export interface DamageEventInput {
-  value: number | string;
-  variant?: DamageEventVariant;
-  prefix?: string;
-  size?: number;
-  anchor?: GameUiAnchor;
-  durationMs?: number;
-}
-
-export interface DamageEventRecord extends DamageEventInput {
-  id: string;
-  variant: DamageEventVariant;
-  createdAt: number;
-}
-
-export interface ToastEventInput {
-  title?: string;
-  message: string;
-  variant?: ToastEventVariant;
-  icon?: string;
-  durationMs?: number;
-  closable?: boolean;
-}
-
-export interface ToastEventRecord extends ToastEventInput {
-  id: string;
-  variant: ToastEventVariant;
-  createdAt: number;
-}
-
-export interface CooldownRuntimeRecord {
-  id: string;
-  label: string;
-  progress: number;
-  ready?: boolean;
-  active?: boolean;
-  disabled?: boolean;
-  resourceCost?: ReactNode;
-  comboHint?: ReactNode;
-  cooldownText?: ReactNode;
-  variant?: 'basic' | 'ultimate' | 'passive';
-  triggerKey?: string;
-}
-
-export interface TargetHealthRuntimeRecord {
-  name: string;
-  health: number;
-  maxHealth: number;
-  shield?: number;
-  level?: string;
-  elite?: boolean;
-  threat?: string;
-  weakness?: string;
-}
-
-export interface ResourceRuntimeRecord {
-  id: string;
-  label: string;
-  value: number;
-  max: number;
-  kind?: 'mana' | 'energy' | 'stamina' | 'rage';
-}
-
-export interface StatusBadgeRuntimeRecord {
-  id: string;
-  label: string;
-  tone: StatusBadgeTone;
-  count?: number;
-  duration?: string;
-}
-
-export interface QuestTrackerObjectiveRuntimeRecord {
-  id: string;
-  label: string;
-  state?: 'active' | 'complete' | 'locked';
-  progress?: number;
-  max?: number;
-  meta?: string;
-}
-
-export interface QuestRuntimeRecord {
-  title: string;
-  subtitle?: string;
-  objectives: QuestTrackerObjectiveRuntimeRecord[];
-}
-
-export interface MiniMapMarkerRuntimeRecord {
-  id: string;
-  x: number;
-  y: number;
-  tone?: 'ally' | 'enemy' | 'objective' | 'neutral';
-  label?: string;
-  active?: boolean;
-}
-
-export interface MiniMapPathRuntimeRecord {
-  id: string;
-  points: GameUiAnchor[];
-  label?: string;
-}
-
-export interface MiniMapZoneRuntimeRecord {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  tone?: 'safe' | 'danger' | 'objective';
-  label?: string;
-}
-
-export interface MapRuntimeRecord {
-  label?: string;
-  markers: MiniMapMarkerRuntimeRecord[];
-  selectedId?: string;
-  paths?: MiniMapPathRuntimeRecord[];
-  zones?: MiniMapZoneRuntimeRecord[];
-  scanRadius?: number;
-  playerHeading?: number;
-  zoomLabel?: string;
-}
-
-export interface DialogueRuntimeRecord {
-  speaker: string;
-  text: string;
-  tone?: DialogueTone;
-  portrait?: ReactNode;
-  source?: ReactNode;
-  typing?: boolean;
-}
-
-export interface ChoicePromptOptionRuntimeRecord {
-  id: string;
-  label: string;
-  description?: ReactNode;
-  cost?: ReactNode;
-  resultPreview?: ReactNode;
-  disabled?: boolean;
-}
-
-export interface ChoiceRuntimeRecord {
-  title?: string;
-  options: ChoicePromptOptionRuntimeRecord[];
-  selectedId?: string;
-}
-
-export interface PartyMemberRuntimeRecord {
-  id: string;
-  name: string;
-  health: number;
-  maxHealth: number;
-  shield?: number;
-  status?: StatusBadgeRuntimeRecord;
-  offline?: boolean;
-}
-
-export interface PartyRuntimeRecord {
-  members: PartyMemberRuntimeRecord[];
-  selectedId?: string;
-}
-
-export interface QuestLogQuestRuntimeRecord {
-  id: string;
-  title: string;
-  subtitle?: string;
-  objectives: QuestTrackerObjectiveRuntimeRecord[];
-}
-
-export interface QuestLogRuntimeRecord {
-  title?: string;
-  quests: QuestLogQuestRuntimeRecord[];
-  activeId?: string;
-}
-
-export interface ShopRuntimeRecord {
-  id: string;
-  title: string;
-  items: RuntimeLootItem[];
-  currencies: Array<{ id: string; label: string; amount: number | string; tone?: 'gold' | 'silver' | 'gem' | 'token' | 'neutral' }>;
-  selectedId?: string;
-}
-
-export interface RewardRevealRuntimeRecord {
-  id: string;
-  title: string;
-  items: RuntimeLootItem[];
-  state: RewardRevealState;
-}
-
-export interface InventorySlotRuntimeRecord {
-  id: string;
-  item?: RuntimeLootItem;
-  locked?: boolean;
-  equipped?: boolean;
-  slotType?: 'bag' | 'weapon' | 'armor' | 'trinket' | 'quest' | 'material';
-  stackCount?: number;
-  rarity?: 'common' | 'rare' | 'epic' | 'legendary';
-  compareState?: 'upgrade' | 'downgrade' | 'same';
-}
-
-export interface InventoryRuntimeRecord {
-  title?: string;
-  slots: InventorySlotRuntimeRecord[];
-  selectedId?: string;
-}
-
-export interface GameUiRuntimeState {
-  layers: {
-    hud: {
-      cooldowns: Record<string, CooldownRuntimeRecord>;
-      selectedAbilityId?: string;
-      target?: TargetHealthRuntimeRecord;
-      combo?: { count: number; label?: string };
-      quest?: QuestRuntimeRecord;
-      map?: MapRuntimeRecord;
-      resources?: Record<string, ResourceRuntimeRecord>;
-      buffs?: StatusBadgeRuntimeRecord[];
-      party?: PartyRuntimeRecord;
-    };
-    feedback: {
-      damage: DamageEventRecord[];
-    };
-    notification: {
-      toasts: ToastEventRecord[];
-    };
-    narrative?: {
-      dialogueQueue: DialogueRuntimeRecord[];
-      choices?: ChoiceRuntimeRecord;
-    };
-    modal: {
-      reward?: RewardRevealRuntimeRecord;
-      shop?: ShopRuntimeRecord;
-      questLog?: QuestLogRuntimeRecord;
-      inventory?: InventoryRuntimeRecord;
-    };
-    debug: {
-      events: string[];
-    };
-  };
-}
-
-export type GameUiEvent =
-  | { type: 'damage:emit'; payload: DamageEventInput & { id?: string } }
-  | { type: 'damage:complete'; id: string }
-  | { type: 'toast:notify'; payload: ToastEventInput & { id?: string } }
-  | { type: 'toast:dismiss'; id: string }
-  | { type: 'cooldown:update'; payload: CooldownRuntimeRecord }
-  | { type: 'ability:select'; id: string }
-  | { type: 'resource:update'; payload: ResourceRuntimeRecord }
-  | { type: 'resource:remove'; id: string }
-  | { type: 'target-health:update'; payload: TargetHealthRuntimeRecord }
-  | { type: 'combo:set'; payload: { count: number; label?: string } }
-  | { type: 'combo:increment'; payload?: { amount?: number; label?: string } }
-  | { type: 'combo:reset' }
-  | { type: 'quest:track'; payload: QuestRuntimeRecord }
-  | { type: 'quest:objective:update'; payload: { id: string; patch: Partial<QuestTrackerObjectiveRuntimeRecord> } }
-  | { type: 'quest:clear' }
-  | { type: 'map:set'; payload: MapRuntimeRecord }
-  | { type: 'map:marker:update'; payload: MiniMapMarkerRuntimeRecord }
-  | { type: 'map:select'; id: string }
-  | { type: 'map:clear' }
-  | { type: 'buff:upsert'; payload: StatusBadgeRuntimeRecord }
-  | { type: 'buff:remove'; id: string }
-  | { type: 'buff:clear' }
-  | { type: 'dialogue:show'; payload: DialogueRuntimeRecord }
-  | { type: 'dialogue:enqueue'; payload: DialogueRuntimeRecord }
-  | { type: 'dialogue:advance' }
-  | { type: 'dialogue:dismiss' }
-  | { type: 'party:set'; payload: PartyRuntimeRecord }
-  | { type: 'party:member:update'; payload: { id: string; patch: Partial<PartyMemberRuntimeRecord> } }
-  | { type: 'party:select'; id: string }
-  | { type: 'party:clear' }
-  | { type: 'quest-log:open'; payload: QuestLogRuntimeRecord }
-  | { type: 'quest-log:close' }
-  | { type: 'quest-log:activate'; id: string }
-  | { type: 'inventory:set'; payload: InventoryRuntimeRecord }
-  | { type: 'inventory:slot:update'; payload: { id: string; patch: Partial<InventorySlotRuntimeRecord> } }
-  | { type: 'inventory:select'; id: string }
-  | { type: 'inventory:clear' }
-  | { type: 'choice:show'; payload: ChoiceRuntimeRecord }
-  | { type: 'choice:select'; id: string }
-  | { type: 'choice:clear' }
-  | { type: 'reward-reveal:show'; payload: RewardRevealRuntimeRecord }
-  | { type: 'reward-reveal:update'; payload: Partial<RewardRevealRuntimeRecord> & { id: string } }
-  | { type: 'reward-reveal:clear' }
-  | { type: 'shop:open'; payload: ShopRuntimeRecord }
-  | { type: 'shop:item:select'; id: string }
-  | { type: 'shop:close' }
-  | { type: 'layer:clear'; layer: GameUiLayerName };
-
-export interface GameUiRuntime {
-  getState(): GameUiRuntimeState;
-  subscribe(listener: (state: GameUiRuntimeState) => void): () => void;
-  dispatch(event: GameUiEvent): void;
-  emitDamage(input: DamageEventInput): string;
-  notify(input: ToastEventInput): string;
-  dismiss(id: string): void;
-  setCombo(count: number, label?: string): void;
-  incrementCombo(amount?: number, label?: string): void;
-  resetCombo(): void;
-  trackQuest(quest: QuestRuntimeRecord): void;
-  setMapMarkers(map: MapRuntimeRecord): void;
-  selectAbility(id: string): void;
-  updateResource(resource: ResourceRuntimeRecord): void;
-  upsertBuff(buff: StatusBadgeRuntimeRecord): void;
-  showDialogue(dialogue: DialogueRuntimeRecord): void;
-  enqueueDialogue(dialogue: DialogueRuntimeRecord): void;
-  advanceDialogue(): void;
-  setParty(party: PartyRuntimeRecord): void;
-  openQuestLog(questLog: QuestLogRuntimeRecord): void;
-  showChoices(choices: ChoiceRuntimeRecord): void;
-  clearLayer(layer: GameUiLayerName): void;
-}
-
-export interface GameUiRuntimeOptions {
-  damageLimit?: number;
-  toastLimit?: number;
-  now?: () => number;
-  createId?: (scope: string) => string;
-}
+export type {
+  ChoicePromptOptionRuntimeRecord,
+  ChoiceRuntimeRecord,
+  CooldownRuntimeRecord,
+  DamageEventInput,
+  DamageEventRecord,
+  DamageEventVariant,
+  DialogueRuntimeRecord,
+  DialogueTone,
+  GameUiAnchor,
+  GameUiEvent,
+  GameUiLayerName,
+  GameUiRuntime,
+  GameUiRuntimeOptions,
+  GameUiRuntimeState,
+  InventoryRuntimeRecord,
+  InventorySlotRuntimeRecord,
+  MapRuntimeRecord,
+  MiniMapMarkerRuntimeRecord,
+  MiniMapPathRuntimeRecord,
+  MiniMapZoneRuntimeRecord,
+  PartyMemberRuntimeRecord,
+  PartyRuntimeRecord,
+  QuestLogQuestRuntimeRecord,
+  QuestLogRuntimeRecord,
+  QuestRuntimeRecord,
+  QuestTrackerObjectiveRuntimeRecord,
+  ResourceRuntimeRecord,
+  RewardRevealRuntimeRecord,
+  RewardRevealState,
+  RuntimeLootItem,
+  ShopRuntimeRecord,
+  StatusBadgeRuntimeRecord,
+  StatusBadgeTone,
+  TargetHealthRuntimeRecord,
+  ToastEventInput,
+  ToastEventRecord,
+  ToastEventVariant,
+} from "./types";
 
 const defaultOptions = {
   damageLimit: 12,
   toastLimit: 4,
 };
-
-const emptyHud = (): GameUiRuntimeState['layers']['hud'] => ({
-  cooldowns: {},
-});
-
-type NarrativeLayerState = NonNullable<GameUiRuntimeState['layers']['narrative']>;
-
-function narrativeLayer(current: GameUiRuntimeState): NarrativeLayerState {
-  return {
-    dialogueQueue: current.layers.narrative?.dialogueQueue ?? [],
-    choices: current.layers.narrative?.choices,
-  };
-}
 
 export function createGameUiRuntime(options: GameUiRuntimeOptions = {}): GameUiRuntime {
   const runtimeOptions = { ...defaultOptions, ...options };
@@ -381,12 +60,14 @@ export function createGameUiRuntime(options: GameUiRuntimeOptions = {}): GameUiR
   }
 
   function dispatch(event: GameUiEvent) {
-    setState(reduceState(state, event, {
-      createId,
-      damageLimit: runtimeOptions.damageLimit,
-      now,
-      toastLimit: runtimeOptions.toastLimit,
-    }));
+    setState(
+      reduceState(state, event, {
+        createId,
+        damageLimit: runtimeOptions.damageLimit,
+        now,
+        toastLimit: runtimeOptions.toastLimit,
+      }),
+    );
   }
 
   return {
@@ -397,769 +78,62 @@ export function createGameUiRuntime(options: GameUiRuntimeOptions = {}): GameUiR
     },
     dispatch,
     emitDamage(input) {
-      const id = createId('damage');
-      dispatch({ type: 'damage:emit', payload: { ...input, id } });
+      const id = createId("damage");
+      dispatch({ type: "damage:emit", payload: { ...input, id } });
       return id;
     },
     notify(input) {
-      const id = createId('toast');
-      dispatch({ type: 'toast:notify', payload: { ...input, id } });
+      const id = createId("toast");
+      dispatch({ type: "toast:notify", payload: { ...input, id } });
       return id;
     },
     dismiss(id) {
-      dispatch({ type: 'toast:dismiss', id });
+      dispatch({ type: "toast:dismiss", id });
     },
     setCombo(count, label) {
-      dispatch({ type: 'combo:set', payload: { count, label } });
+      dispatch({ type: "combo:set", payload: { count, label } });
     },
     incrementCombo(amount = 1, label) {
-      dispatch({ type: 'combo:increment', payload: { amount, label } });
+      dispatch({ type: "combo:increment", payload: { amount, label } });
     },
     resetCombo() {
-      dispatch({ type: 'combo:reset' });
+      dispatch({ type: "combo:reset" });
     },
     trackQuest(quest) {
-      dispatch({ type: 'quest:track', payload: quest });
+      dispatch({ type: "quest:track", payload: quest });
     },
     setMapMarkers(map) {
-      dispatch({ type: 'map:set', payload: map });
+      dispatch({ type: "map:set", payload: map });
     },
     selectAbility(id) {
-      dispatch({ type: 'ability:select', id });
+      dispatch({ type: "ability:select", id });
     },
     updateResource(resource) {
-      dispatch({ type: 'resource:update', payload: resource });
+      dispatch({ type: "resource:update", payload: resource });
     },
     upsertBuff(buff) {
-      dispatch({ type: 'buff:upsert', payload: buff });
+      dispatch({ type: "buff:upsert", payload: buff });
     },
     showDialogue(dialogue) {
-      dispatch({ type: 'dialogue:show', payload: dialogue });
+      dispatch({ type: "dialogue:show", payload: dialogue });
     },
     enqueueDialogue(dialogue) {
-      dispatch({ type: 'dialogue:enqueue', payload: dialogue });
+      dispatch({ type: "dialogue:enqueue", payload: dialogue });
     },
     advanceDialogue() {
-      dispatch({ type: 'dialogue:advance' });
+      dispatch({ type: "dialogue:advance" });
     },
     setParty(party) {
-      dispatch({ type: 'party:set', payload: party });
+      dispatch({ type: "party:set", payload: party });
     },
     openQuestLog(questLog) {
-      dispatch({ type: 'quest-log:open', payload: questLog });
+      dispatch({ type: "quest-log:open", payload: questLog });
     },
     showChoices(choices) {
-      dispatch({ type: 'choice:show', payload: choices });
+      dispatch({ type: "choice:show", payload: choices });
     },
     clearLayer(layer) {
-      dispatch({ type: 'layer:clear', layer });
+      dispatch({ type: "layer:clear", layer });
     },
-  };
-}
-
-function createInitialState(): GameUiRuntimeState {
-  return {
-    layers: {
-      hud: emptyHud(),
-      feedback: {
-        damage: [],
-      },
-      notification: {
-        toasts: [],
-      },
-      narrative: { dialogueQueue: [] },
-      modal: {},
-      debug: {
-        events: [],
-      },
-    },
-  };
-}
-
-function reduceState(
-  current: GameUiRuntimeState,
-  event: GameUiEvent,
-  options: {
-    createId: (scope: string) => string;
-    damageLimit: number;
-    now: () => number;
-    toastLimit: number;
-  },
-): GameUiRuntimeState {
-  switch (event.type) {
-    case 'damage:emit': {
-      const record: DamageEventRecord = {
-        ...event.payload,
-        id: event.payload.id ?? options.createId('damage'),
-        variant: event.payload.variant ?? 'damage',
-        createdAt: options.now(),
-      };
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          feedback: {
-            damage: [...current.layers.feedback.damage, record].slice(-options.damageLimit),
-          },
-        },
-      };
-    }
-    case 'damage:complete':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          feedback: {
-            damage: current.layers.feedback.damage.filter((item) => item.id !== event.id),
-          },
-        },
-      };
-    case 'toast:notify': {
-      const record: ToastEventRecord = {
-        ...event.payload,
-        id: event.payload.id ?? options.createId('toast'),
-        variant: event.payload.variant ?? 'info',
-        createdAt: options.now(),
-      };
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          notification: {
-            toasts: [...current.layers.notification.toasts, record].slice(-options.toastLimit),
-          },
-        },
-      };
-    }
-    case 'toast:dismiss':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          notification: {
-            toasts: current.layers.notification.toasts.filter((item) => item.id !== event.id),
-          },
-        },
-      };
-    case 'cooldown:update':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            cooldowns: {
-              ...current.layers.hud.cooldowns,
-              [event.payload.id]: event.payload,
-            },
-          },
-        },
-      };
-    case 'ability:select':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            selectedAbilityId: event.id,
-          },
-        },
-      };
-    case 'resource:update':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            resources: {
-              ...current.layers.hud.resources,
-              [event.payload.id]: event.payload,
-            },
-          },
-        },
-      };
-    case 'resource:remove': {
-      const { [event.id]: _removed, ...resources } = current.layers.hud.resources ?? {};
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            resources,
-          },
-        },
-      };
-    }
-    case 'target-health:update':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            target: event.payload,
-          },
-        },
-      };
-    case 'combo:set':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            combo: { count: event.payload.count, label: event.payload.label },
-          },
-        },
-      };
-    case 'combo:increment': {
-      const amount = event.payload?.amount ?? 1;
-      const currentCount = current.layers.hud.combo?.count ?? 0;
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            combo: {
-              count: currentCount + amount,
-              label: event.payload?.label ?? current.layers.hud.combo?.label,
-            },
-          },
-        },
-      };
-    }
-    case 'combo:reset':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            combo: undefined,
-          },
-        },
-      };
-    case 'quest:track':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            quest: event.payload,
-          },
-        },
-      };
-    case 'quest:objective:update': {
-      const quest = current.layers.hud.quest;
-      if (!quest) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            quest: {
-              ...quest,
-              objectives: quest.objectives.map((objective) =>
-                objective.id === event.payload.id ? { ...objective, ...event.payload.patch } : objective,
-              ),
-            },
-          },
-        },
-      };
-    }
-    case 'quest:clear':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            quest: undefined,
-          },
-        },
-      };
-    case 'map:set':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            map: event.payload,
-          },
-        },
-      };
-    case 'map:marker:update': {
-      const map = current.layers.hud.map;
-      if (!map) {
-        return current;
-      }
-
-      const markers = map.markers.some((marker) => marker.id === event.payload.id)
-        ? map.markers.map((marker) => (marker.id === event.payload.id ? { ...marker, ...event.payload } : marker))
-        : [...map.markers, event.payload];
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            map: { ...map, markers },
-          },
-        },
-      };
-    }
-    case 'map:select': {
-      const map = current.layers.hud.map;
-      if (!map) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            map: { ...map, selectedId: event.id },
-          },
-        },
-      };
-    }
-    case 'map:clear':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            map: undefined,
-          },
-        },
-      };
-    case 'buff:upsert': {
-      const buffs = current.layers.hud.buffs ?? [];
-      const nextBuffs = buffs.some((buff) => buff.id === event.payload.id)
-        ? buffs.map((buff) => (buff.id === event.payload.id ? event.payload : buff))
-        : [...buffs, event.payload];
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            buffs: nextBuffs,
-          },
-        },
-      };
-    }
-    case 'buff:remove':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            buffs: (current.layers.hud.buffs ?? []).filter((buff) => buff.id !== event.id),
-          },
-        },
-      };
-    case 'buff:clear':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            buffs: undefined,
-          },
-        },
-      };
-    case 'dialogue:show':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          narrative: {
-            ...narrativeLayer(current),
-            dialogueQueue: [event.payload],
-          },
-        },
-      };
-    case 'dialogue:enqueue': {
-      const narrative = narrativeLayer(current);
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          narrative: {
-            ...narrative,
-            dialogueQueue: [...narrative.dialogueQueue, event.payload],
-          },
-        },
-      };
-    }
-    case 'dialogue:advance': {
-      const narrative = narrativeLayer(current);
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          narrative: {
-            ...narrative,
-            dialogueQueue: narrative.dialogueQueue.slice(1),
-          },
-        },
-      };
-    }
-    case 'dialogue:dismiss':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          narrative: {
-            ...narrativeLayer(current),
-            dialogueQueue: [],
-          },
-        },
-      };
-    case 'party:set':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            party: event.payload,
-          },
-        },
-      };
-    case 'party:member:update': {
-      const party = current.layers.hud.party;
-      if (!party) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            party: {
-              ...party,
-              members: party.members.map((member) =>
-                member.id === event.payload.id ? { ...member, ...event.payload.patch } : member,
-              ),
-            },
-          },
-        },
-      };
-    }
-    case 'party:select': {
-      const party = current.layers.hud.party;
-      if (!party) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            party: { ...party, selectedId: event.id },
-          },
-        },
-      };
-    }
-    case 'party:clear':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          hud: {
-            ...current.layers.hud,
-            party: undefined,
-          },
-        },
-      };
-    case 'quest-log:open':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            questLog: event.payload,
-            reward: undefined,
-            shop: undefined,
-          },
-        },
-      };
-    case 'quest-log:close':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            questLog: undefined,
-          },
-        },
-      };
-    case 'quest-log:activate': {
-      const questLog = current.layers.modal.questLog;
-      if (!questLog) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            questLog: { ...questLog, activeId: event.id },
-          },
-        },
-      };
-    }
-    case 'inventory:set':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            inventory: event.payload,
-            questLog: undefined,
-            reward: undefined,
-            shop: undefined,
-          },
-        },
-      };
-    case 'inventory:slot:update': {
-      const inventory = current.layers.modal.inventory;
-      if (!inventory) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            inventory: {
-              ...inventory,
-              slots: inventory.slots.map((slot) =>
-                slot.id === event.payload.id ? { ...slot, ...event.payload.patch } : slot,
-              ),
-            },
-          },
-        },
-      };
-    }
-    case 'inventory:select': {
-      const inventory = current.layers.modal.inventory;
-      if (!inventory) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            inventory: { ...inventory, selectedId: event.id },
-          },
-        },
-      };
-    }
-    case 'inventory:clear':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            inventory: undefined,
-          },
-        },
-      };
-    case 'choice:show':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          narrative: {
-            ...narrativeLayer(current),
-            choices: event.payload,
-          },
-        },
-      };
-    case 'choice:select': {
-      const narrative = narrativeLayer(current);
-      if (!narrative.choices) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          narrative: {
-            ...narrative,
-            choices: { ...narrative.choices, selectedId: event.id },
-          },
-        },
-      };
-    }
-    case 'choice:clear':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          narrative: {
-            ...narrativeLayer(current),
-            choices: undefined,
-          },
-        },
-      };
-    case 'reward-reveal:show':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            reward: event.payload,
-            shop: undefined,
-            questLog: undefined,
-          },
-        },
-      };
-    case 'reward-reveal:update': {
-      if (!current.layers.modal.reward || current.layers.modal.reward.id !== event.payload.id) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            reward: {
-              ...current.layers.modal.reward,
-              ...event.payload,
-            },
-          },
-        },
-      };
-    }
-    case 'reward-reveal:clear':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            reward: undefined,
-          },
-        },
-      };
-    case 'shop:open':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            shop: event.payload,
-            reward: undefined,
-            questLog: undefined,
-          },
-        },
-      };
-    case 'shop:item:select': {
-      const shop = current.layers.modal.shop;
-      if (!shop) {
-        return current;
-      }
-
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            shop: { ...shop, selectedId: event.id },
-          },
-        },
-      };
-    }
-    case 'shop:close':
-      return {
-        ...current,
-        layers: {
-          ...current.layers,
-          modal: {
-            ...current.layers.modal,
-            shop: undefined,
-          },
-        },
-      };
-    case 'layer:clear':
-      return clearRuntimeLayer(current, event.layer);
-  }
-}
-
-function clearRuntimeLayer(current: GameUiRuntimeState, layer: GameUiLayerName): GameUiRuntimeState {
-  if (layer === 'hud') {
-    return { ...current, layers: { ...current.layers, hud: emptyHud() } };
-  }
-
-  if (layer === 'feedback') {
-    return { ...current, layers: { ...current.layers, feedback: { damage: [] } } };
-  }
-
-  if (layer === 'notification') {
-    return { ...current, layers: { ...current.layers, notification: { toasts: [] } } };
-  }
-
-  if (layer === 'narrative') {
-    return { ...current, layers: { ...current.layers, narrative: { dialogueQueue: [] } } };
-  }
-
-  if (layer === 'modal') {
-    return { ...current, layers: { ...current.layers, modal: {} } };
-  }
-
-  return { ...current, layers: { ...current.layers, debug: { events: [] } } };
-}
-
-function createRuntimeIdFactory() {
-  let nextId = 0;
-
-  return (scope: string) => {
-    nextId += 1;
-    return `${scope}-${nextId}`;
   };
 }

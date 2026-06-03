@@ -1,2 +1,2 @@
-export { PauseMenu } from './PauseMenu';
-export type { PauseMenuItem, PauseMenuProps } from './PauseMenu';
+export { PauseMenu } from "./PauseMenu";
+export type { PauseMenuItem, PauseMenuProps } from "./PauseMenu";

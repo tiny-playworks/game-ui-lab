@@ -1,10 +1,10 @@
-import { domAnimation, LazyMotion, m, type Transition } from 'motion/react';
-import React from 'react';
-import type { CSSProperties } from 'react';
-import { damageNumberPrefixClass, damageNumberRecipe, mergeClass } from '../styles';
-import type { GameUiMotionMode } from '../types';
+import { domAnimation, LazyMotion, m, type Transition } from "motion/react";
+import React from "react";
+import type { CSSProperties } from "react";
+import { damageNumberPrefixClass, damageNumberRecipe, mergeClass } from "../styles";
+import type { GameUiMotionMode } from "../types";
 
-export type DamageNumberVariant = 'damage' | 'heal' | 'critical' | 'miss';
+export type DamageNumberVariant = "damage" | "heal" | "critical" | "miss";
 
 export interface DamageNumberProps {
   value: number | string;
@@ -26,16 +26,16 @@ const transitions: Record<DamageNumberVariant, Transition> = {
 
 export function DamageNumber({
   value,
-  variant = 'damage',
+  variant = "damage",
   prefix,
   size,
-  motion = 'live',
+  motion = "live",
   onExitComplete,
   className,
   style,
 }: DamageNumberProps) {
-  const isCritical = variant === 'critical';
-  const damageStyle = { ...style, '--game-ui-damage-size': size ? `${size}px` : undefined } as CSSProperties;
+  const isCritical = variant === "critical";
+  const damageStyle = { ...style, "--game-ui-damage-size": size ? `${size}px` : undefined } as CSSProperties;
   const content = (
     <>
       {prefix ? <span className={damageNumberPrefixClass}>{prefix}</span> : null}
@@ -43,7 +43,7 @@ export function DamageNumber({
     </>
   );
 
-  if (motion !== 'live') {
+  if (motion !== "live") {
     return (
       <output
         className={mergeClass(damageNumberRecipe({ variant }), className)}
@@ -65,7 +65,11 @@ export function DamageNumber({
         data-motion={motion}
         style={damageStyle}
         initial={{ opacity: 0, y: 18, scale: isCritical ? 0.62 : 0.84, rotate: isCritical ? -5 : 0 }}
-        animate={{ opacity: [0, 1, 1, 0], y: [18, -8, -28, -44], scale: isCritical ? [0.62, 1.32, 1, 0.92] : [0.84, 1.05, 1, 0.92] }}
+        animate={{
+          opacity: [0, 1, 1, 0],
+          y: [18, -8, -28, -44],
+          scale: isCritical ? [0.62, 1.32, 1, 0.92] : [0.84, 1.05, 1, 0.92],
+        }}
         transition={transitions[variant]}
         onAnimationComplete={onExitComplete}
         aria-label={`${variant} ${value}`}

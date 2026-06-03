@@ -1,5 +1,5 @@
-import React from 'react';
-import type { ReactNode } from 'react';
+import React from "react";
+import type { ReactNode } from "react";
 import {
   dialogueBoxContentClass,
   dialogueBoxPortraitClass,
@@ -7,9 +7,9 @@ import {
   dialogueBoxSpeakerClass,
   dialogueBoxTextClass,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
-export type DialogueTone = 'neutral' | 'ally' | 'warning';
+export type DialogueTone = "neutral" | "ally" | "warning";
 
 export interface DialogueBoxProps {
   speaker: string;
@@ -26,7 +26,7 @@ export function DialogueBox({
   speaker,
   text,
   portrait,
-  tone = 'neutral',
+  tone = "neutral",
   source,
   typing = false,
   onAdvance,
@@ -40,7 +40,9 @@ export function DialogueBox({
       aria-label={`${speaker} dialogue`}
       onClick={onAdvance}
     >
-      <span className={dialogueBoxPortraitClass} aria-hidden="true">{portrait ?? speaker.slice(0, 1)}</span>
+      <span className={dialogueBoxPortraitClass} aria-hidden="true">
+        {portrait ?? speaker.slice(0, 1)}
+      </span>
       <span className={dialogueBoxContentClass}>
         <strong className={dialogueBoxSpeakerClass}>{speaker}</strong>
         {source ? <span>{source}</span> : null}

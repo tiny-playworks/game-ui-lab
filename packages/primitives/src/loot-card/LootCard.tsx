@@ -1,5 +1,5 @@
-import React from 'react';
-import type { ReactNode } from 'react';
+import React from "react";
+import type { ReactNode } from "react";
 import {
   lootCardBodyClass,
   lootCardIconClass,
@@ -9,9 +9,9 @@ import {
   lootCardRecipe,
   lootCardTextClass,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
-export type LootRarity = 'common' | 'rare' | 'epic' | 'legendary';
+export type LootRarity = "common" | "rare" | "epic" | "legendary";
 
 export interface LootCardProps {
   name: string;
@@ -35,7 +35,7 @@ function formatQuantity(quantity?: number) {
 
 export function LootCard({
   name,
-  rarity = 'common',
+  rarity = "common",
   quantity,
   value,
   subtitle,
@@ -45,16 +45,16 @@ export function LootCard({
   className,
 }: LootCardProps) {
   const quantityText = formatQuantity(quantity);
-  const Component = onClick ? 'button' : 'article';
+  const Component = onClick ? "button" : "article";
   const componentProps = onClick
     ? {
-        type: 'button' as const,
+        type: "button" as const,
         onClick,
-        'aria-pressed': selected,
-        'aria-label': `${name} ${rarity} loot`,
+        "aria-pressed": selected,
+        "aria-label": `${name} ${rarity} loot`,
       }
     : {
-        'aria-label': `${name} ${rarity} loot`,
+        "aria-label": `${name} ${rarity} loot`,
       };
 
   return (

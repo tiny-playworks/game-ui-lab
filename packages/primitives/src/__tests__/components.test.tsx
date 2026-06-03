@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  act,
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-} from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "@rstest/core";
 import { createGameUiRuntime } from "@tiny-playworks/game-ui-runtime";
 import {
@@ -62,20 +56,12 @@ describe("game ui primitives", () => {
       </GameUiProvider>,
     );
 
-    expect(
-      screen
-        .getByText("ready")
-        .parentElement?.getAttribute("data-game-ui-theme"),
-    ).toBe("default");
+    expect(screen.getByText("ready").parentElement?.getAttribute("data-game-ui-theme")).toBe("default");
   });
 
   it("renders provider theme and scoped token overrides", () => {
     render(
-      <GameUiProvider
-        theme="arcade"
-        tokens={{ accent: "#ffffff" }}
-        style={{ marginTop: 12 }}
-      >
+      <GameUiProvider theme="arcade" tokens={{ accent: "#ffffff" }} style={{ marginTop: 12 }}>
         <span>arcade</span>
       </GameUiProvider>,
     );
@@ -84,20 +70,14 @@ describe("game ui primitives", () => {
 
     expect(provider?.getAttribute("data-game-ui-theme")).toBe("arcade");
     expect(provider?.getAttribute("style")).toContain("margin-top: 12px");
-    expect(provider?.getAttribute("style")).toContain(
-      "--game-ui-accent: #ffffff",
-    );
-    expect(provider?.getAttribute("style")).toContain(
-      "--game-ui-colors-accent: #ffffff",
-    );
+    expect(provider?.getAttribute("style")).toContain("--game-ui-accent: #ffffff");
+    expect(provider?.getAttribute("style")).toContain("--game-ui-colors-accent: #ffffff");
   });
 
   it("renders a damage number variant", () => {
     render(<DamageNumber value="128" variant="critical" prefix="CRIT" />);
 
-    expect(screen.getByText("128").getAttribute("data-variant")).toBe(
-      "critical",
-    );
+    expect(screen.getByText("128").getAttribute("data-variant")).toBe("critical");
     expect(screen.getByText("CRIT").textContent).toBe("CRIT");
   });
 
@@ -108,18 +88,10 @@ describe("game ui primitives", () => {
   });
 
   it("renders a floating toast message", () => {
-    render(
-      <FloatingToast
-        title="Loot found"
-        message="Neon shard added"
-        variant="loot"
-      />,
-    );
+    render(<FloatingToast title="Loot found" message="Neon shard added" variant="loot" />);
 
     expect(screen.getByText("Loot found").textContent).toBe("Loot found");
-    expect(screen.getByText("Neon shard added").textContent).toBe(
-      "Neon shard added",
-    );
+    expect(screen.getByText("Neon shard added").textContent).toBe("Neon shard added");
   });
 
   it("renders combo count", () => {
@@ -132,143 +104,81 @@ describe("game ui primitives", () => {
   it("renders a rarity border tone", () => {
     render(<RarityBorder tone="legendary">Legendary cache</RarityBorder>);
 
-    expect(screen.getByText("Legendary cache").getAttribute("data-tone")).toBe(
-      "legendary",
-    );
+    expect(screen.getByText("Legendary cache").getAttribute("data-tone")).toBe("legendary");
   });
 
   it("renders health states with shield and values", () => {
-    const { rerender } = render(
-      <HealthBar value={0} max={120} label="Pilot HP" showValue />,
-    );
+    const { rerender } = render(<HealthBar value={0} max={120} label="Pilot HP" showValue />);
 
-    expect(
-      screen.getByLabelText("Pilot HP 0 of 120").getAttribute("data-empty"),
-    ).toBe("true");
+    expect(screen.getByLabelText("Pilot HP 0 of 120").getAttribute("data-empty")).toBe("true");
     expect(screen.getByText("0 / 120").textContent).toBe("0 / 120");
 
     rerender(<HealthBar value={120} max={120} label="Pilot HP" showValue />);
 
-    expect(
-      screen.getByLabelText("Pilot HP 120 of 120").getAttribute("data-full"),
-    ).toBe("true");
+    expect(screen.getByLabelText("Pilot HP 120 of 120").getAttribute("data-full")).toBe("true");
 
-    rerender(
-      <HealthBar value={78} max={120} shield={34} label="Pilot HP" showValue />,
-    );
+    rerender(<HealthBar value={78} max={120} shield={34} label="Pilot HP" showValue />);
 
-    expect(
-      screen
-        .getByLabelText("Pilot HP 78 of 120 plus 34 shield")
-        .getAttribute("data-shielded"),
-    ).toBe("true");
+    expect(screen.getByLabelText("Pilot HP 78 of 120 plus 34 shield").getAttribute("data-shielded")).toBe("true");
     expect(screen.getByText("+34").textContent).toBe("+34");
   });
 
   it("renders resource meter kind and value", () => {
     render(<ResourceMeter value={42} max={80} kind="mana" label="Arcane" />);
 
-    expect(
-      screen.getByLabelText("Arcane 42 of 80").getAttribute("data-kind"),
-    ).toBe("mana");
+    expect(screen.getByLabelText("Arcane 42 of 80").getAttribute("data-kind")).toBe("mana");
     expect(screen.getByText("Arcane").textContent).toBe("Arcane");
     expect(screen.getByText("42 / 80").textContent).toBe("42 / 80");
   });
 
   it("renders cooldown slot states", () => {
-    const { rerender } = render(
-      <CooldownSlot progress={0.45} label="Blink" icon="B" />,
-    );
+    const { rerender } = render(<CooldownSlot progress={0.45} label="Blink" icon="B" />);
 
-    expect(
-      screen
-        .getByRole("status", { name: "Blink cooldown 45%" })
-        .getAttribute("data-ready"),
-    ).toBe("false");
+    expect(screen.getByRole("status", { name: "Blink cooldown 45%" }).getAttribute("data-ready")).toBe("false");
     expect(screen.getByText("B").textContent).toBe("B");
-    expect(
-      screen
-        .getByText("B")
-        .querySelector('[data-game-ui-slot="cooldown-mask"]'),
-    ).toBeTruthy();
+    expect(screen.getByText("B").querySelector('[data-game-ui-slot="cooldown-mask"]')).toBeTruthy();
 
     rerender(<CooldownSlot progress={1} label="Blink" ready />);
 
-    expect(
-      screen
-        .getByRole("status", { name: "Blink ready" })
-        .getAttribute("data-ready"),
-    ).toBe("true");
+    expect(screen.getByRole("status", { name: "Blink ready" }).getAttribute("data-ready")).toBe("true");
 
     rerender(<CooldownSlot progress={0.2} label="Blink" disabled />);
 
-    expect(
-      screen
-        .getByRole("status", { name: "Blink disabled" })
-        .getAttribute("data-disabled"),
-    ).toBe("true");
+    expect(screen.getByRole("status", { name: "Blink disabled" }).getAttribute("data-disabled")).toBe("true");
   });
 
   it("renders status badge tone, count, and duration", () => {
     render(<StatusBadge label="Haste" tone="buff" count={3} duration="12s" />);
 
-    expect(
-      screen
-        .getByRole("status", { name: "Haste buff 3 stacks 12s" })
-        .getAttribute("data-tone"),
-    ).toBe("buff");
+    expect(screen.getByRole("status", { name: "Haste buff 3 stacks 12s" }).getAttribute("data-tone")).toBe("buff");
     expect(screen.getByText("x3").textContent).toBe("x3");
     expect(screen.getByText("12s").textContent).toBe("12s");
   });
 
   it("renders a loot card with rarity and quantity metadata", () => {
-    render(
-      <LootCard
-        name="Neon Shard"
-        rarity="epic"
-        quantity={3}
-        value="240g"
-        subtitle="Crafting drop"
-      />,
-    );
+    render(<LootCard name="Neon Shard" rarity="epic" quantity={3} value="240g" subtitle="Crafting drop" />);
 
-    expect(
-      screen
-        .getByRole("article", { name: "Neon Shard epic loot" })
-        .getAttribute("data-rarity"),
-    ).toBe("epic");
+    expect(screen.getByRole("article", { name: "Neon Shard epic loot" }).getAttribute("data-rarity")).toBe("epic");
     expect(screen.getByText("Neon Shard").textContent).toBe("Neon Shard");
     expect(screen.getByText("x3").textContent).toBe("x3");
     expect(screen.getByText("240g").textContent).toBe("240g");
   });
 
   it("renders objective chip states and progress", () => {
-    const { rerender } = render(
-      <ObjectiveChip label="Collect shards" progress={2} max={5} />,
-    );
+    const { rerender } = render(<ObjectiveChip label="Collect shards" progress={2} max={5} />);
 
-    expect(
-      screen
-        .getByRole("status", { name: "Collect shards active 2 / 5" })
-        .getAttribute("data-state"),
-    ).toBe("active");
+    expect(screen.getByRole("status", { name: "Collect shards active 2 / 5" }).getAttribute("data-state")).toBe(
+      "active",
+    );
     expect(screen.getByText("2 / 5").textContent).toBe("2 / 5");
 
     rerender(<ObjectiveChip label="Open gate" state="complete" />);
 
-    expect(
-      screen
-        .getByRole("status", { name: "Open gate complete" })
-        .getAttribute("data-state"),
-    ).toBe("complete");
+    expect(screen.getByRole("status", { name: "Open gate complete" }).getAttribute("data-state")).toBe("complete");
 
     rerender(<ObjectiveChip label="Enter vault" state="locked" />);
 
-    expect(
-      screen
-        .getByRole("status", { name: "Enter vault locked" })
-        .getAttribute("data-state"),
-    ).toBe("locked");
+    expect(screen.getByRole("status", { name: "Enter vault locked" }).getAttribute("data-state")).toBe("locked");
   });
 
   it("renders quest tracker objectives and completion count", () => {
@@ -284,15 +194,10 @@ describe("game ui primitives", () => {
       />,
     );
 
-    expect(
-      screen.getByRole("region", { name: "Signal Hunt 1 of 3 complete" })
-        .textContent,
-    ).toContain("1 / 3");
+    expect(screen.getByRole("region", { name: "Signal Hunt 1 of 3 complete" }).textContent).toContain("1 / 3");
     expect(screen.getByText("Daily route").textContent).toBe("Daily route");
     expect(screen.getByText("Find beacon").textContent).toBe("Find beacon");
-    expect(screen.getByText("Collect shards").textContent).toBe(
-      "Collect shards",
-    );
+    expect(screen.getByText("Collect shards").textContent).toBe("Collect shards");
     expect(screen.getByText("Enter vault").textContent).toBe("Enter vault");
   });
 
@@ -312,19 +217,9 @@ describe("game ui primitives", () => {
       />,
     );
 
-    expect(
-      screen.getByRole("group", { name: "Ability bar" }).textContent,
-    ).toContain("20");
-    expect(
-      screen
-        .getByRole("status", { name: "Blink ready" })
-        .getAttribute("data-ready"),
-    ).toBe("true");
-    expect(
-      screen
-        .getByRole("status", { name: "Nova disabled" })
-        .getAttribute("data-disabled"),
-    ).toBe("true");
+    expect(screen.getByRole("group", { name: "Ability bar" }).textContent).toContain("20");
+    expect(screen.getByRole("status", { name: "Blink ready" }).getAttribute("data-ready")).toBe("true");
+    expect(screen.getByRole("status", { name: "Nova disabled" }).getAttribute("data-disabled")).toBe("true");
   });
 
   it("handles ability clicks and ignores locked abilities", () => {
@@ -344,17 +239,9 @@ describe("game ui primitives", () => {
     fireEvent.click(screen.getByRole("button", { name: "Blink ready" }));
 
     expect(selected).toEqual(["blink"]);
-    expect(
-      screen
-        .getByRole("button", { name: "Blink ready" })
-        .getAttribute("aria-pressed"),
-    ).toBe("true");
+    expect(screen.getByRole("button", { name: "Blink ready" }).getAttribute("aria-pressed")).toBe("true");
     expect(screen.queryByRole("button", { name: "Nova disabled" })).toBeNull();
-    expect(
-      screen
-        .getByRole("status", { name: "Nova disabled" })
-        .getAttribute("data-disabled"),
-    ).toBe("true");
+    expect(screen.getByRole("status", { name: "Nova disabled" }).getAttribute("data-disabled")).toBe("true");
   });
 
   it("renders rich ability metadata and triggers abilities by key", () => {
@@ -389,12 +276,8 @@ describe("game ui primitives", () => {
     expect(screen.getByText("35 MP").textContent).toBe("35 MP");
     expect(screen.getByText("Chain +2").textContent).toBe("Chain +2");
     expect(screen.getByText("4.2s").textContent).toBe("4.2s");
-    expect(
-      screen.getByText("Pulse Burst").closest("[data-variant]")?.getAttribute("data-variant"),
-    ).toBe("ultimate");
-    expect(
-      screen.getByRole("button", { name: "Pulse Burst cooldown 42%" }).getAttribute("aria-pressed"),
-    ).toBe("true");
+    expect(screen.getByText("Pulse Burst").closest("[data-variant]")?.getAttribute("data-variant")).toBe("ultimate");
+    expect(screen.getByRole("button", { name: "Pulse Burst cooldown 42%" }).getAttribute("aria-pressed")).toBe("true");
   });
 
   it("allows ability bars to customize rendered ability items", () => {
@@ -425,34 +308,16 @@ describe("game ui primitives", () => {
       />,
     );
 
-    expect(screen.getByTestId("ability-blink").getAttribute("data-index")).toBe(
-      "0",
-    );
-    expect(
-      screen.getByTestId("ability-blink").getAttribute("data-selected"),
-    ).toBe("true");
-    expect(
-      screen.getByTestId("ability-nova").getAttribute("data-disabled"),
-    ).toBe("true");
+    expect(screen.getByTestId("ability-blink").getAttribute("data-index")).toBe("0");
+    expect(screen.getByTestId("ability-blink").getAttribute("data-selected")).toBe("true");
+    expect(screen.getByTestId("ability-nova").getAttribute("data-disabled")).toBe("true");
     expect(screen.getByText("selected").textContent).toBe("selected");
   });
 
   it("renders ability tooltip metadata", () => {
-    render(
-      <AbilityTooltip
-        name="Blink"
-        description="Dash through danger."
-        cost="20 MP"
-        cooldown="8s"
-        state="ready"
-      />,
-    );
+    render(<AbilityTooltip name="Blink" description="Dash through danger." cost="20 MP" cooldown="8s" state="ready" />);
 
-    expect(
-      screen
-        .getByRole("tooltip", { name: "Blink ready" })
-        .getAttribute("data-state"),
-    ).toBe("ready");
+    expect(screen.getByRole("tooltip", { name: "Blink ready" }).getAttribute("data-state")).toBe("ready");
     expect(screen.getByText("Cost 20 MP").textContent).toBe("Cost 20 MP");
     expect(screen.getByText("Cooldown 8s").textContent).toBe("Cooldown 8s");
   });
@@ -460,11 +325,9 @@ describe("game ui primitives", () => {
   it("renders cast bar state and progress", () => {
     render(<CastBar label="Arc Beam" progress={0.72} state="channeling" />);
 
-    expect(
-      screen
-        .getByRole("status", { name: "Arc Beam channeling 72%" })
-        .getAttribute("data-state"),
-    ).toBe("channeling");
+    expect(screen.getByRole("status", { name: "Arc Beam channeling 72%" }).getAttribute("data-state")).toBe(
+      "channeling",
+    );
     expect(screen.getByText("72%").textContent).toBe("72%");
   });
 
@@ -479,11 +342,7 @@ describe("game ui primitives", () => {
       />,
     );
 
-    expect(
-      screen
-        .getByRole("status", { name: "Warden boss target" })
-        .getAttribute("data-faction"),
-    ).toBe("boss");
+    expect(screen.getByRole("status", { name: "Warden boss target" }).getAttribute("data-faction")).toBe("boss");
     expect(screen.getByText("Burn").textContent).toBe("Burn");
   });
 
@@ -505,9 +364,7 @@ describe("game ui primitives", () => {
     expect(marker.getAttribute("data-tone")).toBe("objective");
     expect(marker.getAttribute("data-active")).toBe("true");
     expect(marker.getAttribute("style")).toContain("--game-ui-marker-x: 25%");
-    expect(
-      screen.getByLabelText("Sector map with 2 markers").textContent,
-    ).toContain("Sector map");
+    expect(screen.getByLabelText("Sector map with 2 markers").textContent).toContain("Sector map");
   });
 
   it("selects loot and map items through collection callbacks", () => {
@@ -535,49 +392,25 @@ describe("game ui primitives", () => {
       </>,
     );
 
-    fireEvent.click(
-      screen.getByRole("button", { name: "Pulse Core rare loot" }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: "Pulse Core rare loot" }));
     fireEvent.click(screen.getByRole("button", { name: "Enemy enemy marker" }));
 
     expect(selectedLoot).toEqual(["core"]);
     expect(selectedMarker).toEqual(["enemy"]);
-    expect(
-      screen
-        .getByRole("button", { name: "Pulse Core rare loot" })
-        .getAttribute("aria-pressed"),
-    ).toBe("true");
+    expect(screen.getByRole("button", { name: "Pulse Core rare loot" }).getAttribute("aria-pressed")).toBe("true");
   });
 
   it("renders compass markers and location danger", () => {
     render(
       <>
-        <CompassBar
-          heading={90}
-          markers={[
-            { id: "gate", label: "Gate", heading: 120, tone: "objective" },
-          ]}
-        />
-        <LocationTag
-          name="Ash Gate"
-          zone="North"
-          danger="hostile"
-          status="Enemy patrol"
-        />
+        <CompassBar heading={90} markers={[{ id: "gate", label: "Gate", heading: 120, tone: "objective" }]} />
+        <LocationTag name="Ash Gate" zone="North" danger="hostile" status="Enemy patrol" />
       </>,
     );
 
-    expect(
-      screen.getByRole("status", { name: "Compass 90deg" }).textContent,
-    ).toContain("Gate");
-    expect(screen.getByText("Gate").getAttribute("style")).toContain(
-      "--game-ui-compass-position: 75%",
-    );
-    expect(
-      screen
-        .getByLabelText("Ash Gate hostile location")
-        .getAttribute("data-danger"),
-    ).toBe("hostile");
+    expect(screen.getByRole("status", { name: "Compass 90deg" }).textContent).toContain("Gate");
+    expect(screen.getByText("Gate").getAttribute("style")).toContain("--game-ui-compass-position: 75%");
+    expect(screen.getByLabelText("Ash Gate hostile location").getAttribute("data-danger")).toBe("hostile");
   });
 
   it("renders dialogue and choice prompt callbacks", () => {
@@ -599,9 +432,7 @@ describe("game ui primitives", () => {
       </>,
     );
 
-    expect(screen.getByLabelText("Mira dialogue").textContent).toContain(
-      "Hold the gate.",
-    );
+    expect(screen.getByLabelText("Mira dialogue").textContent).toContain("Hold the gate.");
     fireEvent.click(screen.getByRole("button", { name: "Left path Safer" }));
     expect(selected).toBe("left");
   });
@@ -635,19 +466,9 @@ describe("game ui primitives", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Left path Safe" }));
 
-    expect(
-      screen.getByRole("group", { name: "Route choices" }).textContent,
-    ).toContain("Risky");
-    expect(
-      screen
-        .getByRole("button", { name: "Left path Safe" })
-        .getAttribute("data-cost"),
-    ).toBe(null);
-    expect(
-      screen
-        .getByRole("button", { name: "Right path Fast Risky" })
-        .getAttribute("data-selected"),
-    ).toBe("true");
+    expect(screen.getByRole("group", { name: "Route choices" }).textContent).toContain("Risky");
+    expect(screen.getByRole("button", { name: "Left path Safe" }).getAttribute("data-cost")).toBe(null);
+    expect(screen.getByRole("button", { name: "Right path Fast Risky" }).getAttribute("data-selected")).toBe("true");
     expect(selected).toEqual(["left:Left path"]);
   });
 
@@ -659,21 +480,20 @@ describe("game ui primitives", () => {
           scanRadius={36}
           playerHeading={90}
           zoomLabel="2x"
-          zones={[
-            { id: "danger", x: 60, y: 45, width: 24, height: 18, tone: "danger", label: "Patrol zone" },
-          ]}
+          zones={[{ id: "danger", x: 60, y: 45, width: 24, height: 18, tone: "danger", label: "Patrol zone" }]}
           paths={[
-            { id: "route", points: [{ x: 20, y: 30 }, { x: 50, y: 40 }], label: "Safe route" },
+            {
+              id: "route",
+              points: [
+                { x: 20, y: 30 },
+                { x: 50, y: 40 },
+              ],
+              label: "Safe route",
+            },
           ]}
           markers={[{ id: "beacon", x: 48, y: 28, tone: "objective", label: "Beacon" }]}
         />
-        <DialogueBox
-          speaker="Guide"
-          source="Radio"
-          text="Hold position."
-          typing
-          onAdvance={() => undefined}
-        />
+        <DialogueBox speaker="Guide" source="Radio" text="Hold position." typing onAdvance={() => undefined} />
         <ChoicePrompt
           title="Choose route"
           choices={[
@@ -712,7 +532,9 @@ describe("game ui primitives", () => {
     expect(screen.getByText("Avoids patrol").textContent).toBe("Avoids patrol");
     expect(screen.getByText("12:04").textContent).toBe("12:04");
     expect(screen.getByText("Raid").textContent).toBe("Raid");
-    expect(screen.getByText("Boss engaged").closest("[data-highlighted]")?.getAttribute("data-highlighted")).toBe("true");
+    expect(screen.getByText("Boss engaged").closest("[data-highlighted]")?.getAttribute("data-highlighted")).toBe(
+      "true",
+    );
   });
 
   it("renders quest log and notification stack", () => {
@@ -724,9 +546,7 @@ describe("game ui primitives", () => {
             {
               id: "signal",
               title: "Signal Hunt",
-              objectives: [
-                { id: "beacon", label: "Find beacon", state: "complete" },
-              ],
+              objectives: [{ id: "beacon", label: "Find beacon", state: "complete" }],
             },
           ]}
         />
@@ -762,12 +582,8 @@ describe("game ui primitives", () => {
       </>,
     );
 
-    expect(screen.getByLabelText("Quest log").textContent).toContain(
-      "Signal Hunt",
-    );
-    expect(
-      screen.getByLabelText("Notifications 4 items").textContent,
-    ).toContain("+2 more");
+    expect(screen.getByLabelText("Quest log").textContent).toContain("Signal Hunt");
+    expect(screen.getByLabelText("Notifications 4 items").textContent).toContain("+2 more");
   });
 
   it("allows collection primitives to customize item and overflow rendering", () => {
@@ -791,10 +607,7 @@ describe("game ui primitives", () => {
         <MiniMap
           selectedId="enemy"
           renderMarker={(marker, state, defaultNode) => (
-            <span
-              data-testid={`marker-${marker.id}`}
-              data-selected={state.selected}
-            >
+            <span data-testid={`marker-${marker.id}`} data-selected={state.selected}>
               {defaultNode}
             </span>
           )}
@@ -807,10 +620,7 @@ describe("game ui primitives", () => {
           limit={1}
           overflowLabel={(count) => `${count} queued`}
           renderNotification={(notification, state, defaultNode) => (
-            <div
-              data-testid={`toast-${notification.id}`}
-              data-index={state.index}
-            >
+            <div data-testid={`toast-${notification.id}`} data-index={state.index}>
               {defaultNode}
             </div>
           )}
@@ -832,15 +642,9 @@ describe("game ui primitives", () => {
       </>,
     );
 
-    expect(
-      screen.getByTestId("loot-credits").getAttribute("data-selected"),
-    ).toBe("true");
-    expect(
-      screen.getByTestId("marker-enemy").getAttribute("data-selected"),
-    ).toBe("true");
-    expect(screen.getByTestId("toast-loot").getAttribute("data-index")).toBe(
-      "0",
-    );
+    expect(screen.getByTestId("loot-credits").getAttribute("data-selected")).toBe("true");
+    expect(screen.getByTestId("marker-enemy").getAttribute("data-selected")).toBe("true");
+    expect(screen.getByTestId("toast-loot").getAttribute("data-index")).toBe("0");
     expect(screen.getByText("1 hidden").textContent).toBe("1 hidden");
     expect(screen.getByText("1 queued").textContent).toBe("1 queued");
   });
@@ -856,9 +660,7 @@ describe("game ui primitives", () => {
           {
             id: "signal",
             title: "Signal Hunt",
-            objectives: [
-              { id: "beacon", label: "Find beacon", state: "complete" },
-            ],
+            objectives: [{ id: "beacon", label: "Find beacon", state: "complete" }],
           },
         ]}
       />,
@@ -885,21 +687,15 @@ describe("game ui primitives", () => {
           {
             id: "signal",
             title: "Signal Hunt",
-            objectives: [
-              { id: "beacon", label: "Find beacon", state: "complete" },
-            ],
+            objectives: [{ id: "beacon", label: "Find beacon", state: "complete" }],
           },
         ]}
       />,
     );
 
     expect(screen.getByText("1 tracked").textContent).toBe("1 tracked");
-    expect(screen.getByText("Now tracking signal").textContent).toBe(
-      "Now tracking signal",
-    );
-    expect(
-      screen.getByTestId("quest-signal").getAttribute("data-selected"),
-    ).toBe("true");
+    expect(screen.getByText("Now tracking signal").textContent).toBe("Now tracking signal");
+    expect(screen.getByTestId("quest-signal").getAttribute("data-selected")).toBe("true");
   });
 
   it("renders a loot stack with capped visible items", () => {
@@ -915,11 +711,7 @@ describe("game ui primitives", () => {
       />,
     );
 
-    expect(
-      screen
-        .getByRole("list", { name: "Wave drops 3 items" })
-        .getAttribute("data-overflow"),
-    ).toBe("1");
+    expect(screen.getByRole("list", { name: "Wave drops 3 items" }).getAttribute("data-overflow")).toBe("1");
     expect(screen.getByText("Credits").textContent).toBe("Credits");
     expect(screen.getByText("Pulse Core").textContent).toBe("Pulse Core");
     expect(screen.getByText("+1 more").textContent).toBe("+1 more");
@@ -959,9 +751,7 @@ describe("game ui primitives", () => {
         })
         .getAttribute("data-state"),
     ).toBe("revealed");
-    expect(screen.getByRole("button", { name: "Claim" }).textContent).toBe(
-      "Claim",
-    );
+    expect(screen.getByRole("button", { name: "Claim" }).textContent).toBe("Claim");
   });
 
   it("renders runtime layers and dismisses runtime notifications", () => {
@@ -1001,9 +791,7 @@ describe("game ui primitives", () => {
       />,
     );
 
-    expect(
-      screen.getByRole("list").parentElement?.getAttribute("data-overflow"),
-    ).toBe("1");
+    expect(screen.getByRole("list").parentElement?.getAttribute("data-overflow")).toBe("1");
     fireEvent.click(screen.getByRole("button", { name: "Haste buff" }));
     expect(selected).toEqual(["haste"]);
   });
@@ -1020,17 +808,12 @@ describe("game ui primitives", () => {
     );
 
     expect(screen.getByText("Core").textContent).toBe("Core");
-    expect(screen.getAllByRole("listitem")[1].getAttribute("data-locked")).toBe(
-      "true",
-    );
+    expect(screen.getAllByRole("listitem")[1].getAttribute("data-locked")).toBe("true");
   });
 
   it("moves inventory items between slots", () => {
     const moves: string[] = [];
-    const slots = [
-      { id: "a", item: { id: "core", name: "Core", rarity: "rare" as const } },
-      { id: "b" },
-    ];
+    const slots = [{ id: "a", item: { id: "core", name: "Core", rarity: "rare" as const } }, { id: "b" }];
     const dataTransfer = {
       data: {} as Record<string, string>,
       effectAllowed: "move",
@@ -1043,12 +826,7 @@ describe("game ui primitives", () => {
       },
     };
 
-    render(
-      <InventoryGrid
-        slots={slots}
-        onSlotMove={(fromId, toId) => moves.push(`${fromId}->${toId}`)}
-      />,
-    );
+    render(<InventoryGrid slots={slots} onSlotMove={(fromId, toId) => moves.push(`${fromId}->${toId}`)} />);
 
     const from = screen.getAllByRole("listitem")[0];
     const to = screen.getAllByRole("listitem")[1];
@@ -1100,34 +878,11 @@ describe("game ui primitives", () => {
   it("renders system ui overlays when open", () => {
     render(
       <>
-        <PauseMenu
-          open
-          title="Paused"
-          items={[{ id: "quit", label: "Quit", danger: true }]}
-        />
-        <LoadingOverlay
-          open
-          title="Loading"
-          message="Please wait"
-          progress={0.4}
-        />
-        <DeathScreen
-          open
-          title="Defeated"
-          actionLabel="Retry"
-          onAction={() => undefined}
-        />
-        <GameTimer
-          remainingMs={65_000}
-          totalMs={120_000}
-          label="Boss"
-          variant="bar"
-        />
-        <ChatFeed
-          messages={[
-            { id: "1", author: "System", text: "Wave started", tone: "system" },
-          ]}
-        />
+        <PauseMenu open title="Paused" items={[{ id: "quit", label: "Quit", danger: true }]} />
+        <LoadingOverlay open title="Loading" message="Please wait" progress={0.4} />
+        <DeathScreen open title="Defeated" actionLabel="Retry" onAction={() => undefined} />
+        <GameTimer remainingMs={65_000} totalMs={120_000} label="Boss" variant="bar" />
+        <ChatFeed messages={[{ id: "1", author: "System", text: "Wave started", tone: "system" }]} />
       </>,
     );
 
@@ -1239,8 +994,6 @@ describe("game ui primitives", () => {
       return null;
     }
 
-    expect(() => render(<NeedsRuntime />)).toThrow(
-      "useGameUiRuntime must be used inside GameUiRuntimeProvider",
-    );
+    expect(() => render(<NeedsRuntime />)).toThrow("useGameUiRuntime must be used inside GameUiRuntimeProvider");
   });
 });

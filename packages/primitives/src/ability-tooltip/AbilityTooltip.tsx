@@ -1,5 +1,5 @@
-import React from 'react';
-import type { ReactNode } from 'react';
+import React from "react";
+import type { ReactNode } from "react";
 import {
   abilityTooltipDescriptionClass,
   abilityTooltipKindClass,
@@ -7,9 +7,9 @@ import {
   abilityTooltipNameClass,
   abilityTooltipRecipe,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
-export type AbilityTooltipState = 'ready' | 'cooling' | 'locked';
+export type AbilityTooltipState = "ready" | "cooling" | "locked";
 
 export interface AbilityTooltipProps {
   name: string;
@@ -26,8 +26,8 @@ export function AbilityTooltip({
   description,
   cost,
   cooldown,
-  state = 'ready',
-  kind = 'Ability',
+  state = "ready",
+  kind = "Ability",
   className,
 }: AbilityTooltipProps) {
   return (

@@ -1,7 +1,7 @@
-import React from 'react';
-import { mergeClass, statusBadgeMetaClass, statusBadgeRecipe } from '../styles';
+import React from "react";
+import { mergeClass, statusBadgeMetaClass, statusBadgeRecipe } from "../styles";
 
-export type StatusBadgeTone = 'buff' | 'debuff' | 'neutral' | 'warning';
+export type StatusBadgeTone = "buff" | "debuff" | "neutral" | "warning";
 
 export interface StatusBadgeProps {
   label: string;
@@ -11,15 +11,9 @@ export interface StatusBadgeProps {
   className?: string;
 }
 
-export function StatusBadge({
-  label,
-  tone,
-  count,
-  duration,
-  className,
-}: StatusBadgeProps) {
-  const stackLabel = count ? ` ${count} stacks` : '';
-  const durationLabel = duration ? ` ${duration}` : '';
+export function StatusBadge({ label, tone, count, duration, className }: StatusBadgeProps) {
+  const stackLabel = count ? ` ${count} stacks` : "";
+  const durationLabel = duration ? ` ${duration}` : "";
 
   return (
     <output

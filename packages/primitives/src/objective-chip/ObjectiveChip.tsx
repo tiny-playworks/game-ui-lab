@@ -1,5 +1,5 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   mergeClass,
   objectiveChipBodyClass,
@@ -11,9 +11,9 @@ import {
   objectiveChipProgressTextClass,
   objectiveChipRecipe,
   objectiveChipTrackClass,
-} from '../styles';
+} from "../styles";
 
-export type ObjectiveState = 'active' | 'complete' | 'locked';
+export type ObjectiveState = "active" | "complete" | "locked";
 
 export interface ObjectiveChipProps {
   label: string;
@@ -26,7 +26,7 @@ export interface ObjectiveChipProps {
 }
 
 function getProgressText(progress?: number, max?: number) {
-  if (typeof progress !== 'number' || typeof max !== 'number' || max <= 0) {
+  if (typeof progress !== "number" || typeof max !== "number" || max <= 0) {
     return null;
   }
 
@@ -34,7 +34,7 @@ function getProgressText(progress?: number, max?: number) {
 }
 
 function getProgressRatio(progress?: number, max?: number) {
-  if (typeof progress !== 'number' || typeof max !== 'number' || max <= 0) {
+  if (typeof progress !== "number" || typeof max !== "number" || max <= 0) {
     return null;
   }
 
@@ -42,29 +42,21 @@ function getProgressRatio(progress?: number, max?: number) {
 }
 
 function getStateIcon(state: ObjectiveState) {
-  if (state === 'complete') {
-    return 'OK';
+  if (state === "complete") {
+    return "OK";
   }
 
-  if (state === 'locked') {
-    return 'L';
+  if (state === "locked") {
+    return "L";
   }
 
-  return '>';
+  return ">";
 }
 
-export function ObjectiveChip({
-  label,
-  state = 'active',
-  progress,
-  max,
-  icon,
-  meta,
-  className,
-}: ObjectiveChipProps) {
+export function ObjectiveChip({ label, state = "active", progress, max, icon, meta, className }: ObjectiveChipProps) {
   const progressText = getProgressText(progress, max);
   const progressRatio = getProgressRatio(progress, max);
-  const ariaLabel = [label, state, progressText].filter(Boolean).join(' ');
+  const ariaLabel = [label, state, progressText].filter(Boolean).join(" ");
 
   return (
     <article
@@ -72,7 +64,7 @@ export function ObjectiveChip({
       data-state={state}
       role="status"
       aria-label={ariaLabel}
-      style={progressRatio ? ({ '--game-ui-objective-progress': progressRatio } as CSSProperties) : undefined}
+      style={progressRatio ? ({ "--game-ui-objective-progress": progressRatio } as CSSProperties) : undefined}
     >
       <span className={objectiveChipIconClass} aria-hidden="true">
         {icon ?? getStateIcon(state)}

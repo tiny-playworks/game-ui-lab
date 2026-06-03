@@ -1,5 +1,5 @@
-import { DocShell } from '../../components/doc-shell';
-import { Localized } from '../../components/locale';
+import { DocShell } from "../../components/doc-shell";
+import { Localized } from "../../components/locale";
 
 <DocShell
   eyebrowZh="入门"
@@ -100,22 +100,24 @@ runtime.setCombo(3, 'Combo');
 runtime.trackQuest({ title: 'Beacon', objectives: [{ id: 'a', label: 'Find beacon' }] });
 runtime.setParty({ members: [{ id: 'pilot', name: 'Pilot', health: 80, maxHealth: 100 }] });
 runtime.openQuestLog({ title: 'Log', quests: [{ id: 'q1', title: 'Hunt', objectives: [] }] });`}</code></pre>
-    <Localized
-      as="p"
-      className="docs-section__text"
-      zh={
-        <>
-          完整事件表见 <a href="/game-ui-lab/runtime/runtime-api">Runtime API</a>。交互示例见{' '}
-          <a href="/game-ui-lab/runtime/encounter-demo">Encounter Demo</a>。
-        </>
-      }
-      en={
-        <>
-          See the full event table on <a href="/game-ui-lab/runtime/runtime-api">Runtime API</a>. Try{' '}
-          <a href="/game-ui-lab/runtime/encounter-demo">Encounter Demo</a>.
-        </>
-      }
-    />
+
+<Localized
+  as="p"
+  className="docs-section\_\_text"
+  zh={
+    <>
+      完整事件表见 <a href="/game-ui-lab/runtime/runtime-api">Runtime API</a>。交互示例见{" "}
+      <a href="/game-ui-lab/runtime/encounter-demo">Encounter Demo</a>。
+    </>
+  }
+  en={
+    <>
+      See the full event table on <a href="/game-ui-lab/runtime/runtime-api">Runtime API</a>. Try{" "}
+      <a href="/game-ui-lab/runtime/encounter-demo">Encounter Demo</a>.
+    </>
+  }
+/>
+
   </section>
 
   <section className="docs-section">

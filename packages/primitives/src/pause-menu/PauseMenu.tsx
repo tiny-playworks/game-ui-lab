@@ -1,6 +1,6 @@
-import React from 'react';
-import type { CSSProperties } from 'react';
-import { mergeClass, pauseMenuActionsClass, pauseMenuClass, pauseMenuItemRecipe, pauseMenuTitleClass } from '../styles';
+import React from "react";
+import type { CSSProperties } from "react";
+import { mergeClass, pauseMenuActionsClass, pauseMenuClass, pauseMenuItemRecipe, pauseMenuTitleClass } from "../styles";
 
 export interface PauseMenuItem {
   id: string;
@@ -19,15 +19,7 @@ export interface PauseMenuProps {
   style?: CSSProperties;
 }
 
-export function PauseMenu({
-  open,
-  title = 'Paused',
-  items,
-  onSelect,
-  onResume,
-  className,
-  style,
-}: PauseMenuProps) {
+export function PauseMenu({ open, title = "Paused", items, onSelect, onResume, className, style }: PauseMenuProps) {
   if (!open) {
     return null;
   }

@@ -1,5 +1,5 @@
-import type { ElementType, ReactNode } from 'react';
-import { useDocsLocale } from './locale';
+import type { ElementType, ReactNode } from "react";
+import { useDocsLocale } from "./locale";
 
 export function Localized({
   zh,
@@ -13,7 +13,7 @@ export function Localized({
   className?: string;
 }) {
   const { locale } = useDocsLocale();
-  const Tag = as ?? 'span';
+  const Tag = as ?? "span";
 
-  return <Tag className={className}>{locale === 'zh' ? zh : en}</Tag>;
+  return <Tag className={className}>{locale === "zh" ? zh : en}</Tag>;
 }

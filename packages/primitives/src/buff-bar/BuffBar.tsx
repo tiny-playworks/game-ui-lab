@@ -1,7 +1,7 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import { StatusBadge } from '../status-badge/StatusBadge';
-import type { StatusBadgeProps } from '../status-badge/StatusBadge';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { StatusBadge } from "../status-badge/StatusBadge";
+import type { StatusBadgeProps } from "../status-badge/StatusBadge";
 import {
   buffBarClass,
   buffBarItemButtonClass,
@@ -9,8 +9,8 @@ import {
   buffBarListClass,
   buffBarOverflowClass,
   mergeClass,
-} from '../styles';
-import type { GameUiCollectionRenderer } from '../types';
+} from "../styles";
+import type { GameUiCollectionRenderer } from "../types";
 
 export interface BuffBarBuff extends StatusBadgeProps {
   id: string;
@@ -30,7 +30,7 @@ export interface BuffBarProps {
 }
 
 function pluralizeBuffs(count: number) {
-  return count === 1 ? '1 buff' : `${count} buffs`;
+  return count === 1 ? "1 buff" : `${count} buffs`;
 }
 
 export function BuffBar({
@@ -39,7 +39,7 @@ export function BuffBar({
   onBuffSelect,
   renderBuff,
   overflowLabel,
-  label = 'Buff bar',
+  label = "Buff bar",
   limit = 6,
   className,
   style,

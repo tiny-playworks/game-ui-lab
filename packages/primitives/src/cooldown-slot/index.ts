@@ -1,2 +1,2 @@
-export { CooldownSlot } from './CooldownSlot';
-export type { CooldownSlotProps } from './CooldownSlot';
+export { CooldownSlot } from "./CooldownSlot";
+export type { CooldownSlotProps } from "./CooldownSlot";

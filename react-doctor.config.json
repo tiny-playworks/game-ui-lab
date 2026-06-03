@@ -2,13 +2,8 @@
   "ignore": {
     "overrides": [
       {
-        "files": [
-          "apps/docs/components/**/*",
-          "components/**/*"
-        ],
-        "rules": [
-          "deslop/unused-file"
-        ]
+        "files": ["apps/docs/components/**/*", "components/**/*"],
+        "rules": ["deslop/unused-file"]
       }
     ]
   }

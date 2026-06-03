@@ -1,6 +1,6 @@
-import { domAnimation, LazyMotion, m } from 'motion/react';
-import React from 'react';
-import type { ReactNode } from 'react';
+import { domAnimation, LazyMotion, m } from "motion/react";
+import React from "react";
+import type { ReactNode } from "react";
 import {
   floatingToastActionClass,
   floatingToastCloseClass,
@@ -10,10 +10,10 @@ import {
   floatingToastRecipe,
   floatingToastTitleClass,
   mergeClass,
-} from '../styles';
-import type { GameUiMotionMode } from '../types';
+} from "../styles";
+import type { GameUiMotionMode } from "../types";
 
-export type FloatingToastVariant = 'info' | 'success' | 'warning' | 'loot';
+export type FloatingToastVariant = "info" | "success" | "warning" | "loot";
 
 export interface FloatingToastProps {
   title?: string;
@@ -32,21 +32,21 @@ export interface FloatingToastProps {
 }
 
 const defaultIcons: Record<FloatingToastVariant, string> = {
-  info: 'i',
-  success: '+',
-  warning: '!',
-  loot: '*',
+  info: "i",
+  success: "+",
+  warning: "!",
+  loot: "*",
 };
 
 export function FloatingToast({
   title,
   message,
-  variant = 'info',
+  variant = "info",
   icon = defaultIcons[variant],
   action,
   closable = false,
   onClose,
-  motion = 'live',
+  motion = "live",
   className,
 }: FloatingToastProps) {
   const content = (
@@ -71,7 +71,7 @@ export function FloatingToast({
     </>
   );
 
-  if (motion !== 'live') {
+  if (motion !== "live") {
     return (
       <output
         className={mergeClass(floatingToastRecipe({ variant }), className)}

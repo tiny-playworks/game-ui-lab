@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-export type GameUiMotionMode = 'live' | 'static' | 'none';
+export type GameUiMotionMode = "live" | "static" | "none";
 
 export interface GameUiCollectionItemState {
   index: number;

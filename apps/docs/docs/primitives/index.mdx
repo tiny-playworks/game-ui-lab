@@ -1,6 +1,6 @@
-import { DocShell } from '../../components/doc-shell';
-import { Localized } from '../../components/locale';
-import { PrimitiveOverview } from '../../components/primitive-docs';
+import { DocShell } from "../../components/doc-shell";
+import { Localized } from "../../components/locale";
+import { PrimitiveOverview } from "../../components/primitive-docs";
 
 <DocShell
   eyebrowZh="Primitives"
@@ -11,12 +11,7 @@ import { PrimitiveOverview } from '../../components/primitive-docs';
   summaryEn="35 public primitives by scenario. Each page has a demo, zh/en sample code, bilingual props API, and tokens (use the locale toggle)."
 >
   <section className="docs-product-section">
-    <Localized
-      as="h2"
-      className="docs-product-heading"
-      zh="公开组件"
-      en="Public Components"
-    />
+    <Localized as="h2" className="docs-product-heading" zh="公开组件" en="Public Components" />
     <PrimitiveOverview />
   </section>
 </DocShell>

@@ -1,2 +1,2 @@
-export { LootCard } from './LootCard';
-export type { LootCardProps, LootRarity } from './LootCard';
+export { LootCard } from "./LootCard";
+export type { LootCardProps, LootRarity } from "./LootCard";

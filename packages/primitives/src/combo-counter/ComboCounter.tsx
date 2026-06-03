@@ -1,5 +1,5 @@
-import { domAnimation, LazyMotion, m } from 'motion/react';
-import React from 'react';
+import { domAnimation, LazyMotion, m } from "motion/react";
+import React from "react";
 import {
   comboCounterLabelClass,
   comboCounterRecipe,
@@ -7,7 +7,7 @@ import {
   comboCounterTierClass,
   comboCounterValueClass,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
 export interface ComboCounterProps {
   count: number;
@@ -18,15 +18,15 @@ export interface ComboCounterProps {
 }
 
 function getTier(count: number) {
-  if (count >= 30) return 'Overdrive chain';
-  if (count >= 15) return 'Fever streak';
-  if (count >= 6) return 'Clean combo';
-  return 'Opening hits';
+  if (count >= 30) return "Overdrive chain";
+  if (count >= 15) return "Fever streak";
+  if (count >= 6) return "Clean combo";
+  return "Opening hits";
 }
 
 export function ComboCounter({
   count,
-  label = 'Combo',
+  label = "Combo",
   tier = getTier(count),
   active = count > 0,
   className,

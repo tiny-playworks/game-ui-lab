@@ -1,9 +1,9 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import { chatFeedClass, chatFeedItemRecipe, chatFeedListClass, chatFeedOverflowClass, mergeClass } from '../styles';
-import type { GameUiCollectionRenderer } from '../types';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { chatFeedClass, chatFeedItemRecipe, chatFeedListClass, chatFeedOverflowClass, mergeClass } from "../styles";
+import type { GameUiCollectionRenderer } from "../types";
 
-export type ChatFeedTone = 'info' | 'system' | 'party' | 'combat' | 'loot';
+export type ChatFeedTone = "info" | "system" | "party" | "combat" | "loot";
 
 export interface ChatFeedMessage {
   id: string;
@@ -31,7 +31,7 @@ export function ChatFeed({
   limit = 8,
   renderMessage,
   overflowLabel,
-  label = 'Chat feed',
+  label = "Chat feed",
   className,
   style,
 }: ChatFeedProps) {
@@ -40,7 +40,13 @@ export function ChatFeed({
   const visibleMessages = messages.slice(-visibleLimit);
 
   return (
-    <section className={mergeClass(chatFeedClass, className)} style={style} aria-label={label} aria-live="polite" data-overflow={overflow}>
+    <section
+      className={mergeClass(chatFeedClass, className)}
+      style={style}
+      aria-label={label}
+      aria-live="polite"
+      data-overflow={overflow}
+    >
       <ul className={chatFeedListClass}>
         {overflow > 0 ? (
           <li className={chatFeedOverflowClass}>
@@ -50,9 +56,9 @@ export function ChatFeed({
         {visibleMessages.map((message, index) => {
           const defaultNode = (
             <li
-              className={mergeClass(chatFeedItemRecipe({ tone: message.tone ?? 'info' }), message.className)}
+              className={mergeClass(chatFeedItemRecipe({ tone: message.tone ?? "info" }), message.className)}
               data-highlighted={message.highlighted ?? false}
-              data-tone={message.tone ?? 'info'}
+              data-tone={message.tone ?? "info"}
             >
               {message.timestamp ? <span>{message.timestamp}</span> : null}
               {message.channel ? <span>{message.channel}</span> : null}
@@ -63,7 +69,9 @@ export function ChatFeed({
 
           return (
             <React.Fragment key={message.id}>
-              {renderMessage ? renderMessage(message, { index, selected: false, disabled: false }, defaultNode) : defaultNode}
+              {renderMessage
+                ? renderMessage(message, { index, selected: false, disabled: false }, defaultNode)
+                : defaultNode}
             </React.Fragment>
           );
         })}

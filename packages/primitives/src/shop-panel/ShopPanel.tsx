@@ -1,10 +1,10 @@
-import React from 'react';
-import type { ReactNode } from 'react';
-import type { CSSProperties } from 'react';
-import { CurrencyBar } from '../currency-bar/CurrencyBar';
-import type { CurrencyBarEntry } from '../currency-bar/CurrencyBar';
-import { LootCard } from '../loot-card/LootCard';
-import type { LootCardProps, LootRarity } from '../loot-card/LootCard';
+import React from "react";
+import type { ReactNode } from "react";
+import type { CSSProperties } from "react";
+import { CurrencyBar } from "../currency-bar/CurrencyBar";
+import type { CurrencyBarEntry } from "../currency-bar/CurrencyBar";
+import { LootCard } from "../loot-card/LootCard";
+import type { LootCardProps, LootRarity } from "../loot-card/LootCard";
 import {
   mergeClass,
   shopPanelActionClass,
@@ -15,7 +15,7 @@ import {
   shopPanelMetaClass,
   shopPanelPriceClass,
   shopPanelTitleClass,
-} from '../styles';
+} from "../styles";
 
 export interface ShopPanelItem extends LootCardProps {
   id: string;
@@ -63,7 +63,7 @@ export function ShopPanel({
             id,
             price,
             name,
-            rarity = 'common' as LootRarity,
+            rarity = "common" as LootRarity,
             stock,
             discount,
             unavailableReason,
@@ -73,7 +73,7 @@ export function ShopPanel({
             ...cardProps
           } = item;
           const selected = selectedId === id;
-          const soldOut = typeof stock === 'number' && stock <= 0;
+          const soldOut = typeof stock === "number" && stock <= 0;
           const purchaseDisabled = Boolean(disabled || soldOut || unavailableReason);
           const buttonLabel = purchaseLabel ?? `Buy ${name}`;
 
@@ -92,9 +92,11 @@ export function ShopPanel({
                 selected={selected}
                 onClick={onItemSelect ? () => onItemSelect(id, item) : cardProps.onClick}
               />
-              <span className={shopPanelPriceClass}>{typeof price === 'number' ? price.toLocaleString() : price}</span>
+              <span className={shopPanelPriceClass}>{typeof price === "number" ? price.toLocaleString() : price}</span>
               {discount ? <span className={shopPanelMetaClass}>{discount}</span> : null}
-              {typeof stock === 'number' ? <span className={shopPanelMetaClass}>{soldOut ? 'Sold out' : `${stock} left`}</span> : null}
+              {typeof stock === "number" ? (
+                <span className={shopPanelMetaClass}>{soldOut ? "Sold out" : `${stock} left`}</span>
+              ) : null}
               {unavailableReason ? <span className={shopPanelMetaClass}>{unavailableReason}</span> : null}
               {details ? <span className={shopPanelMetaClass}>{details}</span> : null}
               {onPurchase ? (
@@ -105,7 +107,7 @@ export function ShopPanel({
                   disabled={purchaseDisabled}
                   onClick={() => onPurchase(id, item)}
                 >
-                  {purchaseLabel ?? 'Buy'}
+                  {purchaseLabel ?? "Buy"}
                 </button>
               ) : null}
             </li>

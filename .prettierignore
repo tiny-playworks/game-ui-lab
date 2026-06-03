@@ -1,0 +1,10 @@
+node_modules
+dist
+.rslib
+.rsbuild
+coverage
+apps/docs/doc_build
+apps/docs/smoke-artifacts
+packages/styled-system
+.release
+.qoder

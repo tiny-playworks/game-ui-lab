@@ -1,5 +1,5 @@
-import { DocShell } from '../../components/doc-shell';
-import { Localized } from '../../components/locale';
+import { DocShell } from "../../components/doc-shell";
+import { Localized } from "../../components/locale";
 
 <DocShell
   eyebrowZh="集成"
@@ -22,26 +22,28 @@ import { createPixiFeedbackBridge } from '@tiny-playworks/game-ui-pixi';
 const runtime = createGameUiRuntime();
 
 const detach = createPixiFeedbackBridge(runtime, {
-  container: feedbackLayer,
-  factory: {
-    createLabel(text, options) {
-      return new PIXI.Text({
-        text,
-        style: { fill: options?.variant === 'heal' ? '#5cff9d' : '#ff4d7d' },
-      });
-    },
-  },
-  stageWidth: 1280,
-  stageHeight: 720,
+container: feedbackLayer,
+factory: {
+createLabel(text, options) {
+return new PIXI.Text({
+text,
+style: { fill: options?.variant === 'heal' ? '#5cff9d' : '#ff4d7d' },
+});
+},
+},
+stageWidth: 1280,
+stageHeight: 720,
 });
 
 runtime.emitDamage({ value: 128, variant: 'critical', anchor: { x: 50, y: 40 } });`}</code></pre>
-    <Localized
-      as="p"
-      className="docs-section__text"
-      zh="React 项目仍推荐使用 GameUiLayerHost。当前 alpha 同步 feedback.damage 与 notification.toasts。"
-      en="React apps should still prefer GameUiLayerHost. The alpha bridge syncs feedback.damage and notification.toasts."
-    />
+
+<Localized
+  as="p"
+  className="docs-section__text"
+  zh="React 项目仍推荐使用 GameUiLayerHost。当前 alpha 同步 feedback.damage 与 notification.toasts。"
+  en="React apps should still prefer GameUiLayerHost. The alpha bridge syncs feedback.damage and notification.toasts."
+/>
+
   </section>
 
   <section className="docs-section">

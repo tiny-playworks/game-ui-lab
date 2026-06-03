@@ -1,24 +1,24 @@
-import React, { useEffect, useMemo } from 'react';
-import type { CSSProperties } from 'react';
-import type { ToastEventRecord } from '@tiny-playworks/game-ui-runtime';
-import { AbilityBar } from '../ability-bar/AbilityBar';
-import type { AbilityBarItem } from '../ability-bar/AbilityBar';
-import { BuffBar } from '../buff-bar/BuffBar';
-import type { BuffBarBuff } from '../buff-bar/BuffBar';
-import { ChoicePrompt } from '../choice-prompt/ChoicePrompt';
-import { ComboCounter } from '../combo-counter/ComboCounter';
-import { DamageNumber } from '../damage-number/DamageNumber';
-import { DialogueBox } from '../dialogue-box/DialogueBox';
-import { FloatingToast } from '../floating-toast/FloatingToast';
-import { InventoryGrid } from '../inventory-grid/InventoryGrid';
-import { MiniMap } from '../mini-map/MiniMap';
-import { PartyFrame } from '../party-frame/PartyFrame';
-import type { PartyFrameMember } from '../party-frame/PartyFrame';
-import { QuestLog } from '../quest-log/QuestLog';
-import { QuestTracker } from '../quest-tracker/QuestTracker';
-import { RewardReveal } from '../reward-reveal/RewardReveal';
-import { ShopPanel } from '../shop-panel/ShopPanel';
-import { TargetFrame } from '../target-frame/TargetFrame';
+import React, { useEffect, useMemo } from "react";
+import type { CSSProperties } from "react";
+import type { ToastEventRecord } from "@tiny-playworks/game-ui-runtime";
+import { AbilityBar } from "../ability-bar/AbilityBar";
+import type { AbilityBarItem } from "../ability-bar/AbilityBar";
+import { BuffBar } from "../buff-bar/BuffBar";
+import type { BuffBarBuff } from "../buff-bar/BuffBar";
+import { ChoicePrompt } from "../choice-prompt/ChoicePrompt";
+import { ComboCounter } from "../combo-counter/ComboCounter";
+import { DamageNumber } from "../damage-number/DamageNumber";
+import { DialogueBox } from "../dialogue-box/DialogueBox";
+import { FloatingToast } from "../floating-toast/FloatingToast";
+import { InventoryGrid } from "../inventory-grid/InventoryGrid";
+import { MiniMap } from "../mini-map/MiniMap";
+import { PartyFrame } from "../party-frame/PartyFrame";
+import type { PartyFrameMember } from "../party-frame/PartyFrame";
+import { QuestLog } from "../quest-log/QuestLog";
+import { QuestTracker } from "../quest-tracker/QuestTracker";
+import { RewardReveal } from "../reward-reveal/RewardReveal";
+import { ShopPanel } from "../shop-panel/ShopPanel";
+import { TargetFrame } from "../target-frame/TargetFrame";
 import {
   gameUiDebugLayerClass,
   gameUiFeedbackItemClass,
@@ -31,15 +31,30 @@ import {
   gameUiNarrativeLayerClass,
   gameUiNotificationLayerClass,
   mergeClass,
-} from '../styles';
-import { useGameUiLayer, useGameUiRuntime } from './GameUiRuntimeProvider';
+} from "../styles";
+import { useGameUiLayer, useGameUiRuntime } from "./GameUiRuntimeProvider";
 
 export interface GameUiLayerHostProps {
   className?: string;
 }
 
 function cooldownsToAbilities(
-  cooldowns: Record<string, { id: string; label: string; progress: number; ready?: boolean; active?: boolean; disabled?: boolean; resourceCost?: React.ReactNode; comboHint?: React.ReactNode; cooldownText?: React.ReactNode; variant?: AbilityBarItem['variant']; triggerKey?: string }>,
+  cooldowns: Record<
+    string,
+    {
+      id: string;
+      label: string;
+      progress: number;
+      ready?: boolean;
+      active?: boolean;
+      disabled?: boolean;
+      resourceCost?: React.ReactNode;
+      comboHint?: React.ReactNode;
+      cooldownText?: React.ReactNode;
+      variant?: AbilityBarItem["variant"];
+      triggerKey?: string;
+    }
+  >,
 ): AbilityBarItem[] {
   return Object.values(cooldowns).map((record) => ({
     id: record.id,
@@ -59,15 +74,22 @@ function cooldownsToAbilities(
 
 export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
   const runtime = useGameUiRuntime();
-  const hud = useGameUiLayer('hud');
-  const feedback = useGameUiLayer('feedback');
-  const notification = useGameUiLayer('notification');
-  const narrative = useGameUiLayer('narrative');
-  const modal = useGameUiLayer('modal');
+  const hud = useGameUiLayer("hud");
+  const feedback = useGameUiLayer("feedback");
+  const notification = useGameUiLayer("notification");
+  const narrative = useGameUiLayer("narrative");
+  const modal = useGameUiLayer("modal");
 
   const abilityItems = useMemo(() => cooldownsToAbilities(hud.cooldowns), [hud.cooldowns]);
   const buffItems: BuffBarBuff[] = useMemo(
-    () => (hud.buffs ?? []).map((buff) => ({ id: buff.id, label: buff.label, tone: buff.tone, count: buff.count, duration: buff.duration })),
+    () =>
+      (hud.buffs ?? []).map((buff) => ({
+        id: buff.id,
+        label: buff.label,
+        tone: buff.tone,
+        count: buff.count,
+        duration: buff.duration,
+      })),
     [hud.buffs],
   );
 
@@ -95,18 +117,16 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
   const activeDialogue = narrative?.dialogueQueue?.[0];
 
   const hasHudContent = Boolean(
-    hud.combo ||
-      hud.target ||
-      hud.quest ||
-      hud.map ||
-      buffItems.length ||
-      abilityItems.length ||
-      partyMembers.length,
+    hud.combo || hud.target || hud.quest || hud.map || buffItems.length || abilityItems.length || partyMembers.length,
   );
 
   return (
     <div className={mergeClass(gameUiLayerHostClass, className)} data-game-ui-layer-host="">
-      <div className={mergeClass(gameUiLayerClass, gameUiHudLayerClass)} data-game-ui-layer="hud" data-active={hasHudContent}>
+      <div
+        className={mergeClass(gameUiLayerClass, gameUiHudLayerClass)}
+        data-game-ui-layer="hud"
+        data-active={hasHudContent}
+      >
         {hasHudContent ? (
           <div className={gameUiHudClusterClass}>
             {hud.combo ? <ComboCounter count={hud.combo.count} label={hud.combo.label} /> : null}
@@ -136,7 +156,7 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
                 selectedId={hud.map.selectedId}
                 zones={hud.map.zones}
                 zoomLabel={hud.map.zoomLabel}
-                onMarkerSelect={(id) => runtime.dispatch({ type: 'map:select', id })}
+                onMarkerSelect={(id) => runtime.dispatch({ type: "map:select", id })}
               />
             ) : null}
             {buffItems.length ? <BuffBar buffs={buffItems} limit={8} /> : null}
@@ -145,7 +165,7 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
                 abilities={abilityItems}
                 label="Abilities"
                 selectedId={hud.selectedAbilityId}
-                onAbilityClick={(id) => runtime.dispatch({ type: 'ability:select', id })}
+                onAbilityClick={(id) => runtime.dispatch({ type: "ability:select", id })}
               />
             ) : null}
             {partyMembers.length ? (
@@ -153,7 +173,7 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
                 members={partyMembers}
                 selectedId={hud.party?.selectedId}
                 label="Party"
-                onMemberSelect={(id) => runtime.dispatch({ type: 'party:select', id })}
+                onMemberSelect={(id) => runtime.dispatch({ type: "party:select", id })}
               />
             ) : null}
           </div>
@@ -164,17 +184,19 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
           <span
             key={damage.id}
             className={gameUiFeedbackItemClass}
-            style={{
-              '--game-ui-feedback-x': damage.anchor ? `${damage.anchor.x}%` : undefined,
-              '--game-ui-feedback-y': damage.anchor ? `${damage.anchor.y}%` : undefined,
-            } as CSSProperties}
+            style={
+              {
+                "--game-ui-feedback-x": damage.anchor ? `${damage.anchor.x}%` : undefined,
+                "--game-ui-feedback-y": damage.anchor ? `${damage.anchor.y}%` : undefined,
+              } as CSSProperties
+            }
           >
             <DamageNumber
               value={damage.value}
               variant={damage.variant}
               prefix={damage.prefix}
               size={damage.size}
-              onExitComplete={() => runtime.dispatch({ type: 'damage:complete', id: damage.id })}
+              onExitComplete={() => runtime.dispatch({ type: "damage:complete", id: damage.id })}
             />
           </span>
         ))}
@@ -208,12 +230,12 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
         ) : null}
         {narrative?.choices ? (
           <ChoicePrompt
-            title={narrative.choices.title ?? 'Choose'}
+            title={narrative.choices.title ?? "Choose"}
             choices={narrative.choices.options}
             selectedId={narrative.choices.selectedId}
             onChoice={(id) => {
-              runtime.dispatch({ type: 'choice:select', id });
-              runtime.dispatch({ type: 'choice:clear' });
+              runtime.dispatch({ type: "choice:select", id });
+              runtime.dispatch({ type: "choice:clear" });
             }}
           />
         ) : null}
@@ -230,10 +252,12 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
             state={modal.reward.state}
             revealLabel="Reveal"
             claimLabel="Claim"
-            onReveal={() => runtime.dispatch({ type: 'reward-reveal:update', payload: { id: modal.reward!.id, state: 'revealed' } })}
+            onReveal={() =>
+              runtime.dispatch({ type: "reward-reveal:update", payload: { id: modal.reward!.id, state: "revealed" } })
+            }
             onClaim={() => {
-              runtime.dispatch({ type: 'reward-reveal:clear' });
-              runtime.notify({ title: 'Loot claimed', message: 'Reward moved to inventory.', variant: 'loot' });
+              runtime.dispatch({ type: "reward-reveal:clear" });
+              runtime.notify({ title: "Loot claimed", message: "Reward moved to inventory.", variant: "loot" });
             }}
           />
         ) : null}
@@ -242,23 +266,23 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
             title={modal.shop.title}
             items={modal.shop.items.map((item) => ({
               ...item,
-              price: item.price ?? item.value ?? '0',
+              price: item.price ?? item.value ?? "0",
             }))}
             currencies={modal.shop.currencies}
             selectedId={modal.shop.selectedId}
-            onItemSelect={(id) => runtime.dispatch({ type: 'shop:item:select', id })}
+            onItemSelect={(id) => runtime.dispatch({ type: "shop:item:select", id })}
             onPurchase={(id) => {
-              runtime.notify({ title: 'Purchased', message: `Bought ${id}`, variant: 'success' });
-              runtime.dispatch({ type: 'shop:close' });
+              runtime.notify({ title: "Purchased", message: `Bought ${id}`, variant: "success" });
+              runtime.dispatch({ type: "shop:close" });
             }}
           />
         ) : null}
         {modal.inventory ? (
           <InventoryGrid
-            label={modal.inventory.title ?? 'Inventory'}
+            label={modal.inventory.title ?? "Inventory"}
             slots={modal.inventory.slots}
             selectedId={modal.inventory.selectedId}
-            onSlotSelect={(id) => runtime.dispatch({ type: 'inventory:select', id })}
+            onSlotSelect={(id) => runtime.dispatch({ type: "inventory:select", id })}
           />
         ) : null}
         {modal.questLog ? (
@@ -266,7 +290,7 @@ export function GameUiLayerHost({ className }: GameUiLayerHostProps) {
             title={modal.questLog.title}
             quests={modal.questLog.quests}
             activeId={modal.questLog.activeId}
-            onActiveChange={(id) => runtime.dispatch({ type: 'quest-log:activate', id })}
+            onActiveChange={(id) => runtime.dispatch({ type: "quest-log:activate", id })}
           />
         ) : null}
       </div>

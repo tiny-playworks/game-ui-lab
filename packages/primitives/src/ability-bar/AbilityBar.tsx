@@ -1,10 +1,10 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import { CooldownSlot } from '../cooldown-slot/CooldownSlot';
-import { abilityBarClass, abilityBarCostClass, abilityBarItemClass, mergeClass } from '../styles';
-import type { GameUiCollectionRenderer } from '../types';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { CooldownSlot } from "../cooldown-slot/CooldownSlot";
+import { abilityBarClass, abilityBarCostClass, abilityBarItemClass, mergeClass } from "../styles";
+import type { GameUiCollectionRenderer } from "../types";
 
-export type AbilityBarItemVariant = 'basic' | 'ultimate' | 'passive';
+export type AbilityBarItemVariant = "basic" | "ultimate" | "passive";
 
 export interface AbilityBarItem {
   id: string;
@@ -41,7 +41,7 @@ export function AbilityBar({
   selectedId,
   onAbilityClick,
   renderAbility,
-  label = 'Ability bar',
+  label = "Ability bar",
   className,
   style,
 }: AbilityBarProps) {
@@ -62,12 +62,17 @@ export function AbilityBar({
   }
 
   return (
-    <fieldset className={mergeClass(abilityBarClass, className)} aria-label={label} style={style} onKeyDown={handleKeyDown}>
+    <fieldset
+      className={mergeClass(abilityBarClass, className)}
+      aria-label={label}
+      style={style}
+      onKeyDown={handleKeyDown}
+    >
       {abilities.map((ability, index) => {
         const selected = selectedId === ability.id;
         const active = Boolean(ability.active);
         const disabled = Boolean(ability.locked);
-        const variant = ability.variant ?? 'basic';
+        const variant = ability.variant ?? "basic";
         const cost = ability.resourceCost ?? ability.cost;
         const defaultNode = (
           <div
@@ -88,7 +93,9 @@ export function AbilityBar({
               shortcut={ability.shortcut ?? ability.triggerKey}
               charges={ability.charges}
               cooldownLabel={ability.cooldownText ?? ability.cooldownLabel}
-              onClick={ability.locked ? undefined : onAbilityClick ? () => onAbilityClick(ability.id, ability) : undefined}
+              onClick={
+                ability.locked ? undefined : onAbilityClick ? () => onAbilityClick(ability.id, ability) : undefined
+              }
             />
             {cost ? <span className={abilityBarCostClass}>{cost}</span> : null}
             {ability.comboHint ? <span className={abilityBarCostClass}>{ability.comboHint}</span> : null}

@@ -1,5 +1,5 @@
-import React from 'react';
-import type { CSSProperties } from 'react';
+import React from "react";
+import type { CSSProperties } from "react";
 import {
   healthBarFillClass,
   healthBarLabelClass,
@@ -10,9 +10,9 @@ import {
   healthBarTrackClass,
   healthBarValueClass,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
-export type HealthBarTone = 'hero' | 'danger' | 'boss';
+export type HealthBarTone = "hero" | "danger" | "boss";
 
 export interface HealthBarProps {
   value: number;
@@ -40,8 +40,8 @@ export function HealthBar({
   value,
   max,
   shield = 0,
-  label = 'Health',
-  tone = 'hero',
+  label = "Health",
+  tone = "hero",
   showValue = false,
   className,
 }: HealthBarProps) {
@@ -50,7 +50,7 @@ export function HealthBar({
   const hasShield = shield > 0;
   const isEmpty = value <= 0;
   const isFull = max > 0 && value >= max;
-  const ariaLabel = `${label} ${formatAmount(value)} of ${formatAmount(max)}${hasShield ? ` plus ${formatAmount(shield)} shield` : ''}`;
+  const ariaLabel = `${label} ${formatAmount(value)} of ${formatAmount(max)}${hasShield ? ` plus ${formatAmount(shield)} shield` : ""}`;
 
   return (
     <output
@@ -60,10 +60,12 @@ export function HealthBar({
       data-full={isFull}
       data-shielded={hasShield}
       aria-label={ariaLabel}
-      style={{
-        '--game-ui-health-ratio': `${healthRatio * 100}%`,
-        '--game-ui-shield-ratio': `${shieldRatio * 100}%`,
-      } as CSSProperties}
+      style={
+        {
+          "--game-ui-health-ratio": `${healthRatio * 100}%`,
+          "--game-ui-shield-ratio": `${shieldRatio * 100}%`,
+        } as CSSProperties
+      }
     >
       <span className={healthBarToplineClass}>
         <span className={healthBarLabelClass}>{label}</span>

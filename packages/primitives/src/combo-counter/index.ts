@@ -1,3 +1,2 @@
-export { ComboCounter } from './ComboCounter';
-export type { ComboCounterProps } from './ComboCounter';
-
+export { ComboCounter } from "./ComboCounter";
+export type { ComboCounterProps } from "./ComboCounter";

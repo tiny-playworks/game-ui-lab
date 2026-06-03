@@ -1,2 +1,2 @@
-export { ObjectiveChip } from './ObjectiveChip';
-export type { ObjectiveChipProps, ObjectiveState } from './ObjectiveChip';
+export { ObjectiveChip } from "./ObjectiveChip";
+export type { ObjectiveChipProps, ObjectiveState } from "./ObjectiveChip";

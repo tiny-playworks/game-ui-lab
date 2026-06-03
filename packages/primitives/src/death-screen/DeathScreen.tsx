@@ -1,5 +1,5 @@
-import React from 'react';
-import type { CSSProperties } from 'react';
+import React from "react";
+import type { CSSProperties } from "react";
 import {
   deathScreenActionsClass,
   deathScreenClass,
@@ -8,7 +8,7 @@ import {
   deathScreenSecondaryClass,
   deathScreenTitleClass,
   mergeClass,
-} from '../styles';
+} from "../styles";
 
 export interface DeathScreenProps {
   open: boolean;
@@ -24,9 +24,9 @@ export interface DeathScreenProps {
 
 export function DeathScreen({
   open,
-  title = 'Defeated',
+  title = "Defeated",
   message,
-  actionLabel = 'Retry',
+  actionLabel = "Retry",
   onAction,
   secondaryLabel,
   onSecondary,

@@ -1,4 +1,4 @@
-import type { DamageEventRecord, GameUiRuntime, ToastEventRecord } from '@tiny-playworks/game-ui-runtime';
+import type { DamageEventRecord, GameUiRuntime, ToastEventRecord } from "@tiny-playworks/game-ui-runtime";
 
 export interface PixiDisplayObject {
   x: number;
@@ -12,7 +12,7 @@ export interface PixiFeedbackContainer {
 }
 
 export interface PixiTextFactory {
-  createLabel(text: string, options?: { variant?: DamageEventRecord['variant']; size?: number }): PixiDisplayObject;
+  createLabel(text: string, options?: { variant?: DamageEventRecord["variant"]; size?: number }): PixiDisplayObject;
 }
 
 export interface PixiFeedbackBridgeOptions {
@@ -22,14 +22,14 @@ export interface PixiFeedbackBridgeOptions {
   stageHeight?: number;
 }
 
-const variantFill: Record<DamageEventRecord['variant'], string> = {
-  damage: '#ff4d7d',
-  heal: '#5cff9d',
-  critical: '#ffd166',
-  miss: '#b7c0d8',
+const variantFill: Record<DamageEventRecord["variant"], string> = {
+  damage: "#ff4d7d",
+  heal: "#5cff9d",
+  critical: "#ffd166",
+  miss: "#b7c0d8",
 };
 
-function anchorToPosition(anchor: DamageEventRecord['anchor'] | undefined, width: number, height: number) {
+function anchorToPosition(anchor: DamageEventRecord["anchor"] | undefined, width: number, height: number) {
   return {
     x: ((anchor?.x ?? 50) / 100) * width,
     y: ((anchor?.y ?? 40) / 100) * height,
@@ -57,7 +57,7 @@ export function createPixiFeedbackBridge(runtime: GameUiRuntime, options: PixiFe
         continue;
       }
 
-      const label = `${record.prefix ? `${record.prefix} ` : ''}${record.value}`;
+      const label = `${record.prefix ? `${record.prefix} ` : ""}${record.value}`;
       const node = options.factory.createLabel(label, {
         variant: record.variant,
         size: record.size,
@@ -86,7 +86,7 @@ export function createPixiFeedbackBridge(runtime: GameUiRuntime, options: PixiFe
       }
 
       const node = options.factory.createLabel(record.title ? `${record.title}: ${record.message}` : record.message, {
-        variant: 'damage',
+        variant: "damage",
       });
       node.x = width * 0.72;
       node.y = height * 0.12 + index * 36;
@@ -110,7 +110,7 @@ export function createPixiFeedbackBridge(runtime: GameUiRuntime, options: PixiFe
 export function createSimplePixiTextFactory(): PixiTextFactory {
   return {
     createLabel(text, options) {
-      const fill = options?.variant ? variantFill[options.variant] : '#f8fafc';
+      const fill = options?.variant ? variantFill[options.variant] : "#f8fafc";
       return {
         x: 0,
         y: 0,

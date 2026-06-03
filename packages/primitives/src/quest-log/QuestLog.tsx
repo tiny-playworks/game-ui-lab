@@ -1,7 +1,7 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import { QuestTracker } from '../quest-tracker/QuestTracker';
-import type { QuestTrackerObjective } from '../quest-tracker/QuestTracker';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { QuestTracker } from "../quest-tracker/QuestTracker";
+import type { QuestTrackerObjective } from "../quest-tracker/QuestTracker";
 import {
   mergeClass,
   questLogActiveClass,
@@ -9,8 +9,8 @@ import {
   questLogHeaderClass,
   questLogListClass,
   questLogQuestClass,
-} from '../styles';
-import type { GameUiCollectionRenderer } from '../types';
+} from "../styles";
+import type { GameUiCollectionRenderer } from "../types";
 
 export interface QuestLogQuest {
   id: string;
@@ -33,7 +33,7 @@ export interface QuestLogProps {
 }
 
 export function QuestLog({
-  title = 'Quest log',
+  title = "Quest log",
   quests,
   activeId,
   onActiveChange,
@@ -59,11 +59,7 @@ export function QuestLog({
               data-active={selected}
               onClick={onActiveChange ? () => onActiveChange(quest.id, quest) : undefined}
             >
-              <QuestTracker
-                title={quest.title}
-                subtitle={quest.subtitle}
-                objectives={quest.objectives}
-              />
+              <QuestTracker title={quest.title} subtitle={quest.subtitle} objectives={quest.objectives} />
             </button>
           );
 
@@ -74,7 +70,9 @@ export function QuestLog({
           );
         })}
       </div>
-      {activeId ? <span className={questLogActiveClass}>{activeLabel ? activeLabel(activeId) : `Tracking ${activeId}`}</span> : null}
+      {activeId ? (
+        <span className={questLogActiveClass}>{activeLabel ? activeLabel(activeId) : `Tracking ${activeId}`}</span>
+      ) : null}
     </section>
   );
 }

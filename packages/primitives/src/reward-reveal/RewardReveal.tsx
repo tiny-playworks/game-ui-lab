@@ -1,6 +1,6 @@
-import React from 'react';
-import { LootStack } from '../loot-stack/LootStack';
-import type { LootStackItem } from '../loot-stack/LootStack';
+import React from "react";
+import { LootStack } from "../loot-stack/LootStack";
+import type { LootStackItem } from "../loot-stack/LootStack";
 import {
   mergeClass,
   rewardRevealActionClass,
@@ -8,9 +8,9 @@ import {
   rewardRevealRecipe,
   rewardRevealStateClass,
   rewardRevealTitleClass,
-} from '../styles';
+} from "../styles";
 
-export type RewardRevealState = 'sealed' | 'revealed' | 'claimed';
+export type RewardRevealState = "sealed" | "revealed" | "claimed";
 
 export interface RewardRevealProps {
   title: string;
@@ -26,30 +26,32 @@ export interface RewardRevealProps {
 }
 
 const stateLabels: Record<RewardRevealState, string> = {
-  sealed: 'Sealed',
-  revealed: 'Revealed',
-  claimed: 'Claimed',
+  sealed: "Sealed",
+  revealed: "Revealed",
+  claimed: "Claimed",
 };
 
 function pluralizeItems(count: number) {
-  return count === 1 ? '1 item' : `${count} items`;
+  return count === 1 ? "1 item" : `${count} items`;
 }
 
 export function RewardReveal({
   title,
   items,
-  state = 'sealed',
+  state = "sealed",
   actionLabel,
   onAction,
-  revealLabel = 'Reveal',
-  claimLabel = 'Claim',
+  revealLabel = "Reveal",
+  claimLabel = "Claim",
   onReveal,
   onClaim,
   className,
 }: RewardRevealProps) {
-  const derivedActionLabel = actionLabel ?? (state === 'sealed' ? revealLabel : state === 'revealed' ? claimLabel : undefined);
-  const derivedAction = onAction ?? (state === 'sealed' ? onReveal : state === 'revealed' ? onClaim : undefined);
-  const shouldRenderAction = state !== 'claimed' && Boolean(derivedActionLabel) && (Boolean(actionLabel) || Boolean(derivedAction));
+  const derivedActionLabel =
+    actionLabel ?? (state === "sealed" ? revealLabel : state === "revealed" ? claimLabel : undefined);
+  const derivedAction = onAction ?? (state === "sealed" ? onReveal : state === "revealed" ? onClaim : undefined);
+  const shouldRenderAction =
+    state !== "claimed" && Boolean(derivedActionLabel) && (Boolean(actionLabel) || Boolean(derivedAction));
 
   return (
     <section

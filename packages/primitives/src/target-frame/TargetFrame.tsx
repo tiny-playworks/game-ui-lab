@@ -1,8 +1,8 @@
-import React from 'react';
-import { HealthBar } from '../health-bar/HealthBar';
-import type { HealthBarTone } from '../health-bar/HealthBar';
-import { StatusBadge } from '../status-badge/StatusBadge';
-import type { StatusBadgeProps } from '../status-badge/StatusBadge';
+import React from "react";
+import { HealthBar } from "../health-bar/HealthBar";
+import type { HealthBarTone } from "../health-bar/HealthBar";
+import { StatusBadge } from "../status-badge/StatusBadge";
+import type { StatusBadgeProps } from "../status-badge/StatusBadge";
 import {
   mergeClass,
   targetFrameCopyClass,
@@ -10,9 +10,9 @@ import {
   targetFrameMetaClass,
   targetFrameRecipe,
   targetFrameStatusesClass,
-} from '../styles';
+} from "../styles";
 
-export type TargetFaction = 'ally' | 'enemy' | 'neutral' | 'boss';
+export type TargetFaction = "ally" | "enemy" | "neutral" | "boss";
 
 export interface TargetFrameProps {
   name: string;
@@ -29,10 +29,10 @@ export interface TargetFrameProps {
 }
 
 const healthToneByFaction: Record<TargetFaction, HealthBarTone> = {
-  ally: 'hero',
-  enemy: 'danger',
-  neutral: 'hero',
-  boss: 'boss',
+  ally: "hero",
+  enemy: "danger",
+  neutral: "hero",
+  boss: "boss",
 };
 
 const emptyStatuses: StatusBadgeProps[] = [];
@@ -42,7 +42,7 @@ export function TargetFrame({
   health,
   maxHealth,
   shield,
-  faction = 'enemy',
+  faction = "enemy",
   level,
   elite = false,
   threat,
@@ -67,7 +67,14 @@ export function TargetFrame({
         </span>
         <span className={targetFrameMetaClass}>{faction}</span>
       </header>
-      <HealthBar value={health} max={maxHealth} shield={shield} tone={healthToneByFaction[faction]} label="Target HP" showValue />
+      <HealthBar
+        value={health}
+        max={maxHealth}
+        shield={shield}
+        tone={healthToneByFaction[faction]}
+        label="Target HP"
+        showValue
+      />
       {threat ? <span className={targetFrameMetaClass}>{threat}</span> : null}
       {weakness ? <span className={targetFrameMetaClass}>{weakness}</span> : null}
       {statuses.length ? (

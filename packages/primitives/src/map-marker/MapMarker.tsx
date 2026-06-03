@@ -1,13 +1,8 @@
-import React from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import {
-  mapMarkerDotRecipe,
-  mapMarkerLabelClass,
-  mapMarkerRecipe,
-  mergeClass,
-} from '../styles';
+import React from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { mapMarkerDotRecipe, mapMarkerLabelClass, mapMarkerRecipe, mergeClass } from "../styles";
 
-export type MapMarkerTone = 'ally' | 'enemy' | 'objective' | 'neutral';
+export type MapMarkerTone = "ally" | "enemy" | "objective" | "neutral";
 
 export interface MapMarkerProps {
   x: number;
@@ -28,7 +23,7 @@ function clampCoordinate(value: number) {
 export function MapMarker({
   x,
   y,
-  tone = 'neutral',
+  tone = "neutral",
   label,
   active = false,
   selected = false,
@@ -36,17 +31,17 @@ export function MapMarker({
   onClick,
   className,
 }: MapMarkerProps) {
-  const Component = onClick ? 'button' : 'span';
+  const Component = onClick ? "button" : "span";
   const componentProps = onClick
     ? {
-        type: 'button' as const,
+        type: "button" as const,
         onClick,
-        'aria-pressed': selected,
-        'aria-label': label ? `${label} ${tone} marker` : `${tone} marker`,
+        "aria-pressed": selected,
+        "aria-label": label ? `${label} ${tone} marker` : `${tone} marker`,
       }
     : {
-        role: 'img',
-        'aria-label': label ? `${label} ${tone} marker` : `${tone} marker`,
+        role: "img",
+        "aria-label": label ? `${label} ${tone} marker` : `${tone} marker`,
       };
 
   return (
@@ -55,13 +50,17 @@ export function MapMarker({
       data-tone={tone}
       data-active={active}
       data-selected={selected}
-      style={{
-        '--game-ui-marker-x': clampCoordinate(x),
-        '--game-ui-marker-y': clampCoordinate(y),
-      } as CSSProperties}
+      style={
+        {
+          "--game-ui-marker-x": clampCoordinate(x),
+          "--game-ui-marker-y": clampCoordinate(y),
+        } as CSSProperties
+      }
       {...componentProps}
     >
-      <span className={mapMarkerDotRecipe({ active: active || selected })} aria-hidden="true">{icon}</span>
+      <span className={mapMarkerDotRecipe({ active: active || selected })} aria-hidden="true">
+        {icon}
+      </span>
       {label ? <span className={mapMarkerLabelClass}>{label}</span> : null}
     </Component>
   );
