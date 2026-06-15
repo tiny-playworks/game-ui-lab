@@ -3,15 +3,15 @@ import type { CSSProperties } from "react";
 import { HealthBar } from "../health-bar/HealthBar";
 import { StatusBadge } from "../status-badge/StatusBadge";
 import type { StatusBadgeProps } from "../status-badge/StatusBadge";
+import { mergeClass } from "../styles";
 import {
-  mergeClass,
   partyFrameClass,
   partyFrameListClass,
   partyFrameMemberRecipe,
   partyFrameMetaClass,
   partyFrameNameClass,
   partyFrameStatusesClass,
-} from "../styles";
+} from "./styles";
 import type { GameUiCollectionRenderer } from "../types";
 
 export interface PartyFrameMember {

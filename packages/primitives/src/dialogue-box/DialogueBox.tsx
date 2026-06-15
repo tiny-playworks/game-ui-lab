@@ -1,13 +1,13 @@
 import React from "react";
 import type { ReactNode } from "react";
+import { mergeClass } from "../styles";
 import {
   dialogueBoxContentClass,
   dialogueBoxPortraitClass,
   dialogueBoxRecipe,
   dialogueBoxSpeakerClass,
   dialogueBoxTextClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export type DialogueTone = "neutral" | "ally" | "warning";
 

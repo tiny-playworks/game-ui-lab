@@ -3,14 +3,14 @@ import type { CSSProperties, ReactNode } from "react";
 import { LootCard } from "../loot-card/LootCard";
 import type { LootRarity } from "../loot-card/LootCard";
 import type { LootStackItem } from "../loot-stack/LootStack";
+import { mergeClass } from "../styles";
 import {
   inventoryGridClass,
   inventoryGridActionClass,
   inventoryGridListClass,
   inventoryGridMetaClass,
   inventoryGridSlotRecipe,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 import type { GameUiCollectionRenderer } from "../types";
 
 export type InventoryGridCompareState = "upgrade" | "downgrade" | "same";

@@ -1,5 +1,6 @@
 import React from "react";
-import { mergeClass, statusBadgeMetaClass, statusBadgeRecipe } from "../styles";
+import { mergeClass } from "../styles";
+import { statusBadgeMetaClass, statusBadgeRecipe } from "./styles";
 
 export type StatusBadgeTone = "buff" | "debuff" | "neutral" | "warning";
 

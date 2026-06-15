@@ -33,7 +33,28 @@ export function useGameUiRuntime() {
 
 export function useGameUiLayer<TLayer extends GameUiLayerName>(layer: TLayer): GameUiRuntimeState["layers"][TLayer] {
   const runtime = useGameUiRuntime();
-  const state = useSyncExternalStore(runtime.subscribe, runtime.getState, runtime.getState);
+  return useSyncExternalStore(
+    runtime.subscribe,
+    () => runtime.getState().layers[layer],
+    () => runtime.getState().layers[layer],
+  );
+}
 
-  return state.layers[layer];
+/**
+ * Select a specific piece of state from the Game UI runtime.
+ *
+ * @warning **CRITICAL**: The `selector` function MUST be stable and its return value should ideally be stable.
+ * If you use an inline anonymous function that returns a NEW object or array on every call
+ * (e.g. `state => state.items.filter(...)`), `useSyncExternalStore` will detect a difference
+ * on every single state change, potentially causing infinite re-renders or severe performance degradation.
+ *
+ * Either return primitive values, or memoize your selector function using `useCallback` or move it outside the component.
+ */
+export function useGameUiSelector<T>(selector: (state: GameUiRuntimeState) => T): T {
+  const runtime = useGameUiRuntime();
+  return useSyncExternalStore(
+    runtime.subscribe,
+    () => selector(runtime.getState()),
+    () => selector(runtime.getState()),
+  );
 }

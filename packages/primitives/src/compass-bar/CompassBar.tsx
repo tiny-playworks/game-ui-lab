@@ -1,13 +1,8 @@
 import React from "react";
 import type { CSSProperties } from "react";
 import type { MapMarkerTone } from "../map-marker/MapMarker";
-import {
-  compassBarClass,
-  compassBarHeadingClass,
-  compassBarMarkerRecipe,
-  compassBarTrackClass,
-  mergeClass,
-} from "../styles";
+import { mergeClass } from "../styles";
+import { compassBarClass, compassBarHeadingClass, compassBarMarkerRecipe, compassBarTrackClass } from "./styles";
 
 export interface CompassMarker {
   id: string;

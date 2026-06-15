@@ -1,6 +1,7 @@
 import React from "react";
 import type { CSSProperties } from "react";
-import { mergeClass, pauseMenuActionsClass, pauseMenuClass, pauseMenuItemRecipe, pauseMenuTitleClass } from "../styles";
+import { mergeClass } from "../styles";
+import { pauseMenuActionsClass, pauseMenuClass, pauseMenuItemRecipe, pauseMenuTitleClass } from "./styles";
 
 export interface PauseMenuItem {
   id: string;

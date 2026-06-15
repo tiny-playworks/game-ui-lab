@@ -1,5 +1,6 @@
 import React from "react";
 import type { CSSProperties } from "react";
+import { mergeClass } from "../styles";
 import {
   deathScreenActionsClass,
   deathScreenClass,
@@ -7,8 +8,7 @@ import {
   deathScreenPrimaryClass,
   deathScreenSecondaryClass,
   deathScreenTitleClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export interface DeathScreenProps {
   open: boolean;

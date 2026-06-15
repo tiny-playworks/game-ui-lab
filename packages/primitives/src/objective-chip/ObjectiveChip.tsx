@@ -1,7 +1,7 @@
 import React from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { mergeClass } from "../styles";
 import {
-  mergeClass,
   objectiveChipBodyClass,
   objectiveChipFillClass,
   objectiveChipIconClass,
@@ -11,7 +11,7 @@ import {
   objectiveChipProgressTextClass,
   objectiveChipRecipe,
   objectiveChipTrackClass,
-} from "../styles";
+} from "./styles";
 
 export type ObjectiveState = "active" | "complete" | "locked";
 

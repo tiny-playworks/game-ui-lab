@@ -1,7 +1,8 @@
 import { domAnimation, LazyMotion, m, type Transition } from "motion/react";
 import React from "react";
 import type { CSSProperties } from "react";
-import { damageNumberPrefixClass, damageNumberRecipe, mergeClass } from "../styles";
+import { mergeClass } from "../styles";
+import { damageNumberPrefixClass, damageNumberRecipe } from "./styles";
 import type { GameUiMotionMode } from "../types";
 
 export type DamageNumberVariant = "damage" | "heal" | "critical" | "miss";

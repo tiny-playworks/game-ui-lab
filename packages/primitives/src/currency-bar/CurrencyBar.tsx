@@ -1,12 +1,7 @@
 import React from "react";
 import type { CSSProperties, ReactNode } from "react";
-import {
-  currencyBarClass,
-  currencyBarItemClass,
-  currencyBarItemRecipe,
-  currencyBarListClass,
-  mergeClass,
-} from "../styles";
+import { mergeClass } from "../styles";
+import { currencyBarClass, currencyBarItemClass, currencyBarItemRecipe, currencyBarListClass } from "./styles";
 
 export type CurrencyTone = "gold" | "silver" | "gem" | "token" | "neutral";
 

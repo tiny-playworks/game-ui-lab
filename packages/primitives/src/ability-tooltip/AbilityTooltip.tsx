@@ -1,13 +1,13 @@
 import React from "react";
 import type { ReactNode } from "react";
+import { mergeClass } from "../styles";
 import {
   abilityTooltipDescriptionClass,
   abilityTooltipKindClass,
   abilityTooltipMetaClass,
   abilityTooltipNameClass,
   abilityTooltipRecipe,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export type AbilityTooltipState = "ready" | "cooling" | "locked";
 

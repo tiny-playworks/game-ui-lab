@@ -1,12 +1,12 @@
 import React from "react";
 import type { CSSProperties } from "react";
+import { mergeClass } from "../styles";
 import {
   loadingOverlayClass,
   loadingOverlayMessageClass,
   loadingOverlayProgressClass,
   loadingOverlayTitleClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export interface LoadingOverlayProps {
   open: boolean;

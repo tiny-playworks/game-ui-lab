@@ -1,13 +1,13 @@
 import React from "react";
 import type { CSSProperties } from "react";
+import { mergeClass } from "../styles";
 import {
-  mergeClass,
   resourceMeterFillClass,
   resourceMeterLabelClass,
   resourceMeterRecipe,
   resourceMeterTrackClass,
   resourceMeterValueClass,
-} from "../styles";
+} from "./styles";
 
 export type ResourceMeterKind = "mana" | "energy" | "stamina";
 

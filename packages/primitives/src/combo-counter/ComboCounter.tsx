@@ -1,13 +1,13 @@
 import { domAnimation, LazyMotion, m } from "motion/react";
 import React from "react";
+import { mergeClass } from "../styles";
 import {
   comboCounterLabelClass,
   comboCounterRecipe,
   comboCounterSuffixClass,
   comboCounterTierClass,
   comboCounterValueClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export interface ComboCounterProps {
   count: number;

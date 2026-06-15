@@ -1,13 +1,13 @@
 import React from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { mergeClass } from "../styles";
 import {
   choicePromptChoiceClass,
   choicePromptChoiceDescriptionClass,
   choicePromptChoicesClass,
   choicePromptClass,
   choicePromptTitleClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export interface ChoicePromptOption {
   id: string;

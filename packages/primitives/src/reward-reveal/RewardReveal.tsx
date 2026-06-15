@@ -1,14 +1,14 @@
 import React from "react";
 import { LootStack } from "../loot-stack/LootStack";
 import type { LootStackItem } from "../loot-stack/LootStack";
+import { mergeClass } from "../styles";
 import {
-  mergeClass,
   rewardRevealActionClass,
   rewardRevealHeaderClass,
   rewardRevealRecipe,
   rewardRevealStateClass,
   rewardRevealTitleClass,
-} from "../styles";
+} from "./styles";
 
 export type RewardRevealState = "sealed" | "revealed" | "claimed";
 

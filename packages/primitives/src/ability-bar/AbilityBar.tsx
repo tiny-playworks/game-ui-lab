@@ -1,7 +1,8 @@
 import React from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { CooldownSlot } from "../cooldown-slot/CooldownSlot";
-import { abilityBarClass, abilityBarCostClass, abilityBarItemClass, mergeClass } from "../styles";
+import { mergeClass } from "../styles";
+import { abilityBarClass, abilityBarCostClass, abilityBarItemClass } from "./styles";
 import type { GameUiCollectionRenderer } from "../types";
 
 export type AbilityBarItemVariant = "basic" | "ultimate" | "passive";

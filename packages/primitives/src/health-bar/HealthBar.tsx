@@ -1,5 +1,6 @@
 import React from "react";
 import type { CSSProperties } from "react";
+import { mergeClass } from "../styles";
 import {
   healthBarFillClass,
   healthBarLabelClass,
@@ -9,8 +10,7 @@ import {
   healthBarToplineClass,
   healthBarTrackClass,
   healthBarValueClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export type HealthBarTone = "hero" | "danger" | "boss";
 

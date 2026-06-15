@@ -5,8 +5,8 @@ import { CurrencyBar } from "../currency-bar/CurrencyBar";
 import type { CurrencyBarEntry } from "../currency-bar/CurrencyBar";
 import { LootCard } from "../loot-card/LootCard";
 import type { LootCardProps, LootRarity } from "../loot-card/LootCard";
+import { mergeClass } from "../styles";
 import {
-  mergeClass,
   shopPanelActionClass,
   shopPanelClass,
   shopPanelGridClass,
@@ -15,7 +15,7 @@ import {
   shopPanelMetaClass,
   shopPanelPriceClass,
   shopPanelTitleClass,
-} from "../styles";
+} from "./styles";
 
 export interface ShopPanelItem extends LootCardProps {
   id: string;

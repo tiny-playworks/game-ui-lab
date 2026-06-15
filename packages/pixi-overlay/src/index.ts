@@ -20,6 +20,22 @@ export interface PixiFeedbackBridgeOptions {
   factory: PixiTextFactory;
   stageWidth?: number;
   stageHeight?: number;
+  onDamageAdd?: (node: PixiDisplayObject, record: DamageEventRecord) => void;
+  /**
+   * Called when a damage number should be removed from the screen.
+   * @warning **CRITICAL**: If you provide this callback to handle custom removal animations (e.g. fade out),
+   * you MUST call the `done()` function when your animation finishes. Otherwise, the PixiDisplayObject will
+   * never be destroyed, leading to a memory leak.
+   */
+  onDamageRemove?: (node: PixiDisplayObject, record: DamageEventRecord, done: () => void) => void;
+  onToastAdd?: (node: PixiDisplayObject, record: ToastEventRecord, index: number) => void;
+  /**
+   * Called when a toast should be removed from the screen.
+   * @warning **CRITICAL**: If you provide this callback to handle custom removal animations (e.g. slide out),
+   * you MUST call the `done()` function when your animation finishes. Otherwise, the PixiDisplayObject will
+   * never be destroyed, leading to a memory leak.
+   */
+  onToastRemove?: (node: PixiDisplayObject, record: ToastEventRecord, done: () => void) => void;
 }
 
 const variantFill: Record<DamageEventRecord["variant"], string> = {
@@ -40,15 +56,25 @@ export function createPixiFeedbackBridge(runtime: GameUiRuntime, options: PixiFe
   const width = options.stageWidth ?? 800;
   const height = options.stageHeight ?? 600;
   const damageNodes = new Map<string, PixiDisplayObject>();
+  const damageRecords = new Map<string, DamageEventRecord>();
   const toastNodes = new Map<string, PixiDisplayObject>();
+  const toastRecords = new Map<string, ToastEventRecord>();
 
   function syncDamage(records: DamageEventRecord[]) {
     const activeIds = new Set(records.map((record) => record.id));
 
     for (const [id, node] of damageNodes) {
       if (!activeIds.has(id)) {
-        node.destroy();
+        const record = damageRecords.get(id);
+        if (options.onDamageRemove && record) {
+          options.onDamageRemove(node, record, () => {
+            node.destroy();
+          });
+        } else {
+          node.destroy();
+        }
         damageNodes.delete(id);
+        damageRecords.delete(id);
       }
     }
 
@@ -67,6 +93,11 @@ export function createPixiFeedbackBridge(runtime: GameUiRuntime, options: PixiFe
       node.y = position.y;
       options.container.addChild(node);
       damageNodes.set(record.id, node);
+      damageRecords.set(record.id, record);
+
+      if (options.onDamageAdd) {
+        options.onDamageAdd(node, record);
+      }
     }
   }
 
@@ -75,8 +106,16 @@ export function createPixiFeedbackBridge(runtime: GameUiRuntime, options: PixiFe
 
     for (const [id, node] of toastNodes) {
       if (!activeIds.has(id)) {
-        node.destroy();
+        const record = toastRecords.get(id);
+        if (options.onToastRemove && record) {
+          options.onToastRemove(node, record, () => {
+            node.destroy();
+          });
+        } else {
+          node.destroy();
+        }
         toastNodes.delete(id);
+        toastRecords.delete(id);
       }
     }
 
@@ -92,6 +131,11 @@ export function createPixiFeedbackBridge(runtime: GameUiRuntime, options: PixiFe
       node.y = height * 0.12 + index * 36;
       options.container.addChild(node);
       toastNodes.set(record.id, node);
+      toastRecords.set(record.id, record);
+
+      if (options.onToastAdd) {
+        options.onToastAdd(node, record, index);
+      }
     });
   }
 

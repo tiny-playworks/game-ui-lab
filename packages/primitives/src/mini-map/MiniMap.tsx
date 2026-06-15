@@ -2,8 +2,8 @@ import React from "react";
 import type { CSSProperties } from "react";
 import { MapMarker } from "../map-marker/MapMarker";
 import type { MapMarkerProps } from "../map-marker/MapMarker";
+import { mergeClass } from "../styles";
 import {
-  mergeClass,
   miniMapClass,
   miniMapGridClass,
   miniMapLabelClass,
@@ -12,7 +12,7 @@ import {
   miniMapScanClass,
   miniMapZoneClass,
   miniMapZoomClass,
-} from "../styles";
+} from "./styles";
 import type { GameUiCollectionRenderer } from "../types";
 
 export interface MiniMapMarker extends MapMarkerProps {

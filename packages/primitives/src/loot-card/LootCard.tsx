@@ -1,5 +1,6 @@
 import React from "react";
 import type { ReactNode } from "react";
+import { mergeClass } from "../styles";
 import {
   lootCardBodyClass,
   lootCardIconClass,
@@ -8,8 +9,7 @@ import {
   lootCardQuantityClass,
   lootCardRecipe,
   lootCardTextClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export type LootRarity = "common" | "rare" | "epic" | "legendary";
 

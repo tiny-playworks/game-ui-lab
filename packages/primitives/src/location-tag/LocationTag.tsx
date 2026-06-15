@@ -1,5 +1,6 @@
 import React from "react";
-import { locationTagMetaClass, locationTagRecipe, mergeClass } from "../styles";
+import { mergeClass } from "../styles";
+import { locationTagMetaClass, locationTagRecipe } from "./styles";
 
 export type LocationDanger = "safe" | "contested" | "hostile";
 

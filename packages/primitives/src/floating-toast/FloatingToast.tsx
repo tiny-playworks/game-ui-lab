@@ -1,6 +1,7 @@
 import { domAnimation, LazyMotion, m } from "motion/react";
 import React from "react";
 import type { ReactNode } from "react";
+import { mergeClass } from "../styles";
 import {
   floatingToastActionClass,
   floatingToastCloseClass,
@@ -9,8 +10,7 @@ import {
   floatingToastMessageClass,
   floatingToastRecipe,
   floatingToastTitleClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 import type { GameUiMotionMode } from "../types";
 
 export type FloatingToastVariant = "info" | "success" | "warning" | "loot";

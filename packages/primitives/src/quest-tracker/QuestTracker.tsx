@@ -1,8 +1,8 @@
 import React from "react";
 import { ObjectiveChip } from "../objective-chip/ObjectiveChip";
 import type { ObjectiveChipProps } from "../objective-chip/ObjectiveChip";
+import { mergeClass } from "../styles";
 import {
-  mergeClass,
   questTrackerClass,
   questTrackerCopyClass,
   questTrackerCountClass,
@@ -10,7 +10,7 @@ import {
   questTrackerListClass,
   questTrackerSubtitleClass,
   questTrackerTitleClass,
-} from "../styles";
+} from "./styles";
 
 export interface QuestTrackerObjective extends ObjectiveChipProps {
   id: string;

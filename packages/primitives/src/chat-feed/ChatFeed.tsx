@@ -1,6 +1,7 @@
 import React from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { chatFeedClass, chatFeedItemRecipe, chatFeedListClass, chatFeedOverflowClass, mergeClass } from "../styles";
+import { mergeClass } from "../styles";
+import { chatFeedClass, chatFeedItemRecipe, chatFeedListClass, chatFeedOverflowClass } from "./styles";
 import type { GameUiCollectionRenderer } from "../types";
 
 export type ChatFeedTone = "info" | "system" | "party" | "combat" | "loot";

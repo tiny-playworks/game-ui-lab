@@ -1,13 +1,13 @@
 import React from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { mergeClass } from "../styles";
 import {
   castBarFillClass,
   castBarRecipe,
   castBarToplineClass,
   castBarToplineStrongClass,
   castBarTrackClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export type CastBarState = "casting" | "channeling" | "complete" | "interrupted";
 

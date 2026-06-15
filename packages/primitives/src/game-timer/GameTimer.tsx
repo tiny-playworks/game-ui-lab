@@ -1,13 +1,13 @@
 import React from "react";
 import type { CSSProperties } from "react";
+import { mergeClass } from "../styles";
 import {
   gameTimerBarClass,
   gameTimerLabelClass,
   gameTimerRecipe,
   gameTimerRingClass,
   gameTimerValueClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 
 export interface GameTimerProps {
   remainingMs: number;

@@ -1,6 +1,7 @@
 import React from "react";
 import type { ReactNode } from "react";
-import { mergeClass, rarityBorderRecipe } from "../styles";
+import { mergeClass } from "../styles";
+import { rarityBorderRecipe } from "./styles";
 
 export type RarityBorderTone = "common" | "rare" | "epic" | "legendary";
 

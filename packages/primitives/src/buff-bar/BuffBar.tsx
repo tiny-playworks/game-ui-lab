@@ -2,14 +2,14 @@ import React from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { StatusBadge } from "../status-badge/StatusBadge";
 import type { StatusBadgeProps } from "../status-badge/StatusBadge";
+import { mergeClass } from "../styles";
 import {
   buffBarClass,
   buffBarItemButtonClass,
   buffBarItemClass,
   buffBarListClass,
   buffBarOverflowClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 import type { GameUiCollectionRenderer } from "../types";
 
 export interface BuffBarBuff extends StatusBadgeProps {

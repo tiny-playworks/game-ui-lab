@@ -1,6 +1,7 @@
 import React from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { mapMarkerDotRecipe, mapMarkerLabelClass, mapMarkerRecipe, mergeClass } from "../styles";
+import { mergeClass } from "../styles";
+import { mapMarkerDotRecipe, mapMarkerLabelClass, mapMarkerRecipe } from "./styles";
 
 export type MapMarkerTone = "ally" | "enemy" | "objective" | "neutral";
 

@@ -3,14 +3,14 @@ import { HealthBar } from "../health-bar/HealthBar";
 import type { HealthBarTone } from "../health-bar/HealthBar";
 import { StatusBadge } from "../status-badge/StatusBadge";
 import type { StatusBadgeProps } from "../status-badge/StatusBadge";
+import { mergeClass } from "../styles";
 import {
-  mergeClass,
   targetFrameCopyClass,
   targetFrameHeaderClass,
   targetFrameMetaClass,
   targetFrameRecipe,
   targetFrameStatusesClass,
-} from "../styles";
+} from "./styles";
 
 export type TargetFaction = "ally" | "enemy" | "neutral" | "boss";
 

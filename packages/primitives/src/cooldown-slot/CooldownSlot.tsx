@@ -1,12 +1,7 @@
 import React from "react";
 import type { CSSProperties, ReactNode } from "react";
-import {
-  cooldownSlotIconClass,
-  cooldownSlotLabelClass,
-  cooldownSlotMaskClass,
-  cooldownSlotRecipe,
-  mergeClass,
-} from "../styles";
+import { mergeClass } from "../styles";
+import { cooldownSlotIconClass, cooldownSlotLabelClass, cooldownSlotMaskClass, cooldownSlotRecipe } from "./styles";
 
 export interface CooldownSlotProps {
   progress: number;

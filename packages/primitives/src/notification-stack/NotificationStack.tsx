@@ -2,7 +2,8 @@ import React from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { FloatingToast } from "../floating-toast/FloatingToast";
 import type { FloatingToastProps } from "../floating-toast/FloatingToast";
-import { mergeClass, notificationStackClass, notificationStackOverflowClass } from "../styles";
+import { mergeClass } from "../styles";
+import { notificationStackClass, notificationStackOverflowClass } from "./styles";
 import type { GameUiCollectionRenderer } from "../types";
 
 export interface NotificationStackItem extends FloatingToastProps {

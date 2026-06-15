@@ -2,14 +2,14 @@ import React from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { QuestTracker } from "../quest-tracker/QuestTracker";
 import type { QuestTrackerObjective } from "../quest-tracker/QuestTracker";
+import { mergeClass } from "../styles";
 import {
-  mergeClass,
   questLogActiveClass,
   questLogClass,
   questLogHeaderClass,
   questLogListClass,
   questLogQuestClass,
-} from "../styles";
+} from "./styles";
 import type { GameUiCollectionRenderer } from "../types";
 
 export interface QuestLogQuest {

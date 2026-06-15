@@ -76,6 +76,6 @@ export { StatusBadge } from "./status-badge";
 export type { StatusBadgeProps, StatusBadgeTone } from "./status-badge";
 export { TargetFrame } from "./target-frame";
 export type { TargetFaction, TargetFrameProps } from "./target-frame";
-export { GameUiLayerHost, GameUiRuntimeProvider, useGameUiLayer, useGameUiRuntime } from "./runtime";
+export { GameUiLayerHost, GameUiRuntimeProvider, useGameUiLayer, useGameUiRuntime, useGameUiSelector } from "./runtime";
 export type { GameUiLayerHostProps, GameUiRuntimeProviderProps } from "./runtime";
 export type { GameUiCollectionItemState, GameUiCollectionRenderer, GameUiMotionMode } from "./types";

@@ -2,6 +2,7 @@ import React from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { LootCard } from "../loot-card/LootCard";
 import type { LootRarity } from "../loot-card/LootCard";
+import { mergeClass } from "../styles";
 import {
   lootStackClass,
   lootStackItemClass,
@@ -9,8 +10,7 @@ import {
   lootStackListClass,
   lootStackOverflowClass,
   lootStackToplineClass,
-  mergeClass,
-} from "../styles";
+} from "./styles";
 import type { GameUiCollectionRenderer } from "../types";
 
 export interface LootStackItem {
